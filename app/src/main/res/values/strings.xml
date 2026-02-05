@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Православный календарь</string>
+    <string name="title_calendar">Календарь</string>
+    <string name="title_holidays">Праздники</string>
+    <string name="title_fast">Пост</string>
+    <string name="title_settings">Настройки</string>
+
+    <!-- Fast levels -->
+    <string name="fast_no_fast">Поста нет</string>
+    <string name="fast_continuous_week">Сплошная седмица, поста нет</string>
+    <string name="fast_xerophagy">Сухоядение</string>
+    <string name="fast_no_fish">Рыба не разрешается</string>
+    <string name="fast_no_oil">Масло не разрешается</string>
+    <string name="fast_strict">Строгий пост</string>
+    <string name="fast_wine_oil_allowed">Вино и масло разрешены</string>
+</resources>

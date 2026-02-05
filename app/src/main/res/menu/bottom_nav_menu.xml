@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="@string/title_calendar" />
+    <item
+        android:id="@+id/navigation_holidays"
+        android:icon="@drawable/ic_holiday"
+        android:title="@string/title_holidays" />
+    <item
+        android:id="@+id/navigation_fast"
+        android:icon="@drawable/ic_fast"
+        android:title="@string/title_fast" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/title_settings" />
+</menu>

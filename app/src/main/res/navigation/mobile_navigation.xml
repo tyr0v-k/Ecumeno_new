@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_calendar">
+
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.uvpv521.calendar.ui.CalendarFragment"
+        android:label="@string/title_calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/navigation_fast"
+        android:name="com.uvpv521.calendar.ui.FastRulesFragment"
+        android:label="@string/title_fast"
+        tools:layout="@layout/fragment_fast_rules" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.uvpv521.calendar.ui.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <!-- Диалог для деталей праздника -->
+    <dialog
+        android:id="@+id/holidayDetailDialog"
+        android:name="com.uvpv521.calendar.ui.HolidayDetailDialog"
+        android:label="Детали праздника"
+        tools:layout="@layout/dialog_holiday_detail" />
+
+</navigation>
