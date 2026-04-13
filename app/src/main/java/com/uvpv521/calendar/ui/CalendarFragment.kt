@@ -83,6 +83,7 @@ class CalendarFragment : Fragment() {
                         binding.prevMonth.imageAlpha = 1000
                         binding.prevMonth.isEnabled = true
                     }
+                    calendarAdapter.setCurrentMonth(month.month)
                 }
             }
         }
@@ -135,7 +136,7 @@ class CalendarFragment : Fragment() {
                 FastLevel.XEROPHAGY -> getString(R.string.fast_xerophagy)
                 FastLevel.NO_FISH -> getString(R.string.fast_no_fish)
                 FastLevel.NO_OIL -> getString(R.string.fast_no_oil)
-                FastLevel.STRICT_FAST -> getString(R.string.fast_strict)
+                FastLevel.FAST -> getString(R.string.fast_strict)
                 FastLevel.WINE_OIL_ALLOWED -> getString(R.string.fast_wine_oil_allowed)
             }
             binding.fastInfo.text = fastText

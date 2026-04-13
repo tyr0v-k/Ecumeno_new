@@ -24,9 +24,6 @@ class CalendarViewModel : ViewModel() {
     private val _selectedDate = MutableStateFlow<LocalDate?>(null)
     val selectedDate: StateFlow<LocalDate?> = _selectedDate
 
-//    private val _selectedHoliday = MutableStateFlow<Holiday?>(null)
-//    val selectedHoliday: StateFlow<Holiday?> = _selectedHoliday
-
     init {
         loadMonth(currentMonth.value.year, currentMonth.value.monthValue)
     }
@@ -40,13 +37,6 @@ class CalendarViewModel : ViewModel() {
 
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
-        // Находим праздники для выбранной даты
-//        val day = _calendarDays.value.find { it.date == date }
-//        if (!day?.holidays.isNullOrEmpty()) {
-//            _selectedHoliday.value = day?.holidays?.first()
-//        } else {
-//            _selectedHoliday.value = null
-//        }
     }
 
     fun navigateToPreviousMonth() {
@@ -62,7 +52,6 @@ class CalendarViewModel : ViewModel() {
     fun navigateToToday() {
         val today = LocalDate.now()
         loadMonth(today.year, today.monthValue)
-        selectDate(today)
     }
 
 //    fun getHolidayDescription(holiday: Holiday): String {

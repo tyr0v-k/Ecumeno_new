@@ -5,13 +5,9 @@
         android:icon="@drawable/ic_calendar"
         android:title="@string/title_calendar" />
     <item
-        android:id="@+id/navigation_holidays"
-        android:icon="@drawable/ic_holiday"
-        android:title="@string/title_holidays" />
-    <item
-        android:id="@+id/navigation_fast"
-        android:icon="@drawable/ic_fast"
-        android:title="@string/title_fast" />
+        android:id="@+id/navigation_rosary"
+        android:icon="@drawable/ic_calendar"
+        android:title="@string/title_rosary" />
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"

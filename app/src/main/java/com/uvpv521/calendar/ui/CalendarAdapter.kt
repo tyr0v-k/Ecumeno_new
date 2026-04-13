@@ -12,13 +12,19 @@ import com.uvpv521.calendar.data.models.CalendarDay
 import com.uvpv521.calendar.data.models.FastLevel
 import com.uvpv521.calendar.databinding.CalendarDayItemBinding
 import java.time.LocalDate
+import java.time.Month
 
 class CalendarAdapter(
     private val onDateClick: (LocalDate) -> Unit
 ) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
 
     private var selectedDate: LocalDate? = null
+    private var currentMonth: Month = LocalDate.now().month
 
+    fun setCurrentMonth(month: Month) {
+        currentMonth = month
+        notifyDataSetChanged()
+    }
     inner class CalendarViewHolder(
         private val binding: CalendarDayItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -40,7 +46,7 @@ class CalendarAdapter(
                 )
             }
 
-            if (day.date.month != currentList.get(20).date.month) {
+            if (day.date.month != currentMonth) {
                 binding.dayNumber.setTextColor(
                     binding.root.context.getColor(R.color.grey)
                 )
@@ -102,11 +108,6 @@ class CalendarAdapter(
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
-//    fun updateSelectedDate(date: LocalDate) {
-//        selectedDate = date
-//        notifyDataSetChanged()
-//    }
 
     class DiffCallback : DiffUtil.ItemCallback<CalendarDay>() {
         override fun areItemsTheSame(oldItem: CalendarDay, newItem: CalendarDay): Boolean {

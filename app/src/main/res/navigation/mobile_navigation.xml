@@ -12,22 +12,16 @@
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
-        android:id="@+id/navigation_fast"
-        android:name="com.uvpv521.calendar.ui.FastRulesFragment"
-        android:label="@string/title_fast"
-        tools:layout="@layout/fragment_fast_rules" />
-
-    <fragment
         android:id="@+id/navigation_settings"
         android:name="com.uvpv521.calendar.ui.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 
-    <!-- Диалог для деталей праздника -->
-    <dialog
-        android:id="@+id/holidayDetailDialog"
-        android:name="com.uvpv521.calendar.ui.HolidayDetailDialog"
-        android:label="Детали праздника"
-        tools:layout="@layout/dialog_holiday_detail" />
+    <fragment
+        android:id="@+id/navigation_rosary"
+        android:name="com.uvpv521.calendar.ui.RosaryFragment"
+        android:label="@string/title_rosary"
+        tools:layout="@layout/fragment_rosary" />
+
 
 </navigation>

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Православный календарь</string>
     <string name="title_calendar">Календарь</string>
+    <string name="title_rosary">Четки</string>
     <string name="title_holidays">Праздники</string>
     <string name="title_fast">Пост</string>
     <string name="title_settings">Настройки</string>
@@ -11,6 +12,17 @@
     <string name="fast_xerophagy">Сухоядение</string>
     <string name="fast_no_fish">Рыба не разрешается</string>
     <string name="fast_no_oil">Масло не разрешается</string>
-    <string name="fast_strict">Строгий пост</string>
+    <string name="fast_strict">Пост</string>
     <string name="fast_wine_oil_allowed">Вино и масло разрешены</string>
+
+    <string name="rosary_mystery_joyful">Радостные (Пн, Сб)</string>
+    <string name="rosary_mystery_luminous">Светлые (Чт)</string>
+    <string name="rosary_mystery_sorrowful">Скорбные (Вт, Пт)</string>
+    <string name="rosary_mystery_glorious">Славные (Ср, Вс)</string>
+
+    <string name="rosary_creed">Верую в Бога, Отца Всемогущего, Творца неба и земли.\nИ в Иисуса Христа, Единственного Его Сына, Господа нашего, Который был зачат Святым Духом, рождён Девой Марией, страдал при Понтии Пилате, был распят, умер и погребён, сошёл в ад, в третий день воскрес из мёртвых, восшёл на небеса и восседает справа от Бога Отца Всемогущего, оттуда придёт судить живых и мёртвых.\nВерую в Святого Духа, Святую Вселенскую Церковь, общение святых, прощение грехов, воскресение тела, жизнь вечную. Аминь.</string>
+    <string name="rosary_our_father">Отче наш, сущий на небесах! Да святится имя Твоё, да придёт Царствие Твоё, да будет воля Твоя и на земле, как на небе; хлеб наш насущный дай нам на сей день; и прости нам долги наши, как и мы прощаем должникам нашим; и не введи нас в искушение, но избавь нас от лукавого. Аминь.</string>
+    <string name="rosary_hail_mary">Радуйся, Мария, благодати полная, Господь с Тобою, благословенна Ты между жёнами и благословен плод чрева Твоего Иисус. Святая Мария, Матерь Божия, молись о нас, грешных, ныне и в час смерти нашей. Аминь.</string>
+    <string name="rosary_glory">Слава Отцу и Сыну и Святому Духу, и ныне и присно, и во веки веков. Аминь.</string>
+    <string name="rosary_fatima">О мой Иисус, прости нам наши прегрешения, избавь нас от огня адского и приведи все души на небо, особенно те, которые наиболее нуждаются в Твоем милосердии.</string>
 </resources>

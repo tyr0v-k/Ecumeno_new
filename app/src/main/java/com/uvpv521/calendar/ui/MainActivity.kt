@@ -20,18 +20,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val navView: BottomNavigationView = binding.navView
-//        val navController = findNavController(R.id.nav_host_fragment)
-//
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_calendar,
-//                R.id.navigation_holidays,
-//                R.id.navigation_fast,
-//                R.id.navigation_settings
-//            )
-//        )
-//
-//        navView.setupWithNavController(navController)
+        val navView: BottomNavigationView = binding.navView
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_calendar,
+                R.id.navigation_settings
+            )
+        )
+
+        navView.setupWithNavController(navController)
     }
 }

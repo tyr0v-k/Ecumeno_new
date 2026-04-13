@@ -1,9 +1,6 @@
 package com.uvpv521.calendar.data.models
 
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 //import com.uvpv521.calendar.data.database.Converters
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
@@ -35,7 +32,7 @@ enum class FastLevel {
     XEROPHAGY, // Сухоядение
     NO_FISH, // Рыба нельзя
     NO_OIL, // Масло нельзя
-    STRICT_FAST, // Строгий пост
+    FAST, // Строгий пост
     WINE_OIL_ALLOWED // Вино и масло разрешены
 }
 

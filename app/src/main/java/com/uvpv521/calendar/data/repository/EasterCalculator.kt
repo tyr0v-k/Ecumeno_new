@@ -42,22 +42,28 @@ object EasterCalculator {
     fun calculateMovableHolidays(easterDate: LocalDate, year: Int): Map<String, LocalDate> {
         val holidays = mutableMapOf<String, LocalDate>()
 
-        // Неделя перед Пасхой
-        holidays["Вербное воскресенье"] = easterDate.minusDays(7)
+        // Перед Пасхой
+        holidays["Прощеное воскресенье"] = easterDate.minusDays(49)
         holidays["Лазарева суббота"] = easterDate.minusDays(8)
+        holidays["Вербное воскресенье"] = easterDate.minusDays(7)
 
         // Великий пост
+        holidays["Торжество православия"] = easterDate.minusDays(48)
         holidays["Страстная пятница"] = easterDate.minusDays(2)
 
         // После Пасхи
-        holidays["Радоница"] = easterDate.plusDays(9)
+        holidays["Антипасха"] = easterDate.plusDays(7)
         holidays["Вознесение Господне"] = easterDate.plusDays(39)
         holidays["День Святой Троицы"] = easterDate.plusDays(49)
         holidays["День Святого Духа"] = easterDate.plusDays(50)
 
-        // Мясопустная и Сырная седмицы
+        // Дни поминовения
         holidays["Вселенская родительская суббота"] = easterDate.minusDays(57)
-        holidays["Прощеное воскресенье"] = easterDate.minusDays(49)
+        holidays["Суббота 2-й седмицы Великого Поста (родительская)"] = easterDate.minusDays(36)
+        holidays["Суббота 3-й седмицы Великого Поста (родительская)"] = easterDate.minusDays(29)
+        holidays["Суббота 4-й седмицы Великого Поста (родительская)"] = easterDate.minusDays(22)
+        holidays["Радоница"] = easterDate.plusDays(9)
+        holidays["Троицкая суббота"] = easterDate.plusDays(48)
 
         return holidays
     }
@@ -100,12 +106,12 @@ object EasterCalculator {
 
         // Успенский пост
         if (isDormitionFast(date, date.year)) {
-            return FastLevel.STRICT_FAST
+            return FastLevel.FAST
         }
 
         // Среда и пятница - постные дни (кроме сплошных седмиц)
         if (dayOfWeek == 3 || dayOfWeek == 5) {
-            return FastLevel.XEROPHAGY
+            return FastLevel.FAST
         }
 
         return FastLevel.NO_FAST
@@ -136,7 +142,7 @@ object EasterCalculator {
         val cheeseFareWeekEnd = easterDate.minusDays(49)
 
         // Пасхальная седмица
-        val brightWeekStart = easterDate
+        val brightWeekStart = easterDate.plusDays(1)
         val brightWeekEnd = easterDate.plusDays(6)
 
         // Троицкая седмица

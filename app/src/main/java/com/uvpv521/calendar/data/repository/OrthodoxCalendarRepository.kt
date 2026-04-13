@@ -58,8 +58,31 @@ class OrthodoxCalendarRepository {
             isMovable = false
         ),
 
+        // Май
+        "0509" to Holiday(
+            id = "warriors_remembrance_day",
+            name = "День поминовения усопших воинов",
+            date = LocalDate.of(2000, 5, 9),
+            priority = 6,
+            isMovable = false
+        ),
 
         // Июль
+        "0707" to Holiday(
+            id = "nativity_of_john",
+            name = "Рождество Иоанна Предтечи",
+            date = LocalDate.of(2000, 7, 7),
+            priority = 1,
+            isMovable = false
+        ),
+
+        "0712" to Holiday(
+            id = "day_of_peter_and_paul",
+            name = "День Петра и Павла",
+            date = LocalDate.of(2000, 7, 12),
+            priority = 1,
+            isMovable = false
+        ),
 
         // Август
         "0819" to Holiday(
@@ -80,11 +103,27 @@ class OrthodoxCalendarRepository {
         ),
 
         // Сентябрь
+        "0911" to Holiday(
+            id = "beheading_of_john",
+            name = "Усекновение главы Иоанна Предтечи",
+            date = LocalDate.of(2000, 9, 11),
+            priority = 1,
+            isMovable = false
+        ),
+
         "0921" to Holiday(
             id = "nativity_of_theotokos",
             name = "Рождество Пресвятой Богородицы",
 //            description = "Рождество Пресвятой Владычицы нашей Богородицы и Приснодевы Марии",
             date = LocalDate.of(2000, 9, 21),
+            priority = 1,
+            isMovable = false
+        ),
+
+        "0927" to Holiday(
+            id = "feast_of_the_cross",
+            name = "Воздвижение Креста Господня",
+            date = LocalDate.of(2000, 9, 27),
             priority = 1,
             isMovable = false
         ),
