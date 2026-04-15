@@ -1,18 +1,43 @@
 package com.uvpv521.calendar.ui
 
+import android.Manifest
+import android.app.TimePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
+import com.uvpv521.calendar.data.local.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentSettingsBinding
+import com.uvpv521.calendar.notifications.AlarmUtils
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var prefs: PrefsHelper
+
+    // 1. Инициализация лаунчера для запроса разрешения на уведомления (Android 13+)
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            checkNotificationPermission()
+        } else {
+            // Если отказали, возвращаем свитч в выключенное положение
+            binding.switchNotifications.isChecked = false
+            prefs.isNotificationEnabled = false
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +50,23 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        prefs = PrefsHelper(requireContext())
+
+        binding.switchNotifications.isChecked = prefs.isNotificationEnabled
+        updateTimeButtonText(prefs.notificationHour, prefs.notificationMinute)
+
+        binding.switchNotifications.setOnClickListener {
+            val isChecked = binding.switchNotifications.isChecked
+            if (isChecked) {
+                checkNotificationPermission()
+            } else {
+                disableNotifications()
+            }
+        }
+
+        binding.notificationTime.setOnClickListener {
+            showTimePicker()
+        }
 
         binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
             // Логика переключения темы
@@ -46,25 +88,60 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-
-        val resources = requireContext().resources
-        val configuration = resources.configuration
-        configuration.setLocale(locale)
-
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-
-        // Сохраняем выбранный язык
-        saveLocalePreference(languageCode)
+        val appLocale = LocaleListCompat.forLanguageTags(languageCode)
         context?.getDatabasePath("bible.db")?.delete()
         context?.getDatabasePath("prayers_ort.db")?.delete()
-        // Перезапускаем активность для применения изменений
-        requireActivity().recreate()
+        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
-    private fun saveLocalePreference(languageCode: String) {
-        val prefs = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        prefs.edit().putString("selected_language", languageCode).apply()
+    // 2. Проверка разрешения на отправку уведомлений
+    private fun checkNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // Разрешение уже есть
+                enableNotifications()
+            }
+            else -> {
+                // Запрашиваем разрешение
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun enableNotifications() {
+        prefs.isNotificationEnabled = true
+        AlarmUtils.scheduleNotification(requireContext(), prefs.notificationHour, prefs.notificationMinute)
+    }
+
+    private fun disableNotifications() {
+        prefs.isNotificationEnabled = false
+        AlarmUtils.cancelNotification(requireContext())
+    }
+
+    private fun showTimePicker() {
+        val picker = TimePickerDialog(
+            requireContext(),
+            { _, hourOfDay, minute ->
+                prefs.notificationHour = hourOfDay
+                prefs.notificationMinute = minute
+                updateTimeButtonText(hourOfDay, minute)
+
+                if (prefs.isNotificationEnabled) {
+                    AlarmUtils.scheduleNotification(requireContext(), hourOfDay, minute)
+                }
+            },
+            prefs.notificationHour,
+            prefs.notificationMinute,
+            true
+        )
+        picker.show()
+    }
+
+    private fun updateTimeButtonText(hour: Int, minute: Int) {
+        val timeString = String.format("%02d:%02d", hour, minute)
+        binding.notificationTime.text = "$timeString"
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.uvpv521.calendar.R
+import com.uvpv521.calendar.data.models.PrayerType
 import com.uvpv521.calendar.databinding.FragmentRosaryBinding
 import java.util.Calendar
 
@@ -60,14 +61,6 @@ class RosaryFragment : Fragment() {
         PrayerType.FATIMA_PRAYER,  // 19: Фатимская молитва
         // Декады 2-5 повторяют структуру 8-19
     )
-
-    enum class PrayerType {
-        CREED,
-        OUR_FATHER,
-        HAIL_MARY,
-        GLORY_BE,
-        FATIMA_PRAYER
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

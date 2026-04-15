@@ -8,7 +8,10 @@
         <item name="colorOnSecondary">@color/main</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="textAppearanceListItemSmall"></item>
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textColorPrimary">@color/accent</item>
+        <item name="android:textColorSecondary">@color/accent</item>
+        <item name="android:textColorTertiary">@color/accent</item>
     </style>
 
     <style name="Theme.Calendar.NoActionBar">

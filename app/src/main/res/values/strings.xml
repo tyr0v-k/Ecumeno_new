@@ -7,6 +7,10 @@
     <string name="title_prayers">Молитвы</string>
     <string name="title_settings">Настройки</string>
 
+    <string name="notification_message_small">Не забывайте о духовной жизни!</string>
+    <string name="notification_message">Важные даты сегодня: %s\nСтепень поста: %s</string>
+    <string name="no_dates">отсутствуют</string>
+
     <string name="chapter">Глава</string>
     <string name="today">Сегодня</string>
     <string name="decade">Декада</string>
@@ -16,6 +20,7 @@
     <string name="daily_notifications">Ежедневные уведомления</string>
     <string name="appearance">Внешний вид</string>
     <string name="dark_mode">Темная тема</string>
+    <string name="language">Язык</string>
     <string name="reset">Сброс</string>
 
     <!-- Fast levels -->

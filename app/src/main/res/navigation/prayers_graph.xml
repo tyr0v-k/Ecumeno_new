@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/prayers_graph"
+    app:startDestination="@+id/navigation_prayers">
+
+    <fragment
+        android:id="@+id/navigation_prayers"
+        android:name="com.uvpv521.calendar.ui.BooksFragment"
+        android:label="@string/title_prayers"
+        tools:layout="@layout/fragment_books">
+        <argument android:name="dbName" app:argType="string" android:defaultValue="prayers_ort.db" />
+        <action android:id="@+id/action_books_to_reader" app:destination="@id/readerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/readerFragment"
+        android:name="com.uvpv521.calendar.ui.ReaderFragment"
+        android:label="@string/title_reader" >
+        <argument
+            android:name="dbName"
+            app:argType="string" />
+        <argument
+            android:name="number"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

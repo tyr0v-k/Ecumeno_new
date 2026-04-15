@@ -3,6 +3,7 @@ package com.uvpv521.calendar.data.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.appcompat.app.AppCompatDelegate
 import com.uvpv521.calendar.data.entities.Book
 import com.uvpv521.calendar.data.entities.Category
 import com.uvpv521.calendar.data.entities.Prayer
@@ -20,7 +21,14 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
         val dbFile = context.getDatabasePath(dbName)
         if (!dbFile.exists()) {
             dbFile.parentFile?.mkdirs()
-            val localeName = if (Locale.getDefault().language == "ru") "_ru." else "_en."
+            val currentLocales = AppCompatDelegate.getApplicationLocales()
+            val languageCode : String
+            if (currentLocales.isEmpty){
+                languageCode = Locale.getDefault().language
+            } else{
+                languageCode = currentLocales[0]?.language ?: "en"
+            }
+            val localeName = if (languageCode == "ru") "_ru." else "_en."
             val dbAssetName = dbName.substringBeforeLast(".") + localeName + dbName.substringAfterLast(".")
             context.assets.open(dbAssetName).use { input ->
                 FileOutputStream(dbFile).use { output ->

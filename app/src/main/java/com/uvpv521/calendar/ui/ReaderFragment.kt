@@ -4,9 +4,7 @@ import android.content.Context
 import android.hardware.SensorManager
 import com.uvpv521.calendar.R
 import android.os.Bundle
-import android.os.Vibrator
 import android.text.Html
-import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -14,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.uvpv521.calendar.data.database.DatabaseHelper
+import com.uvpv521.calendar.data.local.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentReaderBinding
 import kotlin.collections.joinToString
 import kotlin.collections.map
@@ -26,9 +26,10 @@ import kotlin.collections.map
 class ReaderFragment : Fragment() {
     private var _binding: FragmentReaderBinding? = null
     private val binding get() = _binding!!
-    private var currentFontSize = 18f
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var sensorManager: SensorManager
+    private lateinit var prefs: PrefsHelper
+
 
 
 
@@ -42,6 +43,7 @@ class ReaderFragment : Fragment() {
         val number = args.number
         val dbName = args.dbName
         val dbHelper = DatabaseHelper(requireContext(), dbName)
+        prefs = PrefsHelper(requireContext())
 
         if (dbName.contains("bible")){
             // Настройка спиннера глав
@@ -50,13 +52,28 @@ class ReaderFragment : Fragment() {
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerChapters.adapter = spinnerAdapter
 
+
             binding.spinnerChapters.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val verses = dbHelper.getVerses(number, chapters[position])
                     // Собираем все стихи в один текст для простоты
+                    prefs.lastChapter = position
                     binding.textViewContent.text = verses.joinToString("\n\n") { "${it.verse}. ${Html.fromHtml(it.text.replace(Regex("<[Ss][^>]*>.*?</[Ss]>", RegexOption.IGNORE_CASE), ""))}".replace("\\[.*?\\]".toRegex(), "") }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+            if (prefs.lastChapter != -1){
+                binding.spinnerChapters.setSelection(prefs.lastChapter)
+            }
+
+            // Перехватываем нажатие системной кнопки "Назад"
+            requireActivity().onBackPressedDispatcher.addCallback(this) {
+                prefs.lastChapter = -1
+                prefs.lastBook = -1
+                // Убираем колбэк, чтобы не зациклиться, и выполняем стандартное поведение
+                isEnabled = false
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
         else {
@@ -75,16 +92,16 @@ class ReaderFragment : Fragment() {
         }
 
         // Настройка размера шрифта
-        binding.textViewContent.textSize = currentFontSize
+        binding.textViewContent.textSize = prefs.fontSize
 
         binding.btnTextMinus.setOnClickListener {
-            if (currentFontSize > 10f) currentFontSize -= 2f
-            binding.textViewContent.textSize = currentFontSize
+            if (prefs.fontSize > 10f) prefs.fontSize -= 2f
+            binding.textViewContent.textSize = prefs.fontSize
         }
 
         binding.btnTextPlus.setOnClickListener {
-            if (currentFontSize < 40f) currentFontSize += 2f
-            binding.textViewContent.textSize = currentFontSize
+            if (prefs.fontSize < 40f) prefs.fontSize += 2f
+            binding.textViewContent.textSize = prefs.fontSize
         }
 
         initGestureDetector()

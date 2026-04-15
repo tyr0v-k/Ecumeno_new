@@ -1,9 +1,9 @@
-package com.uvpv521.calendar.ui
+package com.uvpv521.calendar.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +33,14 @@ class CalendarAdapter(
 
         fun bind(day: CalendarDay) {
             binding.dayNumber.text = day.date.dayOfMonth.toString()
-            binding.dayOfWeek.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+            val currentLocales = AppCompatDelegate.getApplicationLocales()
+            val languageCode : String
+            if (currentLocales.isEmpty){
+                languageCode = Locale.getDefault().language
+            } else{
+                languageCode = currentLocales[0]?.language ?: "en"
+            }
+            binding.dayOfWeek.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.forLanguageTag(languageCode))
 
             if (day.date.month != currentMonth) {
                 binding.dayNumber.setTextColor(

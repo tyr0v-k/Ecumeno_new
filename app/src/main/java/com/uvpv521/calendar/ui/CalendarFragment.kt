@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.uvpv521.calendar.R
 import com.uvpv521.calendar.data.models.FastLevel
 import com.uvpv521.calendar.databinding.FragmentCalendarBinding
+import com.uvpv521.calendar.ui.adapters.CalendarAdapter
 import com.uvpv521.calendar.ui.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -90,7 +92,7 @@ class CalendarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // Наблюдаем за currentMonth
                 viewModel.currentMonth.collect { month ->
-                    val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.getDefault())
+                    val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.forLanguageTag(getCurrentLocale()))
                     binding.monthTitle.text = month.format(formatter).substring(0,1).uppercase() + month.format(formatter).substring(1)
                     if(month == YearMonth.now()){
                         binding.prevMonth.imageAlpha = 100
@@ -139,11 +141,10 @@ class CalendarFragment : Fragment() {
         // Получаем текущий список дней
         val days = calendarAdapter.currentList
         val day = days.find { it.date == date }
-
         day?.let {
             binding.dayInfo.visibility=View.VISIBLE
             binding.selectedDate.text = date.format(
-                DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale.getDefault())
+                DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale.forLanguageTag(getCurrentLocale()))
             )
 
             if (it.holidays.isNotEmpty()) {
@@ -195,5 +196,14 @@ class CalendarFragment : Fragment() {
             override fun onDown(e: MotionEvent): Boolean = true
         }
         )
+    }
+
+    private fun getCurrentLocale() : String{
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentLocales.isEmpty){
+            return Locale.getDefault().language
+        } else{
+            return currentLocales[0]?.language ?: "en"
+        }
     }
 }

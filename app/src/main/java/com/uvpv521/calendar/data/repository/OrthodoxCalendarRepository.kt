@@ -6,9 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.TextStyle
 import java.time.temporal.TemporalAdjusters
-import java.util.Locale
 
 class OrthodoxCalendarRepository {
 
@@ -204,5 +202,62 @@ class OrthodoxCalendarRepository {
         }
 
         return@withContext days
+    }
+
+    suspend fun getDailyCalendar(): CalendarDay = withContext(Dispatchers.IO) {
+        var currentDate = LocalDate.now()
+        // Вычисляем Пасху для года
+        val easterDate = EasterCalculator.calculateOrthodoxEaster(currentDate.year)
+        val movableHolidays = EasterCalculator.calculateMovableHolidays(easterDate, currentDate.year)
+
+
+        val dayHolidays = mutableListOf<Holiday>()
+
+        // Проверяем неподвижные праздники
+        val monthDay = String.format("%02d%02d", currentDate.monthValue, currentDate.dayOfMonth)
+        fixedHolidays[monthDay]?.let { fixedHoliday ->
+            val holiday = fixedHoliday.copy(
+                date = LocalDate.of(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+            )
+            dayHolidays.add(holiday)
+        }
+
+        // Проверяем подвижные праздники
+        movableHolidays.forEach { (name, date) ->
+            if (date.year == currentDate.year &&
+                date.monthValue == currentDate.monthValue &&
+                date.dayOfMonth == currentDate.dayOfMonth) {
+                dayHolidays.add(
+                    Holiday(
+                        name = name,
+                        date = currentDate,
+                        priority = 2,
+                        isMovable = true
+                    )
+                )
+            }
+        }
+
+        // Добавляем Пасху
+        if (currentDate == easterDate) {
+            dayHolidays.add(
+                Holiday(
+                    name = "easter",
+                    date = currentDate,
+                    priority = 0, // Высший приоритет
+                    isMovable = true
+                )
+            )
+        }
+
+        val fastLevel = EasterCalculator.getFastLevel(currentDate, easterDate)
+
+        return@withContext CalendarDay(
+            date = currentDate,
+            holidays = dayHolidays,
+            fastLevel = fastLevel,
+            isToday = true,
+            isSelected = false
+        )
     }
 }

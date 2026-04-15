@@ -7,6 +7,10 @@
     <string name="title_prayers">Prayers</string>
     <string name="title_settings">Settings</string>
 
+    <string name="notification_message_small">Don\'t forget about spiritual life!</string>
+    <string name="notification_message">Dates today:%s\nFast level: %s</string>
+    <string name="no_dates">none</string>
+
     <string name="chapter">Chapter</string>
     <string name="today">Today</string>
     <string name="decade">Decade</string>
@@ -16,6 +20,7 @@
     <string name="daily_notifications">Daily notifications</string>
     <string name="appearance">Appearance</string>
     <string name="dark_mode">Dark mode</string>
+    <string name="language">Language</string>
     <string name="reset">Reset</string>
 
     <!-- Fast levels -->

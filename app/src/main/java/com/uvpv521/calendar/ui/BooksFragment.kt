@@ -7,10 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.uvpv521.calendar.data.database.DatabaseHelper
+import com.uvpv521.calendar.data.local.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentBooksBinding
+import kotlinx.coroutines.launch
 import kotlin.collections.map
 
 class BooksFragment : Fragment() {
@@ -18,6 +23,9 @@ class BooksFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: BooksFragmentArgs by navArgs()
+
+    private lateinit var prefs: PrefsHelper
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentBooksBinding.inflate(inflater, container, false)
@@ -28,6 +36,11 @@ class BooksFragment : Fragment() {
         val dbName = args.dbName
         val dbHelper = DatabaseHelper(requireContext(), dbName)
         if (dbName.contains("bible")){
+            prefs = PrefsHelper(requireContext())
+            if (prefs.lastBook != -1){
+                val action = BooksFragmentDirections.actionBooksToReader(args.dbName, prefs.lastBook)
+                findNavController().navigate(action)
+            }
             val books = dbHelper.getBooks()
 
             val adapter = ArrayAdapter(requireContext(), R.layout.simple_list_item_1, books.map { it.longName })
@@ -35,6 +48,7 @@ class BooksFragment : Fragment() {
 
             binding.listViewBooks.setOnItemClickListener { _, _, position, _ ->
                 val bookNumber = books[position].bookNumber
+                prefs.lastBook = bookNumber
                 val action = BooksFragmentDirections.actionBooksToReader(args.dbName, bookNumber)
                 findNavController().navigate(action)
             }

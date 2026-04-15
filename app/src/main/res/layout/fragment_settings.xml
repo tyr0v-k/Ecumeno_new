@@ -16,7 +16,6 @@
             android:text="@string/notifications"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/accent"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
@@ -31,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/daily_notifications"
-                android:textColor="@color/accent"
                 />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -41,22 +39,28 @@
                 android:checked="true" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/notification_time"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/accent"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <Spinner
-            android:id="@+id/spinner_notification_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/accent"
-            android:popupBackground="@color/main"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_time"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="textEnd"
+                android:backgroundTint="@color/accent"
+                android:popupBackground="@color/main"/>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -70,14 +74,12 @@
             android:text="@string/appearance"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/accent"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
             android:gravity="center_vertical">
 
             <TextView
@@ -85,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/dark_mode"
-                android:textColor="@color/accent"
                 />
 
             <androidx.appcompat.widget.SwitchCompat
@@ -99,6 +100,14 @@
             android:layout_height="1dp"
             android:background="@color/accent"
             android:layout_marginVertical="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

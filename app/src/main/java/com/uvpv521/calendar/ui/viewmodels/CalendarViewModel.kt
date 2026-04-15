@@ -53,8 +53,4 @@ class CalendarViewModel : ViewModel() {
         val today = LocalDate.now()
         loadMonth(today.year, today.monthValue)
     }
-
-//    fun getHolidayDescription(holiday: Holiday): String {
-//        return repository.getHolidayDescription(holiday)
-//    }
 }
