@@ -1,10 +1,7 @@
 package com.uvpv521.calendar.ui
 
 import android.content.Context
-import android.hardware.Sensor
 import android.hardware.SensorManager
-import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -16,11 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.uvpv521.calendar.R
-import com.uvpv521.calendar.databinding.FragmentCalendarBinding
 import com.uvpv521.calendar.databinding.FragmentRosaryBinding
 import java.util.Calendar
 
@@ -36,11 +31,11 @@ class RosaryFragment : Fragment() {
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var vibrator: Vibrator
     private lateinit var sensorManager: SensorManager
-    private lateinit var accelerometer: Sensor
 
     private var currentDecade = 0
     private var currentBead = 0
     private var currentPrayerIndex = 0
+    private var delimiter = false
 
     private val rosaryStructure = listOf(
         PrayerType.CREED,          // 0: Символ веры
@@ -88,8 +83,7 @@ class RosaryFragment : Fragment() {
 
         initViews()
         initGestureDetector()
-        initSensors()
-
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         updateDisplay()
 
         view.isFocusableInTouchMode = true
@@ -120,14 +114,10 @@ class RosaryFragment : Fragment() {
         tvBeadNumber = binding.tvBeadNumber
         tvMysteryTitle = binding.tvMysteryTitle
         btnReset = binding.btnReset
-//        btnPrevious = findViewById(R.id.btnPrevious)
-//        btnNext = findViewById(R.id.btnNext)
 
         vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         btnReset.setOnClickListener { resetRosary() }
-//        btnPrevious.setOnClickListener { previousBead() }
-//        btnNext.setOnClickListener { nextBead() }
     }
 
     private fun initGestureDetector() {
@@ -156,11 +146,6 @@ class RosaryFragment : Fragment() {
         })
     }
 
-    private fun initSensors() {
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
-    }
-
     private fun nextBead() {
         if(currentDecade == 5 && currentPrayerIndex == rosaryStructure.size - 1){
             resetRosary()
@@ -178,7 +163,7 @@ class RosaryFragment : Fragment() {
             }
             updateCurrentDecadeAndBead()
             updateDisplay()
-            triggerVibration()
+            triggerVibration(delimiter)
         }
     }
 
@@ -187,7 +172,7 @@ class RosaryFragment : Fragment() {
             currentPrayerIndex--
             updateCurrentDecadeAndBead()
             updateDisplay()
-            triggerVibration()
+            triggerVibration(delimiter)
         }
     }
 
@@ -211,8 +196,14 @@ class RosaryFragment : Fragment() {
             getString(R.string.rosary_mystery_glorious)
         )
         val prayerType = rosaryStructure[currentPrayerIndex]
+        if (getPrayerText(prayerType) != tvPrayer.text.toString()){
+            delimiter = true
+        }
+        else{
+            delimiter = false
+        }
         tvPrayer.text = getPrayerText(prayerType)
-        tvBeadNumber.text = "Декада: ${currentDecade}, Зерно: ${currentBead}"
+        tvBeadNumber.text = "${getString(R.string.decade)}: ${currentDecade}, ${getString(R.string.bead)}: ${currentBead}"
 
         // Определяем тайну по дню недели
         val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
@@ -225,7 +216,7 @@ class RosaryFragment : Fragment() {
             Calendar.THURSDAY -> 1
             else -> 0
         }
-        tvMysteryTitle.text = "Тайна: ${mysteries[dayOfWeek]}"
+        tvMysteryTitle.text = "${getString(R.string.rosary_mystery)}: ${mysteries[dayOfWeek]}"
     }
 
     private fun getPrayerText(prayerType: PrayerType): String {
@@ -245,15 +236,21 @@ class RosaryFragment : Fragment() {
         }
     }
 
-    private fun triggerVibration() {
-        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+    private fun triggerVibration(delimiter : Boolean) {
+        if (delimiter){
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        }
+        else{
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        }
     }
 
     private fun resetRosary() {
         currentPrayerIndex = 0
         currentDecade = 0
         currentBead = 0
+        delimiter = false
         updateDisplay()
-        triggerVibration()
+        triggerVibration(delimiter)
     }
 }

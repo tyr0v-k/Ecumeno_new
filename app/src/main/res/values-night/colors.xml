@@ -4,7 +4,7 @@
     <color name="holiday_middle">#FB8C00</color>
     <color name="holiday_small">#43A047</color>
     <color name="fast_color">#5C6BC0</color>
-    <color name="main">#E7E7E7</color>
-    <color name="accent">#191919</color>
+    <color name="main">#191919</color>
+    <color name="accent">#E7E7E7</color>
     <color name="not_available">#9C9C9C</color>
 </resources>

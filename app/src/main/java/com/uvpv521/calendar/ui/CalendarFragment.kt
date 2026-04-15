@@ -1,9 +1,14 @@
 package com.uvpv521.calendar.ui
 
+import android.content.Context
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -30,6 +35,11 @@ class CalendarFragment : Fragment() {
 
     private lateinit var calendarAdapter: CalendarAdapter
 
+    private lateinit var gestureDetector: GestureDetectorCompat
+    private lateinit var sensorManager: SensorManager
+
+    private var current = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,6 +55,12 @@ class CalendarFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
         setupClickListeners()
+        initGestureDetector()
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        view.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            true
+        }
     }
 
     private fun setupRecyclerView() {
@@ -56,6 +72,7 @@ class CalendarFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 7)
             adapter = calendarAdapter
         }
+        binding.calendarGrid.isNestedScrollingEnabled = false
     }
 
     private fun setupObservers() {
@@ -73,15 +90,21 @@ class CalendarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // Наблюдаем за currentMonth
                 viewModel.currentMonth.collect { month ->
-                    val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale("ru"))
+                    val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.getDefault())
                     binding.monthTitle.text = month.format(formatter).substring(0,1).uppercase() + month.format(formatter).substring(1)
                     if(month == YearMonth.now()){
                         binding.prevMonth.imageAlpha = 100
                         binding.prevMonth.isEnabled = false
+                        current = true
+                        binding.todayButton.isEnabled = false
+                        binding.todayButton.setAlpha(0.1f)
                     }
                     else{
                         binding.prevMonth.imageAlpha = 1000
                         binding.prevMonth.isEnabled = true
+                        current = false
+                        binding.todayButton.isEnabled = true
+                        binding.todayButton.setAlpha(1f)
                     }
                     calendarAdapter.setCurrentMonth(month.month)
                 }
@@ -118,12 +141,13 @@ class CalendarFragment : Fragment() {
         val day = days.find { it.date == date }
 
         day?.let {
+            binding.dayInfo.visibility=View.VISIBLE
             binding.selectedDate.text = date.format(
-                DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale("ru"))
+                DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale.getDefault())
             )
 
             if (it.holidays.isNotEmpty()) {
-                binding.holidayName.text = it.holidays.joinToString("\n") { holiday -> holiday.name }
+                binding.holidayName.text = it.holidays.joinToString("\n") { holiday -> getString(requireContext().resources.getIdentifier(holiday.name, "string", requireContext().packageName)) }
                 binding.holidayName.visibility = View.VISIBLE
             } else {
                 binding.holidayName.visibility = View.GONE
@@ -146,5 +170,30 @@ class CalendarFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initGestureDetector() {
+        gestureDetector = GestureDetectorCompat(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                val diffX = e2.x - (e1?.x ?: 0f)
+                if (Math.abs(diffX) > 100 && Math.abs(velocityX) > 100) {
+                    if (diffX < 0) {
+                        viewModel.navigateToNextMonth()
+                    } else if (!current){
+                        viewModel.navigateToPreviousMonth()
+                    }
+                    return true
+                }
+                return false
+            }
+
+            override fun onDown(e: MotionEvent): Boolean = true
+        }
+        )
     }
 }

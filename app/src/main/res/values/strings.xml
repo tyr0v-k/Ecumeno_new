@@ -1,10 +1,22 @@
 <resources>
-    <string name="app_name">Православный календарь</string>
+    <string name="app_name">Ecumeno</string>
+    <string name="title_bible">Библия</string>
+    <string name="title_reader">Чтение</string>
     <string name="title_calendar">Календарь</string>
     <string name="title_rosary">Четки</string>
-    <string name="title_holidays">Праздники</string>
-    <string name="title_fast">Пост</string>
+    <string name="title_prayers">Молитвы</string>
     <string name="title_settings">Настройки</string>
+
+    <string name="chapter">Глава</string>
+    <string name="today">Сегодня</string>
+    <string name="decade">Декада</string>
+    <string name="bead">Зерно</string>
+    <string name="notifications">Уведомления</string>
+    <string name="notification_time">Время уведомлений</string>
+    <string name="daily_notifications">Ежедневные уведомления</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="dark_mode">Темная тема</string>
+    <string name="reset">Сброс</string>
 
     <!-- Fast levels -->
     <string name="fast_no_fast">Поста нет</string>
@@ -15,6 +27,39 @@
     <string name="fast_strict">Пост</string>
     <string name="fast_wine_oil_allowed">Вино и масло разрешены</string>
 
+    <string name="christmas">Рождество Христово</string>
+    <string name="forgiveness_sunday">Прощеное воскресенье</string>
+    <string name="lazarus_saturday">Лазарева суббота</string>
+    <string name="palm_sunday">Вербное воскресенье</string>
+    <string name="triumph_of_orthodoxy">Торжество православия</string>
+    <string name="good_friday">Страстная пятница</string>
+    <string name="thomas_sunday">Антипасха</string>
+    <string name="ascension_of_the_lord">Вознесение Господне</string>
+    <string name="pentecost">День Святой Троицы</string>
+    <string name="day_of_the_holy_spirit">День Святого Духа</string>
+    <string name="universal_memorial_saturday">Вселенская родительская суббота</string>
+    <string name="lent_saturday_2">Суббота 2-й седмицы Великого Поста (родительская)</string>
+    <string name="lent_saturday_3">Суббота 3-й седмицы Великого Поста (родительская)</string>
+    <string name="lent_saturday_4">Суббота 4-й седмицы Великого Поста (родительская)</string>
+    <string name="radonitsa">Радоница</string>
+    <string name="trinity_saturday">Троицкая суббота</string>
+    <string name="circumcision_of_the_lord">Обрезание Господне</string>
+    <string name="theophany">Крещение Господне</string>
+    <string name="presentation_of_the_lord">Сретение Господне</string>
+    <string name="annunciation_of_the_most_holy_theotokos">Благовещение Пресвятой Богородицы</string>
+    <string name="memorial_day_for_fallen_soldiers">День поминовения усопших воинов</string>
+    <string name="nativity_of_john_the_baptist">Рождество Иоанна Предтечи</string>
+    <string name="feast_of_saints_peter_and_paul">День Петра и Павла</string>
+    <string name="transfiguration_of_the_lord">Преображение Господне</string>
+    <string name="dormition_of_the_most_holy_theotokos">Успение Пресвятой Богородицы</string>
+    <string name="beheading_of_john_the_baptist">Усекновение главы Иоанна Предтечи</string>
+    <string name="nativity_of_the_most_holy_theotokos">Рождество Пресвятой Богородицы</string>
+    <string name="exaltation_of_the_holy_cross">Воздвижение Креста Господня</string>
+    <string name="protection_of_the_most_holy_theotokos">Покров Пресвятой Богородицы</string>
+    <string name="entrance_of_the_most_holy_theotokos_into_the_temple">Введение во храм Пресвятой Богородицы</string>
+    <string name="easter">Светлое Христово Воскресение. Пасха</string>
+
+    <string name="rosary_mystery">Тайны</string>
     <string name="rosary_mystery_joyful">Радостные (Пн, Сб)</string>
     <string name="rosary_mystery_luminous">Светлые (Чт)</string>
     <string name="rosary_mystery_sorrowful">Скорбные (Вт, Пт)</string>

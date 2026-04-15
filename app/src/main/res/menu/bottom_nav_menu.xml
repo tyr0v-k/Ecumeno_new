@@ -5,8 +5,16 @@
         android:icon="@drawable/ic_calendar"
         android:title="@string/title_calendar" />
     <item
+        android:id="@+id/navigation_bible"
+        android:icon="@drawable/ic_bible"
+        android:title="@string/title_bible" />
+    <item
+        android:id="@+id/navigation_prayers"
+        android:icon="@drawable/ic_prayer"
+        android:title="@string/title_prayers" />
+    <item
         android:id="@+id/navigation_rosary"
-        android:icon="@drawable/ic_calendar"
+        android:icon="@drawable/ic_rosary"
         android:title="@string/title_rosary" />
     <item
         android:id="@+id/navigation_settings"

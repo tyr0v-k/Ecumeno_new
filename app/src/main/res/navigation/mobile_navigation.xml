@@ -23,5 +23,34 @@
         android:label="@string/title_rosary"
         tools:layout="@layout/fragment_rosary" />
 
+    <fragment
+        android:id="@+id/navigation_bible"
+        android:name="com.uvpv521.calendar.ui.BooksFragment"
+        android:label="@string/title_bible"
+        tools:layout="@layout/fragment_books">
+        <argument android:name="dbName" app:argType="string" android:defaultValue="bible.db" />
+        <action android:id="@+id/action_books_to_reader" app:destination="@id/readerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_prayers"
+        android:name="com.uvpv521.calendar.ui.BooksFragment"
+        android:label="@string/title_prayers"
+        tools:layout="@layout/fragment_books">
+        <argument android:name="dbName" app:argType="string" android:defaultValue="prayers_ort.db" />
+        <action android:id="@+id/action_books_to_reader" app:destination="@id/readerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/readerFragment"
+        android:name="com.uvpv521.calendar.ui.ReaderFragment"
+        android:label="@string/title_reader" >
+        <argument
+            android:name="dbName"
+            app:argType="string" />
+        <argument
+            android:name="number"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

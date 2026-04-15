@@ -23,9 +23,12 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)
 
-        val appBarConfiguration = AppBarConfiguration(
+        AppBarConfiguration(
             setOf(
                 R.id.navigation_calendar,
+                R.id.navigation_bible,
+                R.id.navigation_prayers,
+                R.id.navigation_rosary,
                 R.id.navigation_settings
             )
         )

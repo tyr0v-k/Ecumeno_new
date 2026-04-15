@@ -14,25 +14,19 @@ class OrthodoxCalendarRepository {
 
     private val fixedHolidays = mapOf(
         "0107" to Holiday(
-            id = "christmas",
-            name = "Рождество Христово",
-//            description = "Рождество Господа Бога и Спаса нашего Иисуса Христа",
+            name = "christmas",
             date = LocalDate.of(2000, 1, 7),
             priority = 1,
             isMovable = false
         ),
         "0114" to Holiday(
-            id = "circumcision",
-            name = "Обрезание Господне",
-//            description = "Память обрезания Иисуса Христа",
+            name = "circumcision_of_the_lord",
             date = LocalDate.of(2000, 1, 14),
             priority = 4,
             isMovable = false
         ),
         "0119" to Holiday(
-            id = "baptism",
-            name = "Крещение Господне",
-//            description = "Богоявление. Крещение Господа Бога и Спаса нашего Иисуса Христа",
+            name = "theophany",
             date = LocalDate.of(2000, 1, 19),
             priority = 1,
             isMovable = false
@@ -40,9 +34,7 @@ class OrthodoxCalendarRepository {
 
         // Февраль
         "0215" to Holiday(
-            id = "meeting",
-            name = "Сретение Господне",
-//            description = "Встреча Господа в храме",
+            name = "presentation_of_the_lord",
             date = LocalDate.of(2000, 2, 15),
             priority = 3,
             isMovable = false
@@ -50,9 +42,7 @@ class OrthodoxCalendarRepository {
 
         // Апрель
         "0407" to Holiday(
-            id = "annunciation",
-            name = "Благовещение Пресвятой Богородицы",
-//            description = "Возвещение архангелом Гавриилом Деве Марии о рождении Иисуса Христа",
+            name = "annunciation_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 4, 7),
             priority = 2,
             isMovable = false
@@ -60,8 +50,7 @@ class OrthodoxCalendarRepository {
 
         // Май
         "0509" to Holiday(
-            id = "warriors_remembrance_day",
-            name = "День поминовения усопших воинов",
+            name = "memorial_day_for_fallen_soldiers",
             date = LocalDate.of(2000, 5, 9),
             priority = 6,
             isMovable = false
@@ -69,16 +58,14 @@ class OrthodoxCalendarRepository {
 
         // Июль
         "0707" to Holiday(
-            id = "nativity_of_john",
-            name = "Рождество Иоанна Предтечи",
+            name = "nativity_of_john_the_baptist",
             date = LocalDate.of(2000, 7, 7),
             priority = 1,
             isMovable = false
         ),
 
         "0712" to Holiday(
-            id = "day_of_peter_and_paul",
-            name = "День Петра и Павла",
+            name = "feast_of_saints_peter_and_paul",
             date = LocalDate.of(2000, 7, 12),
             priority = 1,
             isMovable = false
@@ -86,17 +73,13 @@ class OrthodoxCalendarRepository {
 
         // Август
         "0819" to Holiday(
-            id = "transfiguration",
-            name = "Преображение Господне",
-//            description = "Преображение Господа Бога и Спаса нашего Иисуса Христа",
+            name = "transfiguration_of_the_lord",
             date = LocalDate.of(2000, 8, 19),
             priority = 2,
             isMovable = false
         ),
         "0828" to Holiday(
-            id = "dormition",
-            name = "Успение Пресвятой Богородицы",
-//            description = "Успение Пресвятой Владычицы нашей Богородицы и Приснодевы Марии",
+            name = "dormition_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 8, 28),
             priority = 1,
             isMovable = false
@@ -104,25 +87,21 @@ class OrthodoxCalendarRepository {
 
         // Сентябрь
         "0911" to Holiday(
-            id = "beheading_of_john",
-            name = "Усекновение главы Иоанна Предтечи",
+            name = "beheading_of_john_the_baptist",
             date = LocalDate.of(2000, 9, 11),
             priority = 1,
             isMovable = false
         ),
 
         "0921" to Holiday(
-            id = "nativity_of_theotokos",
-            name = "Рождество Пресвятой Богородицы",
-//            description = "Рождество Пресвятой Владычицы нашей Богородицы и Приснодевы Марии",
+            name = "nativity_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 9, 21),
             priority = 1,
             isMovable = false
         ),
 
         "0927" to Holiday(
-            id = "feast_of_the_cross",
-            name = "Воздвижение Креста Господня",
+            name = "exaltation_of_the_holy_cross",
             date = LocalDate.of(2000, 9, 27),
             priority = 1,
             isMovable = false
@@ -130,9 +109,7 @@ class OrthodoxCalendarRepository {
 
         // Октябрь
         "1014" to Holiday(
-            id = "protection",
-            name = "Покров Пресвятой Богородицы",
-//            description = "Покров Пресвятой Владычицы нашей Богородицы и Приснодевы Марии",
+            name = "protection_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 10, 14),
             priority = 2,
             isMovable = false
@@ -140,9 +117,7 @@ class OrthodoxCalendarRepository {
 
         // Декабрь
         "1204" to Holiday(
-            id = "introduction",
-            name = "Введение во храм Пресвятой Богородицы",
-//            description = "Введение во храм Пресвятой Владычицы нашей Богородицы и Приснодевы Марии",
+            name = "entrance_of_the_most_holy_theotokos_into_the_temple",
             date = LocalDate.of(2000, 12, 4),
             priority = 1,
             isMovable = false
@@ -192,9 +167,7 @@ class OrthodoxCalendarRepository {
                     date.dayOfMonth == currentDate.dayOfMonth) {
                     dayHolidays.add(
                         Holiday(
-                            id = name.lowercase().replace(" ", "_"),
                             name = name,
-//                            description = "Подвижный праздник",
                             date = currentDate,
                             priority = 2,
                             isMovable = true
@@ -207,9 +180,7 @@ class OrthodoxCalendarRepository {
             if (currentDate == easterDate) {
                 dayHolidays.add(
                     Holiday(
-                        id = "easter",
-                        name = "Светлое Христово Воскресение. Пасха",
-//                        description = "Воскресение Господа Бога и Спаса нашего Иисуса Христа",
+                        name = "easter",
                         date = currentDate,
                         priority = 0, // Высший приоритет
                         isMovable = true
@@ -222,7 +193,6 @@ class OrthodoxCalendarRepository {
             days.add(
                 CalendarDay(
                     date = currentDate,
-                    dayOfWeek = currentDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("ru")),
                     holidays = dayHolidays,
                     fastLevel = fastLevel,
                     isToday = currentDate == today,
@@ -235,28 +205,4 @@ class OrthodoxCalendarRepository {
 
         return@withContext days
     }
-
-//    fun getHolidayDescription(holiday: Holiday): String {
-//        return when (holiday.id) {
-//            "easter" -> "Пасха - самый главный христианский праздник. " +
-//                    "Установлен в честь Воскресения Иисуса Христа."
-//            "christmas" -> "Рождество Христово - один из главных христианских праздников. " +
-//                    "Установлен в честь рождения Иисуса Христа."
-//            "baptism" -> "Крещение Господне - праздник в честь крещения Иисуса Христа " +
-//                    "в реке Иордан Иоанном Крестителем."
-//            else -> holiday.description
-//        }
-//    }
-//
-//    private fun getRussianDayOfWeek(date: LocalDate): String {
-//        return when (date.dayOfWeek) {
-//            DayOfWeek.MONDAY -> "Пн"
-//            DayOfWeek.TUESDAY -> "Вт"
-//            DayOfWeek.WEDNESDAY -> "Ср"
-//            DayOfWeek.THURSDAY -> "Чт"
-//            DayOfWeek.FRIDAY -> "Пт"
-//            DayOfWeek.SATURDAY -> "Сб"
-//            DayOfWeek.SUNDAY -> "Вс"
-//        }
-//    }
 }

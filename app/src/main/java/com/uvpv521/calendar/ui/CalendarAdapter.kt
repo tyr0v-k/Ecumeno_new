@@ -13,6 +13,8 @@ import com.uvpv521.calendar.data.models.FastLevel
 import com.uvpv521.calendar.databinding.CalendarDayItemBinding
 import java.time.LocalDate
 import java.time.Month
+import java.time.format.TextStyle
+import java.util.Locale
 
 class CalendarAdapter(
     private val onDateClick: (LocalDate) -> Unit
@@ -31,24 +33,11 @@ class CalendarAdapter(
 
         fun bind(day: CalendarDay) {
             binding.dayNumber.text = day.date.dayOfMonth.toString()
-            binding.dayOfWeek.text = day.dayOfWeek
-
-            // Выделение сегодняшнего дня
-            if (day.isToday) {
-                binding.dayNumber.setBackgroundResource(R.drawable.today_circle)
-                binding.dayNumber.setTextColor(
-                    binding.root.context.getColor(R.color.white)
-                )
-            } else {
-                binding.dayNumber.background = null
-                binding.dayNumber.setTextColor(
-                    binding.root.context.getColor(R.color.black)
-                )
-            }
+            binding.dayOfWeek.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
 
             if (day.date.month != currentMonth) {
                 binding.dayNumber.setTextColor(
-                    binding.root.context.getColor(R.color.grey)
+                    binding.root.context.getColor(R.color.not_available)
                 )
                 binding.holidayIndicator.visibility = View.GONE
                 binding.fastIndicator.visibility = View.GONE
@@ -56,8 +45,24 @@ class CalendarAdapter(
                 // Выделение выбранного дня
                 if (day.date == selectedDate) {
                     binding.root.setBackgroundResource(R.drawable.selected_day_bg)
+                    binding.dayNumber.setTextColor(
+                        binding.root.context.getColor(R.color.main)
+                    )
                 } else {
                     binding.root.background = null
+                    binding.dayNumber.setTextColor(
+                        binding.root.context.getColor(R.color.accent)
+                    )
+                }
+
+                // Выделение сегодняшнего дня
+                if (day.isToday) {
+                    binding.dayNumber.setBackgroundResource(R.drawable.today_circle)
+                    binding.dayNumber.setTextColor(
+                        binding.root.context.getColor(R.color.main)
+                    )
+                } else {
+                    binding.dayNumber.background = null
                 }
 
                 // Отображение праздников
