@@ -11,7 +11,7 @@ class PrefsHelper(context: Context) {
         set(value) = prefs.edit().putBoolean("notif_enabled", value).apply()
 
     var notificationHour: Int
-        get() = prefs.getInt("notif_hour", 9) // По умолчанию 9:00
+        get() = prefs.getInt("notif_hour", 9)
         set(value) = prefs.edit().putInt("notif_hour", value).apply()
 
     var notificationMinute: Int
@@ -30,7 +30,7 @@ class PrefsHelper(context: Context) {
         get() = prefs.getInt("last_chapter", -1)
         set(value) = prefs.edit().putInt("last_chapter", value).apply()
 
-    var confession: String?
-        get() = prefs.getString("confession", "ort")
+    var confession: String
+        get() = prefs.getString("confession", "ort").toString()
         set(value) = prefs.edit().putString("confession", value).apply()
 }

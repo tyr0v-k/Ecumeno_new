@@ -26,4 +26,16 @@
     <include app:graph="@navigation/bible_graph" />
     <include app:graph="@navigation/prayers_graph" />
 
+    <fragment
+        android:id="@+id/onboarding"
+        android:name="com.uvpv521.calendar.ui.OnboardingFragment"
+        android:label="Onboarding"
+        tools:layout="@layout/fragment_onboarding">
+        <action android:id="@+id/action_onboarding_to_calendar"
+            app:destination="@id/navigation_calendar"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/mobile_navigation"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
 </navigation>

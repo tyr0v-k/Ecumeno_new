@@ -10,7 +10,7 @@
         android:name="com.uvpv521.calendar.ui.BooksFragment"
         android:label="@string/title_prayers"
         tools:layout="@layout/fragment_books">
-        <argument android:name="dbName" app:argType="string" android:defaultValue="prayers_ort.db" />
+        <argument android:name="dbName" app:argType="string" android:defaultValue="prayers.db" />
         <action android:id="@+id/action_books_to_reader" app:destination="@id/readerFragment" />
     </fragment>
 

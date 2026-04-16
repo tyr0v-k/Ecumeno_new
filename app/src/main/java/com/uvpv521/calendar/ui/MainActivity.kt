@@ -3,6 +3,7 @@ package com.uvpv521.calendar.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavGraph
@@ -24,9 +25,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)
+
+        val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
+
+        if (getSharedPreferences("app_settings", MODE_PRIVATE).getString("confession", null) == null){
+            navGraph.setStartDestination(R.id.onboarding)
+            binding.navView.visibility = View.GONE
+            binding.delimiter.visibility = View.GONE
+        } else{
+            navGraph.setStartDestination(R.id.navigation_calendar)
+        }
+
+        navController.graph = navGraph
 
         AppBarConfiguration(
             setOf(
@@ -49,8 +61,8 @@ class MainActivity : AppCompatActivity() {
                 parentGraph?.let { graph ->
                     // startDestination доступен через свойство graph.startDestinationId
                     if (currentDest.id != graph.startDestinationId) {
-                        getSharedPreferences("app_settings", Context.MODE_PRIVATE).edit().putInt("last_book", -1).apply()
-                        getSharedPreferences("app_settings", Context.MODE_PRIVATE).edit().putInt("last_chapter", -1).apply()
+                        getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_book", -1).apply()
+                        getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_chapter", -1).apply()
                         navController.popBackStack(graph.startDestinationId, inclusive = false)
                     }
                 }

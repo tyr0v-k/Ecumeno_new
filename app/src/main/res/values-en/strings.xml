@@ -10,7 +10,9 @@
     <string name="notification_message_small">Don\'t forget about spiritual life!</string>
     <string name="notification_message">Dates today:%s\nFast level: %s</string>
     <string name="no_dates">none</string>
-
+    <string name="hello">Peace be multiplied unto you!\n(Daniel 6:25)</string>
+    <string name="onboarding">Welcome to the Ecumeno app. Your spiritual life is in your own hands, but we will try to help, even if we differ.\n\nPlease select your denomination (you can change your choice in the settings at any time):</string>
+    <string name="finishOnBoard">Continue</string>
     <string name="chapter">Chapter</string>
     <string name="today">Today</string>
     <string name="decade">Decade</string>
@@ -22,6 +24,10 @@
     <string name="dark_mode">Dark mode</string>
     <string name="language">Language</string>
     <string name="reset">Reset</string>
+    <string name="confession">Denomination</string>
+    <string name="confession_ort">Orthodoxy</string>
+    <string name="confession_cat">Catholicism</string>
+    <string name="confession_lut">Lutheranism</string>
 
     <!-- Fast levels -->
     <string name="fast_no_fast">No fast</string>

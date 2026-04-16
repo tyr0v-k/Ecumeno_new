@@ -29,7 +29,6 @@
         app:itemTextColor="@color/accent"
         app:itemIconTint="@color/accent"
         app:backgroundTint="@color/main">
-
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <View

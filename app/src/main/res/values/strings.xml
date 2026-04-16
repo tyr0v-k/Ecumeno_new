@@ -10,7 +10,9 @@
     <string name="notification_message_small">Не забывайте о духовной жизни!</string>
     <string name="notification_message">Важные даты сегодня: %s\nСтепень поста: %s</string>
     <string name="no_dates">отсутствуют</string>
-
+    <string name="hello">Мир вам да умножится!\n(Дан. 6:25)</string>
+    <string name="onboarding">Приветствуем вас в приложении Ecumeno. Ваша духовная жизнь только в ваших руках, но мы постараемся помочь, даже если отличаемся.\n\nВыберите, пожалуйста, вашу конфессию (выбор можно изменить в настройках в любой момент):</string>
+    <string name="finishOnBoard">Продолжить</string>
     <string name="chapter">Глава</string>
     <string name="today">Сегодня</string>
     <string name="decade">Декада</string>
@@ -22,6 +24,10 @@
     <string name="dark_mode">Темная тема</string>
     <string name="language">Язык</string>
     <string name="reset">Сброс</string>
+    <string name="confession">Конфессия</string>
+    <string name="confession_ort">Православие</string>
+    <string name="confession_cat">Католицизм</string>
+    <string name="confession_lut">Лютеранство</string>
 
     <!-- Fast levels -->
     <string name="fast_no_fast">Поста нет</string>

@@ -28,7 +28,10 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
             } else{
                 languageCode = currentLocales[0]?.language ?: "en"
             }
-            val localeName = if (languageCode == "ru") "_ru." else "_en."
+            var localeName = if (languageCode == "ru") "_ru." else "_en."
+            if (dbFile.name.contains("prayers")){
+                localeName = "_" + context.getSharedPreferences("app_settings", Context.MODE_PRIVATE).getString("confession", "ort") + localeName
+            }
             val dbAssetName = dbName.substringBeforeLast(".") + localeName + dbName.substringAfterLast(".")
             context.assets.open(dbAssetName).use { input ->
                 FileOutputStream(dbFile).use { output ->
@@ -43,7 +46,16 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
 
     fun getBooks(): List<Book> {
         val books = mutableListOf<Book>()
-        readableDatabase.rawQuery("SELECT * FROM books ORDER BY book_number", null).use { cursor ->
+        val confession = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE).getString("confession", "ort").toString()
+        val sql : String
+        if (confession == "ort"){
+            sql = "SELECT * FROM books ORDER BY book_number"
+        } else if (confession == "cat"){
+            sql = "SELECT * FROM books WHERE orthodox IS NULL ORDER BY book_number"
+        } else{
+            sql = "SELECT * FROM books WHERE orthodox IS NULL AND apocrypha IS NULL ORDER BY book_number"
+        }
+        readableDatabase.rawQuery(sql, null).use { cursor ->
             while (cursor.moveToNext()) {
                 books.add(Book(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4)))
             }

@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,6 +81,21 @@ class SettingsFragment : Fragment() {
         binding.buttonEnglish.setOnClickListener {
             setLocale("en")
         }
+
+        binding.buttonOrt.setOnClickListener {
+            prefs.confession = "ort"
+            context?.getDatabasePath("prayers.db")?.delete()
+        }
+
+        binding.buttonCat.setOnClickListener {
+            prefs.confession = "cat"
+            context?.getDatabasePath("prayers.db")?.delete()
+        }
+
+        binding.buttonLut.setOnClickListener {
+            prefs.confession = "lut"
+            context?.getDatabasePath("prayers.db")?.delete()
+        }
     }
 
     override fun onDestroyView() {
@@ -90,7 +106,7 @@ class SettingsFragment : Fragment() {
     private fun setLocale(languageCode: String) {
         val appLocale = LocaleListCompat.forLanguageTags(languageCode)
         context?.getDatabasePath("bible.db")?.delete()
-        context?.getDatabasePath("prayers_ort.db")?.delete()
+        context?.getDatabasePath("prayers.db")?.delete()
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
