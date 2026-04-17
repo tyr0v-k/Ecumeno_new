@@ -9,7 +9,9 @@ class PrefsHelper(context: Context) {
     var isNotificationEnabled: Boolean
         get() = prefs.getBoolean("notif_enabled", false)
         set(value) = prefs.edit().putBoolean("notif_enabled", value).apply()
-
+    var isRuleEnabled: Boolean
+        get() = prefs.getBoolean("rule_enabled", true)
+        set(value) = prefs.edit().putBoolean("rule_enabled", value).apply()
     var notificationHour: Int
         get() = prefs.getInt("notif_hour", 9)
         set(value) = prefs.edit().putInt("notif_hour", value).apply()

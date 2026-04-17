@@ -23,6 +23,7 @@
     <string name="appearance">Внешний вид</string>
     <string name="dark_mode">Темная тема</string>
     <string name="language">Язык</string>
+    <string name="switch_rosary">Молитвенное правило на четках</string>
     <string name="reset">Сброс</string>
     <string name="confession">Конфессия</string>
     <string name="confession_ort">Православие</string>
@@ -81,4 +82,15 @@
     <string name="rosary_hail_mary">Радуйся, Мария, благодати полная, Господь с Тобою, благословенна Ты между жёнами и благословен плод чрева Твоего Иисус. Святая Мария, Матерь Божия, молись о нас, грешных, ныне и в час смерти нашей. Аминь.</string>
     <string name="rosary_glory">Слава Отцу и Сыну и Святому Духу, и ныне и присно, и во веки веков. Аминь.</string>
     <string name="rosary_fatima">О мой Иисус, прости нам наши прегрешения, избавь нас от огня адского и приведи все души на небо, особенно те, которые наиболее нуждаются в Твоем милосердии.</string>
+    <string name="rosary_jesus">Господи, Иисусе Христе, Сыне Божий, помилуй мя, грешнаго.</string>
+    <string name="fralsarkransen_first">Ты — безграничен, Ты — рядом, Ты — свет, и я — Твой.</string>
+    <string name="fralsarkransen_second">В Божьей тишине мне дано пребывать, без слов, в покое, без всяких требований.</string>
+    <string name="fralsarkransen_third">Боже, помоги мне увидеть себя — Твоими глазами.</string>
+    <string name="fralsarkransen_fourth">Ты знаешь меня и с нежностью обнимаешь, Поэтому я предаю себя в Твои руки.</string>
+    <string name="fralsarkransen_fifth">Боже, очисти меня, и я стану чист. Исцели меня, и я стану целостным. Привлеки меня к Себе, и сердце моё обретёт покой.</string>
+    <string name="fralsarkransen_sixth">Не ведай тревоги, не ведай страха. Тот, кто с Богом, не будет нуждаться ни в чём.</string>
+    <string name="fralsarkransen_seventh">Ты — мой, и я — Твой. Вечна Твоя любовь!</string>
+    <string name="fralsarkransen_eight">Дай мне любить ближнего Твоей любовью.</string>
+    <string name="fralsarkransen_ninth">Я выдыхаю своё одиночество. Я вдыхаю то, что я Твой.</string>
+    <string name="fralsarkransen_tenth">Здесь я хочу быть. Здесь я хочу остаться. Во свете Твоего лица я обрёл покой.</string>
 </resources>

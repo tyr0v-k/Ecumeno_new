@@ -93,15 +93,39 @@ class ReaderFragment : Fragment() {
 
         // Настройка размера шрифта
         binding.textViewContent.textSize = prefs.fontSize
+        if (prefs.fontSize < 11f){
+            binding.btnTextMinus.isEnabled = false
+            binding.btnTextMinus.setAlpha(0.1f)
+        }
+        if (prefs.fontSize > 39f){
+            binding.btnTextPlus.isEnabled = false
+            binding.btnTextPlus.setAlpha(0.1f)
+        }
 
         binding.btnTextMinus.setOnClickListener {
             if (prefs.fontSize > 10f) prefs.fontSize -= 2f
             binding.textViewContent.textSize = prefs.fontSize
+            if (prefs.fontSize < 11f){
+                binding.btnTextMinus.isEnabled = false
+                binding.btnTextMinus.setAlpha(0.1f)
+            }
+            if (!binding.btnTextPlus.isEnabled){
+                binding.btnTextPlus.isEnabled = true
+                binding.btnTextPlus.setAlpha(1f)
+            }
         }
 
         binding.btnTextPlus.setOnClickListener {
             if (prefs.fontSize < 40f) prefs.fontSize += 2f
             binding.textViewContent.textSize = prefs.fontSize
+            if (prefs.fontSize > 39f){
+                binding.btnTextPlus.isEnabled = false
+                binding.btnTextPlus.setAlpha(0.1f)
+            }
+            if (!binding.btnTextMinus.isEnabled){
+                binding.btnTextMinus.isEnabled = true
+                binding.btnTextMinus.setAlpha(1f)
+            }
         }
 
         initGestureDetector()

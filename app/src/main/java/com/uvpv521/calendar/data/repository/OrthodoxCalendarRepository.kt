@@ -14,112 +14,82 @@ class OrthodoxCalendarRepository {
         "0107" to Holiday(
             name = "christmas",
             date = LocalDate.of(2000, 1, 7),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
         "0114" to Holiday(
             name = "circumcision_of_the_lord",
             date = LocalDate.of(2000, 1, 14),
-            priority = 4,
-            isMovable = false
-        ),
+            priority = 4),
         "0119" to Holiday(
             name = "theophany",
             date = LocalDate.of(2000, 1, 19),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         // Февраль
         "0215" to Holiday(
             name = "presentation_of_the_lord",
             date = LocalDate.of(2000, 2, 15),
-            priority = 3,
-            isMovable = false
-        ),
+            priority = 3),
 
         // Апрель
         "0407" to Holiday(
             name = "annunciation_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 4, 7),
-            priority = 2,
-            isMovable = false
-        ),
+            priority = 2),
 
         // Май
         "0509" to Holiday(
             name = "memorial_day_for_fallen_soldiers",
             date = LocalDate.of(2000, 5, 9),
-            priority = 6,
-            isMovable = false
-        ),
+            priority = 6),
 
         // Июль
         "0707" to Holiday(
             name = "nativity_of_john_the_baptist",
             date = LocalDate.of(2000, 7, 7),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         "0712" to Holiday(
             name = "feast_of_saints_peter_and_paul",
             date = LocalDate.of(2000, 7, 12),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         // Август
         "0819" to Holiday(
             name = "transfiguration_of_the_lord",
             date = LocalDate.of(2000, 8, 19),
-            priority = 2,
-            isMovable = false
-        ),
+            priority = 2),
         "0828" to Holiday(
             name = "dormition_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 8, 28),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         // Сентябрь
         "0911" to Holiday(
             name = "beheading_of_john_the_baptist",
             date = LocalDate.of(2000, 9, 11),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         "0921" to Holiday(
             name = "nativity_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 9, 21),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         "0927" to Holiday(
             name = "exaltation_of_the_holy_cross",
             date = LocalDate.of(2000, 9, 27),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
 
         // Октябрь
         "1014" to Holiday(
             name = "protection_of_the_most_holy_theotokos",
             date = LocalDate.of(2000, 10, 14),
-            priority = 2,
-            isMovable = false
-        ),
+            priority = 2),
 
         // Декабрь
         "1204" to Holiday(
             name = "entrance_of_the_most_holy_theotokos_into_the_temple",
             date = LocalDate.of(2000, 12, 4),
-            priority = 1,
-            isMovable = false
-        ),
+            priority = 1),
     )
 
     suspend fun getMonthCalendar(year: Int, month: Int): List<CalendarDay> = withContext(Dispatchers.IO) {
@@ -167,9 +137,7 @@ class OrthodoxCalendarRepository {
                         Holiday(
                             name = name,
                             date = currentDate,
-                            priority = 2,
-                            isMovable = true
-                        )
+                            priority = 2)
                     )
                 }
             }
@@ -180,9 +148,7 @@ class OrthodoxCalendarRepository {
                     Holiday(
                         name = "easter",
                         date = currentDate,
-                        priority = 0, // Высший приоритет
-                        isMovable = true
-                    )
+                        priority = 0)
                 )
             }
 
@@ -231,9 +197,7 @@ class OrthodoxCalendarRepository {
                     Holiday(
                         name = name,
                         date = currentDate,
-                        priority = 2,
-                        isMovable = true
-                    )
+                        priority = 2)
                 )
             }
         }
@@ -244,9 +208,7 @@ class OrthodoxCalendarRepository {
                 Holiday(
                     name = "easter",
                     date = currentDate,
-                    priority = 0, // Высший приоритет
-                    isMovable = true
-                )
+                    priority = 0)
             )
         }
 

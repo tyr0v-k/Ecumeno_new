@@ -58,12 +58,16 @@ class MainActivity : AppCompatActivity() {
                 val currentDest = navController.currentDestination
                 val parentGraph = currentDest?.parent as? NavGraph
 
-                parentGraph?.let { graph ->
-                    // startDestination доступен через свойство graph.startDestinationId
-                    if (currentDest.id != graph.startDestinationId) {
-                        getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_book", -1).apply()
-                        getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_chapter", -1).apply()
-                        navController.popBackStack(graph.startDestinationId, inclusive = false)
+                if (parentGraph?.id == R.id.bible_graph || parentGraph?.id == R.id.prayers_graph){
+                    parentGraph?.let { graph ->
+                        // startDestination доступен через свойство graph.startDestinationId
+                        if (currentDest.id != graph.startDestinationId) {
+                            if (parentGraph?.id == R.id.bible_graph){
+                                getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_book", -1).apply()
+                                getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_chapter", -1).apply()
+                            }
+                            navController.popBackStack(graph.startDestinationId, inclusive = false)
+                        }
                     }
                 }
                 return@setOnNavigationItemSelectedListener true

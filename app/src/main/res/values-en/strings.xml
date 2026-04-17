@@ -23,6 +23,7 @@
     <string name="appearance">Appearance</string>
     <string name="dark_mode">Dark mode</string>
     <string name="language">Language</string>
+    <string name="switch_rosary">Rosary prayer rule</string>
     <string name="reset">Reset</string>
     <string name="confession">Denomination</string>
     <string name="confession_ort">Orthodoxy</string>
@@ -81,4 +82,16 @@
     <string name="rosary_hail_mary">Hail, Mary, full of grace, the Lord is with thee. Blessed art thou amongst women and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.</string>
     <string name="rosary_glory">Glory be to the Father and to the Son and to the Holy Spirit, as it was in the beginning is now, and ever shall be world without end. Amen.</string>
     <string name="rosary_fatima">O my Jesus, forgive us, save us from the fire of hell. Lead all souls to Heaven, especially those who are most in need.</string>
+    <string name="rosary_jesus">Lord Jesus Christ, Son of God, have mercy on me, a sinner.</string>
+    <string name="fralsarkransen_first">You are immense, You are near, You are the light and I am Yours. </string>
+    <string name="fralsarkransen_second">At each oblong bead you may either rest in silence, or pray:\nI give away my loneliness. I receive that I am Yours.</string>
+    <string name="fralsarkransen_third">You created me as Your own image. Let me see Your image in myself.</string>
+    <string name="fralsarkransen_fourth">You have invited me. In Your hands I commend my life.</string>
+    <string name="fralsarkransen_fifth">Keep me holy and I will be holy kept. Heal me and I will be healed. Draw me near Yourself, and my heart will have peace. Jesus Christ, give me mercy.</string>
+    <string name="fralsarkransen_sixth">I give away my load of worries. I receive Your peace.</string>
+    <string name="fralsarkransen_seventh">You are mine and I am Yours. Your love is everlasting.</string>
+    <string name="fralsarkransen_eight">Let me love my neighbour with Your love.</string>
+    <string name="fralsarkransen_ninth">Out of the depths have I cried unto You, oh Lord. Lord, hear my voice. Do not abandon me.</string>
+    <string name="fralsarkransen_tenth">Here is no time. Here is no distance. I have peace in my heart in front of You. Here I want to stay.</string>
+
 </resources>

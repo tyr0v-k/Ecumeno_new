@@ -9,6 +9,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import com.uvpv521.calendar.R
 import com.uvpv521.calendar.data.local.PrefsHelper
 import com.uvpv521.calendar.data.models.CalendarDay
@@ -77,11 +79,12 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(context.getString(R.string.app_name))
+            .setContentTitle(HtmlCompat.fromHtml("<b>" + context.getString(R.string.app_name) + "</b>", FROM_HTML_MODE_LEGACY))
             .setContentText(context.getString(R.string.notification_message_small))
             .setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_message).format(dates, fastText.lowercase())))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setColor(ContextCompat.getColor(context, R.color.main))
+            .setColor(context.getColor(R.color.main))
+            .setColorized(true)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()

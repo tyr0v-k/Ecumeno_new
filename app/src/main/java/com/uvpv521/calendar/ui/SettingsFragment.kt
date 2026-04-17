@@ -54,6 +54,7 @@ class SettingsFragment : Fragment() {
         prefs = PrefsHelper(requireContext())
 
         binding.switchNotifications.isChecked = prefs.isNotificationEnabled
+        binding.switchRosary.isChecked = prefs.isRuleEnabled
         updateTimeButtonText(prefs.notificationHour, prefs.notificationMinute)
 
         binding.switchNotifications.setOnClickListener {
@@ -64,6 +65,16 @@ class SettingsFragment : Fragment() {
                 disableNotifications()
             }
         }
+
+        binding.switchRosary.setOnClickListener {
+            val isChecked = binding.switchRosary.isChecked
+            if (isChecked) {
+                prefs.isRuleEnabled = true
+            } else {
+                prefs.isRuleEnabled = false
+            }
+        }
+
 
         binding.notificationTime.setOnClickListener {
             showTimePicker()

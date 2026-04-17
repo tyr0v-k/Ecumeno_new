@@ -52,7 +52,7 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
             sql = "SELECT * FROM books ORDER BY book_number"
         } else if (confession == "cat"){
             sql = "SELECT * FROM books WHERE orthodox IS NULL ORDER BY book_number"
-        } else{
+        } else {
             sql = "SELECT * FROM books WHERE orthodox IS NULL AND apocrypha IS NULL ORDER BY book_number"
         }
         readableDatabase.rawQuery(sql, null).use { cursor ->
