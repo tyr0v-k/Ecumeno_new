@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Calendar"
+rootProject.name = "Ecumeno"
 include(":app")
  

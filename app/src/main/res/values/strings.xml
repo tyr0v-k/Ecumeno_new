@@ -53,8 +53,10 @@
     <string name="lent_saturday_2">Суббота 2-й седмицы Великого Поста (родительская)</string>
     <string name="lent_saturday_3">Суббота 3-й седмицы Великого Поста (родительская)</string>
     <string name="lent_saturday_4">Суббота 4-й седмицы Великого Поста (родительская)</string>
+    <string name="lent_saturday_5">Суббота Акафиста (Похвала Пресвятой Богородицы)</string>
     <string name="radonitsa">Радоница</string>
     <string name="trinity_saturday">Троицкая суббота</string>
+    <string name="demetrius_saturday">Димитриевская суббота</string>
     <string name="circumcision_of_the_lord">Обрезание Господне</string>
     <string name="theophany">Крещение Господне</string>
     <string name="presentation_of_the_lord">Сретение Господне</string>

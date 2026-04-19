@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
-import com.uvpv521.calendar.data.local.PrefsHelper
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentSettingsBinding
 import com.uvpv521.calendar.notifications.AlarmUtils
 import java.util.Locale
@@ -96,16 +96,19 @@ class SettingsFragment : Fragment() {
         binding.buttonOrt.setOnClickListener {
             prefs.confession = "ort"
             context?.getDatabasePath("prayers.db")?.delete()
+            requireActivity().finish()
         }
 
         binding.buttonCat.setOnClickListener {
             prefs.confession = "cat"
             context?.getDatabasePath("prayers.db")?.delete()
+            requireActivity().finish()
         }
 
         binding.buttonLut.setOnClickListener {
             prefs.confession = "lut"
             context?.getDatabasePath("prayers.db")?.delete()
+            requireActivity().finish()
         }
     }
 

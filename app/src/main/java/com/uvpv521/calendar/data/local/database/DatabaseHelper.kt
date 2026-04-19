@@ -1,13 +1,13 @@
-package com.uvpv521.calendar.data.database
+package com.uvpv521.calendar.data.local.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.appcompat.app.AppCompatDelegate
-import com.uvpv521.calendar.data.entities.Book
-import com.uvpv521.calendar.data.entities.Category
-import com.uvpv521.calendar.data.entities.Prayer
-import com.uvpv521.calendar.data.entities.Verse
+import com.uvpv521.calendar.data.local.database.entities.Book
+import com.uvpv521.calendar.data.local.database.entities.Category
+import com.uvpv521.calendar.data.local.database.entities.Prayer
+import com.uvpv521.calendar.data.local.database.entities.Verse
 import java.io.FileOutputStream
 import java.util.Locale
 import kotlin.io.copyTo

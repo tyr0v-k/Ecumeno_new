@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.uvpv521.calendar.R
 import com.uvpv521.calendar.data.models.CalendarDay
-import com.uvpv521.calendar.data.models.FastLevel
+import com.uvpv521.calendar.data.models.enums.FastLevel
 import com.uvpv521.calendar.databinding.CalendarDayItemBinding
 import java.time.LocalDate
 import java.time.Month

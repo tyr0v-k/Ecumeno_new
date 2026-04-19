@@ -53,8 +53,10 @@
     <string name="lent_saturday_2">Saturday of the 2nd Week of Great Lent (Memorial Saturday)</string>
     <string name="lent_saturday_3">Saturday of the 3nd Week of Great Lent (Memorial Saturday)</string>
     <string name="lent_saturday_4">Saturday of the 4nd Week of Great Lent (Memorial Saturday)</string>
+    <string name="lent_saturday_5">Saturday of Akathist</string>
     <string name="radonitsa">Radonitsa</string>
     <string name="trinity_saturday">Trinity Saturday</string>
+    <string name="demetrius_saturday">Demetrius Saturday</string>
     <string name="circumcision_of_the_lord">Circumcision of the Lord</string>
     <string name="theophany">Theophany</string>
     <string name="presentation_of_the_lord">Presentation of the Lord</string>

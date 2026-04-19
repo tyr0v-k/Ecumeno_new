@@ -1,4 +1,4 @@
-package com.uvpv521.calendar.data.local
+package com.uvpv521.calendar.data.local.preferences
 
 import android.content.Context
 import android.content.SharedPreferences

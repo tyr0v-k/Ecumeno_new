@@ -14,18 +14,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.uvpv521.calendar.R
-import com.uvpv521.calendar.data.local.PrefsHelper
-import com.uvpv521.calendar.data.models.PrayerType
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
+import com.uvpv521.calendar.data.models.enums.PrayerType
 import com.uvpv521.calendar.databinding.FragmentRosaryBinding
+import com.uvpv521.calendar.ui.views.BeadsView
 import java.util.Calendar
 
 class RosaryFragment : Fragment() {
     private var _binding: FragmentRosaryBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var beadsView: BeadsView
     private lateinit var tvPrayer: TextView
     private lateinit var tvBeadNumber: TextView
     private lateinit var tvMysteryTitle: TextView
@@ -101,6 +102,7 @@ class RosaryFragment : Fragment() {
         tvPrayer = binding.tvPrayer
         tvBeadNumber = binding.tvBeadNumber
         btnReset = binding.btnReset
+        beadsView = binding.beadsView
         if (!prefs.isRuleEnabled){
             tvPrayer.visibility = View.INVISIBLE
         }
@@ -167,7 +169,7 @@ class RosaryFragment : Fragment() {
     }
 
     private fun previousBead() {
-        if (currentPrayerIndex > 0 && currentBead > 1) {
+        if (currentPrayerIndex > 0) {
             currentPrayerIndex--
             updateCurrentDecadeAndBead()
             updateDisplay()
@@ -202,7 +204,8 @@ class RosaryFragment : Fragment() {
         tvPrayer.text = getPrayerText(prayerType)
         if (prefs.confession == "lut" && prefs.isRuleEnabled) currentBead++
         tvBeadNumber.text = "${if (currentDecade != 0 && !(prefs.confession == "lut" && prefs.isRuleEnabled)) "${getString(R.string.decade)}: ${currentDecade}\n" else ""}" +
-                "${if (currentBead != 0) "${getString(R.string.bead)}: ${currentBead}" else ""}"
+                "${if (currentBead != 0 && !(prefs.confession == "cat" && currentPrayerIndex > 16)) "${getString(R.string.bead)}: ${currentBead}" else ""}"
+        if (!(prefs.confession == "cat" && currentPrayerIndex > 16)) beadsView.setBigCircleIndex(if(prefs.confession != "cat" || (prefs.confession == "cat" && !prefs.isRuleEnabled) || (prefs.confession == "cat" && prefs.isRuleEnabled && currentPrayerIndex > 5)) currentBead + 10 else currentBead)
     }
 
     private fun initMysteries(){

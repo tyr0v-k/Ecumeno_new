@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.uvpv521.calendar.data.database.DatabaseHelper
-import com.uvpv521.calendar.data.local.PrefsHelper
+import com.uvpv521.calendar.data.local.database.DatabaseHelper
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentBooksBinding
-import kotlinx.coroutines.launch
 import kotlin.collections.map
 
 class BooksFragment : Fragment() {

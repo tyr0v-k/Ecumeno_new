@@ -8,6 +8,5 @@ import java.time.LocalDate
 @Parcelize
 data class Holiday(
     val name: String,
-    val date: LocalDate, // Для неподвижных праздников
     val priority: Int, // 1-6 по уставу
 ) : Parcelable

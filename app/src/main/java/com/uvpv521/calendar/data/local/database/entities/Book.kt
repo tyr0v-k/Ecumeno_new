@@ -1,4 +1,4 @@
-package com.uvpv521.calendar.data.entities
+package com.uvpv521.calendar.data.local.database.entities
 
 data class Book(
     val bookNumber: Int,

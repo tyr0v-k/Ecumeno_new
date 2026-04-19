@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.uvpv521.calendar.R
-import com.uvpv521.calendar.data.local.PrefsHelper
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentOnboardingBinding
 
 class OnboardingFragment : Fragment() {

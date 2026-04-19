@@ -1,4 +1,4 @@
-package com.uvpv521.calendar.data.models
+package com.uvpv521.calendar.data.models.enums
 
 enum class PrayerType {
     CREED,

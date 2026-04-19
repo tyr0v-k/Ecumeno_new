@@ -1,5 +1,6 @@
 package com.uvpv521.calendar.data.models
 
+import com.uvpv521.calendar.data.models.enums.FastLevel
 import java.time.LocalDate
 
 data class CalendarDay(

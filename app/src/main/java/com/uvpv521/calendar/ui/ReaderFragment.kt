@@ -15,10 +15,9 @@ import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.uvpv521.calendar.data.database.DatabaseHelper
-import com.uvpv521.calendar.data.local.PrefsHelper
+import com.uvpv521.calendar.data.local.database.DatabaseHelper
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
 import com.uvpv521.calendar.databinding.FragmentReaderBinding
 import kotlin.collections.joinToString
 import kotlin.collections.map

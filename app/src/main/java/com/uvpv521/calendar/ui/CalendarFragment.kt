@@ -17,10 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.uvpv521.calendar.R
-import com.uvpv521.calendar.data.models.FastLevel
+import com.uvpv521.calendar.data.local.preferences.PrefsHelper
+import com.uvpv521.calendar.data.models.enums.FastLevel
 import com.uvpv521.calendar.databinding.FragmentCalendarBinding
 import com.uvpv521.calendar.ui.adapters.CalendarAdapter
 import com.uvpv521.calendar.ui.viewmodels.CalendarViewModel
+import com.uvpv521.calendar.ui.viewmodels.CalendarViewModelFactory
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
@@ -32,8 +34,11 @@ class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var prefs: PrefsHelper
     // Используем viewModels() делегат для создания ViewModel
-    private val viewModel: CalendarViewModel by viewModels()
+    private val viewModel: CalendarViewModel by viewModels {
+        CalendarViewModelFactory(prefs)
+    }
 
     private lateinit var calendarAdapter: CalendarAdapter
 
@@ -53,7 +58,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        prefs = PrefsHelper(requireContext())
         setupRecyclerView()
         setupObservers()
         setupClickListeners()
