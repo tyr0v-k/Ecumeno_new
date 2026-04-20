@@ -40,7 +40,7 @@
         android:lineSpacingExtra="8sp"
         android:layout_marginBottom="24dp"
         android:gravity="center"/>
-    <com.uvpv521.calendar.ui.views.BeadsView
+    <com.ecumeno.ui.rosary.BeadsView
         android:id="@+id/beads_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

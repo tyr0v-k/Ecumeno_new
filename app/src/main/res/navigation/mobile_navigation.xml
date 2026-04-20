@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_calendar"
-        android:name="com.uvpv521.calendar.ui.CalendarFragment"
+        android:name="com.ecumeno.ui.calendar.CalendarFragment"
         android:label="@string/title_calendar"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.uvpv521.calendar.ui.SettingsFragment"
+        android:name="com.ecumeno.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_rosary"
-        android:name="com.uvpv521.calendar.ui.RosaryFragment"
+        android:name="com.ecumeno.ui.rosary.RosaryFragment"
         android:label="@string/title_rosary"
         tools:layout="@layout/fragment_rosary" />
 
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/onboarding"
-        android:name="com.uvpv521.calendar.ui.OnboardingFragment"
+        android:name="com.ecumeno.ui.onboarding.OnboardingFragment"
         android:label="Onboarding"
         tools:layout="@layout/fragment_onboarding">
         <action android:id="@+id/action_onboarding_to_calendar"

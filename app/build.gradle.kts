@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.uvpv521.calendar"
+    namespace = "com.ecumeno"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.uvpv521.calendar"
+        applicationId = "com.ecumeno"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
