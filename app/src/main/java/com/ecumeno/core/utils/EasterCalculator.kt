@@ -489,7 +489,7 @@ object EasterCalculator {
             days.add(
                 CalendarDay(
                     date = currentDate,
-                    holidays = dayHolidays,
+                    holidays = dayHolidays.sortedBy { it.priority },
                     fastLevel = fastLevel,
                     isToday = currentDate == today,
                     isSelected = false
@@ -556,7 +556,7 @@ object EasterCalculator {
 
         return@withContext CalendarDay(
             date = currentDate,
-            holidays = dayHolidays,
+            holidays = dayHolidays.sortedBy { it.priority },
             fastLevel = fastLevel,
             isToday = true,
             isSelected = false
