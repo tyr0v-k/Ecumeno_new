@@ -1,6 +1,7 @@
 package com.ecumeno.ui.rosary
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
@@ -97,6 +99,18 @@ class RosaryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
     private fun initViews() {
         tvPrayer = binding.tvPrayer
         tvBeadNumber = binding.tvBeadNumber
@@ -105,7 +119,7 @@ class RosaryFragment : Fragment() {
         if (!prefs.isRuleEnabled){
             tvPrayer.visibility = View.INVISIBLE
         }
-        vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         btnReset.setOnClickListener { resetRosary() }
     }

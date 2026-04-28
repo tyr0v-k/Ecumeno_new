@@ -79,7 +79,7 @@ class CalendarAdapter(
                     binding.holidayIndicator.setBackgroundColor(
                         when (holiday.priority) {
                             0, 1 -> binding.root.context.getColor(R.color.holiday_great)
-                            2, 3 -> binding.root.context.getColor(R.color.holiday_middle)
+                            2 -> binding.root.context.getColor(R.color.holiday_middle)
                             else -> binding.root.context.getColor(R.color.holiday_small)
                         }
                     )
@@ -92,10 +92,6 @@ class CalendarAdapter(
                     FastLevel.NO_FAST -> View.GONE
                     FastLevel.CONTINUOUS_WEEK -> View.GONE
                     else -> View.VISIBLE
-                }
-
-                if(day.fastLevel == FastLevel.CONTINUOUS_WEEK){
-                    binding.fastIndicator.setBackgroundColor(binding.root.context.getColor(R.color.holiday_middle))
                 }
 
                 binding.root.setOnClickListener {

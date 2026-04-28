@@ -157,16 +157,21 @@ class CalendarFragment : Fragment() {
             }
 
             // Отображение поста
-            val fastText = when (it.fastLevel) {
-                FastLevel.NO_FAST -> getString(R.string.fast_no_fast)
-                FastLevel.CONTINUOUS_WEEK -> getString(R.string.fast_continuous_week)
-                FastLevel.XEROPHAGY -> getString(R.string.fast_xerophagy)
-                FastLevel.NO_FISH -> getString(R.string.fast_no_fish)
-                FastLevel.NO_OIL -> getString(R.string.fast_no_oil)
-                FastLevel.FAST -> getString(R.string.fast_strict)
-                FastLevel.WINE_OIL_ALLOWED -> getString(R.string.fast_wine_oil_allowed)
+            if (prefs.confession != "lut"){
+                val fastText = when (it.fastLevel) {
+                    FastLevel.NO_FAST -> getString(R.string.fast_no_fast)
+                    FastLevel.CONTINUOUS_WEEK -> getString(R.string.fast_continuous_week)
+                    FastLevel.XEROPHAGY -> getString(R.string.fast_xerophagy)
+                    FastLevel.FISH -> getString(R.string.fast_fish)
+                    FastLevel.NO_OIL -> getString(R.string.fast_no_oil)
+                    FastLevel.FAST -> getString(R.string.fast_strict)
+                    FastLevel.OIL_ALLOWED -> getString(R.string.fast_oil_allowed)
+                    FastLevel.ABSTINENCE -> getString(R.string.abstinence)
+                }
+                binding.fastInfo.text = fastText
+            } else{
+                binding.fastInfo.visibility = View.GONE
             }
-            binding.fastInfo.text = fastText
         }
     }
 

@@ -18,7 +18,8 @@
             android:id="@+id/prevMonth"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:src="@android:drawable/arrow_down_float"
+            android:rotation="90"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/accent" />
 
@@ -36,7 +37,8 @@
             android:id="@+id/nextMonth"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@android:drawable/ic_media_next"
+            android:src="@android:drawable/arrow_down_float"
+            android:rotation="270"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/accent" />
     </LinearLayout>

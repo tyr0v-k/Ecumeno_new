@@ -23,14 +23,12 @@ class SettingsFragment : Fragment() {
 
     private lateinit var prefs: PrefsHelper
 
-    // 1. Инициализация лаунчера для запроса разрешения на уведомления (Android 13+)
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
             checkNotificationPermission()
         } else {
-            // Если отказали, возвращаем свитч в выключенное положение
             binding.switchNotifications.isChecked = false
             prefs.isNotificationEnabled = false
         }
@@ -80,7 +78,6 @@ class SettingsFragment : Fragment() {
             // Логика переключения темы
         }
 
-        // Добавляем кнопки для выбора языка
         binding.buttonRussian.setOnClickListener {
             setLocale("ru")
         }
@@ -91,19 +88,19 @@ class SettingsFragment : Fragment() {
 
         binding.buttonOrt.setOnClickListener {
             prefs.confession = "ort"
-            context?.getDatabasePath("prayers.db")?.delete()
+            requireContext().getDatabasePath("prayers.db")?.delete()
             requireActivity().finish()
         }
 
         binding.buttonCat.setOnClickListener {
             prefs.confession = "cat"
-            context?.getDatabasePath("prayers.db")?.delete()
+            requireContext().getDatabasePath("prayers.db")?.delete()
             requireActivity().finish()
         }
 
         binding.buttonLut.setOnClickListener {
             prefs.confession = "lut"
-            context?.getDatabasePath("prayers.db")?.delete()
+            requireContext().getDatabasePath("prayers.db")?.delete()
             requireActivity().finish()
         }
     }
@@ -115,23 +112,20 @@ class SettingsFragment : Fragment() {
 
     private fun setLocale(languageCode: String) {
         val appLocale = LocaleListCompat.forLanguageTags(languageCode)
-        context?.getDatabasePath("bible.db")?.delete()
-        context?.getDatabasePath("prayers.db")?.delete()
+        requireContext().getDatabasePath("bible.db")?.delete()
+        requireContext().getDatabasePath("prayers.db")?.delete()
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
-    // 2. Проверка разрешения на отправку уведомлений
     private fun checkNotificationPermission() {
         when {
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED -> {
-                // Разрешение уже есть
                 enableNotifications()
             }
             else -> {
-                // Запрашиваем разрешение
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
