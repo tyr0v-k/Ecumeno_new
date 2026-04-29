@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/prevMonth"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/arrow_down_float"
+            android:rotation="90"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/accent" />
+
+        <TextView
+            android:id="@+id/monthTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <ImageButton
+            android:id="@+id/nextMonth"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/arrow_down_float"
+            android:rotation="270"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/accent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/accent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calendarGrid"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:overScrollMode="never" />
+
+        <ScrollView
+            android:id="@+id/day_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/accent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/selectedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/holidayName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/holiday_great"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/fastInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="italic" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/todayButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/accent"
+        android:textColor="@color/main"
+        android:text="@string/today"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>

@@ -1,71 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
+    android:fillViewport="true"
     android:background="@color/main">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/accent"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/onboarding"
-        android:textAlignment="textStart"
-        android:textColor="@color/accent"
-        android:layout_marginBottom="32dp" />
-
-    <RadioGroup
-        android:id="@+id/radioGroupOptions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp">
-
-        <RadioButton
-            android:id="@+id/option1"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/confession_ort"
+            android:text="@string/hello"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:textColor="@color/accent"
-            android:checked="true"
-            android:backgroundTint="@color/accent"
-            />
+            android:layout_marginBottom="16dp" />
 
-        <RadioButton
-            android:id="@+id/option2"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/confession_cat"
+            android:text="@string/onboarding"
+            android:textAlignment="textStart"
             android:textColor="@color/accent"
-            android:backgroundTint="@color/accent"
-            />
+            android:layout_marginBottom="32dp" />
 
-        <RadioButton
-            android:id="@+id/option3"
+        <RadioGroup
+            android:id="@+id/radioGroupOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/confession_lut"
-            android:textColor="@color/accent"
+            android:layout_marginBottom="32dp">
+
+            <RadioButton
+                android:id="@+id/option1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confession_ort"
+                android:textColor="@color/accent"
+                android:checked="true"
+                android:backgroundTint="@color/accent" />
+
+            <RadioButton
+                android:id="@+id/option2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confession_cat"
+                android:textColor="@color/accent"
+                android:backgroundTint="@color/accent" />
+
+            <RadioButton
+                android:id="@+id/option3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confession_lut"
+                android:textColor="@color/accent"
+                android:backgroundTint="@color/accent" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonContinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/finishOnBoard"
             android:backgroundTint="@color/accent"
-            />
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/buttonContinue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/finishOnBoard"
-        android:backgroundTint="@color/accent"
-        android:textColor="@color/main"
-        />
-
-</LinearLayout>
+            android:textColor="@color/main" />
+    </LinearLayout>
+</ScrollView>
