@@ -40,7 +40,7 @@ object EasterCalculator {
 
         return date
     }
-    // Функция вычисления григорианской Пасхи (Алгоритм Меёса/Джонса/Бутчера)
+    // Алгоритм Меёса/Джонса/Бутчера
     fun calculateGregorianEaster(year: Int): LocalDate {
         val a = year % 19
         val b = year / 100
@@ -64,7 +64,7 @@ object EasterCalculator {
         fixedHolidays = mutableMapOf(
             "0107" to Holiday(name = "christmas", priority = 1),
             "0114" to Holiday(name = "circumcision_of_the_lord", priority = 2),
-            "0119" to Holiday(name = "theophany", priority = 1),
+            "0119" to Holiday(name = "theophany_lord", priority = 1),
             // Февраль
             "0215" to Holiday(name = "presentation_of_the_lord", priority = 1),
             // Апрель
@@ -81,7 +81,7 @@ object EasterCalculator {
             // Сентябрь
             "0911" to Holiday(name = "beheading_of_john_the_baptist", priority = 2),
             "0921" to Holiday(name = "nativity_of_the_most_holy_theotokos", priority = 1),
-            "0927" to Holiday(name = "exaltation_of_the_holy_cross", priority = 1),
+            "0927" to Holiday(name = "exaltation_of_the_holy_cross_lord", priority = 1),
             // Октябрь
             "1014" to Holiday(name = "protection_of_the_most_holy_theotokos", priority = 2),
             // Декабрь
@@ -106,7 +106,7 @@ object EasterCalculator {
         fixedHolidays.put("0908", Holiday(name = "nativity_of_the_most_holy_theotokos", priority = 2))
         // Ноябрь
         fixedHolidays.put("1102", Holiday(name = "all_souls", priority = 1))
-        fixedHolidays.put("1109", Holiday(name = "dedication_lateran_basilica", priority = 2))
+        fixedHolidays.put("1109", Holiday(name = "dedication_lateran_basilica_lord", priority = 2))
         // Декабрь
         fixedHolidays.put("1208", Holiday(name = "immaculate_conception", priority = 1))
     }
@@ -155,7 +155,7 @@ object EasterCalculator {
             "0824" to Holiday(name = "bartholomew", priority = 2),
             "0829" to Holiday(name = "beheading_of_john_the_baptist", priority = 3),
             // Сентябрь
-            "0914" to Holiday(name = "exaltation_of_the_holy_cross", priority = 2),
+            "0914" to Holiday(name = "exaltation_of_the_holy_cross_lord", priority = 2),
             "0921" to Holiday(name = "matthew", priority = 2),
             "0929" to Holiday(name = "archangels", priority = 2),
             // Октябрь
@@ -172,24 +172,42 @@ object EasterCalculator {
         )
     }
 
-    // Вычисление всех подвижных праздников на основе даты Пасхи
+    fun moveCatholicFixedHolidays(easterDate: LocalDate){
+        val josephDate = LocalDate.of(easterDate.year, 3, 19)
+        val annunciationDate = LocalDate.of(easterDate.year, 3, 25)
+        if (annunciationDate.isAfter(easterDate.minusDays(46)) && annunciationDate.isBefore(easterDate.minusDays(7)) && annunciationDate.dayOfWeek == DayOfWeek.SUNDAY){
+            fixedHolidays.remove("0325")
+            fixedHolidays.put("0326", Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1))
+        } else if (annunciationDate.isAfter(easterDate.minusDays(8)) && annunciationDate.isBefore(easterDate.plusDays(7))){
+            fixedHolidays.remove("0325")
+            fixedHolidays.put((if (easterDate.plusDays(8).dayOfMonth < 10) "0" + easterDate.plusDays(8).monthValue + "0" else "0" + easterDate.plusDays(8).monthValue) + easterDate.plusDays(8).dayOfMonth, Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1))
+        }
+        if (josephDate.isAfter(easterDate.minusDays(46)) && josephDate.isBefore(easterDate.minusDays(7)) && annunciationDate.dayOfWeek == DayOfWeek.SUNDAY){
+            fixedHolidays.remove("0319")
+            fixedHolidays.put("0320", Holiday(name = "joseph", priority = 1))
+        } else if (josephDate.isAfter(easterDate.minusDays(8)) && josephDate.isBefore(easterDate)){
+            fixedHolidays.remove("0319")
+            fixedHolidays.put("03" + easterDate.minusDays(8).dayOfMonth, Holiday(name = "joseph", priority = 1))
+        }
+    }
+
     fun calculateBasicMovableHolidays(easterDate: LocalDate): MutableMap<String, LocalDate> {
         val holidays = mutableMapOf<String, LocalDate>()
 
         holidays["palm_sunday_greatfeast"] = easterDate.minusDays(7)
-        holidays["holy_monday"] = easterDate.minusDays(6)
-        holidays["holy_tuesday"] = easterDate.minusDays(5)
-        holidays["holy_wednesday"] = easterDate.minusDays(4)
-        holidays["holy_thursday"] = easterDate.minusDays(3)
-        holidays["holy_friday"] = easterDate.minusDays(2)
-        holidays["holy_saturday"] = easterDate.minusDays(1)
+        holidays["reserved_holy_monday"] = easterDate.minusDays(6)
+        holidays["reserved_holy_tuesday"] = easterDate.minusDays(5)
+        holidays["reserved_holy_wednesday"] = easterDate.minusDays(4)
+        holidays["reserved_holy_thursday"] = easterDate.minusDays(3)
+        holidays["reserved_holy_friday"] = easterDate.minusDays(2)
+        holidays["reserved_holy_saturday"] = easterDate.minusDays(1)
         // После Пасхи
-        holidays["easter_monday"] = easterDate.plusDays(1)
-        holidays["easter_tuesday"] = easterDate.plusDays(2)
-        holidays["easter_wednesday"] = easterDate.plusDays(3)
-        holidays["easter_thursday"] = easterDate.plusDays(4)
-        holidays["easter_friday"] = easterDate.plusDays(5)
-        holidays["easter_saturday"] = easterDate.plusDays(6)
+        holidays["reserved_easter_monday"] = easterDate.plusDays(1)
+        holidays["reserved_easter_tuesday"] = easterDate.plusDays(2)
+        holidays["reserved_easter_wednesday"] = easterDate.plusDays(3)
+        holidays["reserved_easter_thursday"] = easterDate.plusDays(4)
+        holidays["reserved_easter_friday"] = easterDate.plusDays(5)
+        holidays["reserved_easter_saturday"] = easterDate.plusDays(6)
         holidays["ascension_of_the_lord_greatfeast"] = easterDate.plusDays(39)
         holidays["pentecost_greatfeast"] = easterDate.plusDays(49)
 
@@ -223,19 +241,19 @@ object EasterCalculator {
         val holidays = calculateBasicMovableHolidays(easterDate)
 
         // Перед Пасхой
-        holidays["theophany"] = LocalDate.of(easterDate.year, 1, 6).with(TemporalAdjusters.next(DayOfWeek.SUNDAY))
+        holidays["theophany_lord"] = LocalDate.of(easterDate.year, 1, 6).with(TemporalAdjusters.next(DayOfWeek.SUNDAY))
         holidays["ash_wednesday"] = easterDate.minusDays(46)
         // После Пасхи
-        holidays["divine_mercy_sunday"] = easterDate.plusDays(7)
+        holidays["reserved_divine_mercy_sunday"] = easterDate.plusDays(7)
         holidays["day_of_the_holy_trinity_greatfeast"] = easterDate.plusDays(56)
         holidays["corpus_christi_greatfeast"] = easterDate.plusDays(60)
 
         val christmas = LocalDate.of(easterDate.year, 12, 25)
 
-        holidays["advent_1_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(4)
-        holidays["advent_2_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(3)
-        holidays["advent_3_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(2)
-        holidays["advent_4_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1)
+        holidays["reserved_advent_1_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(3)
+        holidays["reserved_advent_2_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(2)
+        holidays["reserved_advent_3_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(1)
+        holidays["reserved_advent_4_sunday"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
         return holidays
     }
 
@@ -248,8 +266,8 @@ object EasterCalculator {
 
         val christmas = LocalDate.of(easterDate.year, 12, 25)
 
-        holidays["jesus_king_greatfeast"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(5)
-        holidays["holy_family"] = if (christmas.dayOfWeek == DayOfWeek.SUNDAY) LocalDate.of(easterDate.year, 12, 30) else christmas.with(TemporalAdjusters.next(DayOfWeek.SUNDAY))
+        holidays["jesus_king_greatfeast"] = christmas.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(4)
+        holidays["holy_family_lord"] = if (christmas.dayOfWeek == DayOfWeek.SUNDAY) LocalDate.of(easterDate.year, 12, 30) else christmas.with(TemporalAdjusters.next(DayOfWeek.SUNDAY))
         return holidays
     }
 
@@ -409,7 +427,7 @@ object EasterCalculator {
         }
         when (confession){
             "ort" -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
-            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate) }
+            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
             else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate) }
         }
 
@@ -433,10 +451,7 @@ object EasterCalculator {
             val dayHolidays = mutableListOf<Holiday>()
 
             val monthDay = String.format("%02d%02d", currentDate.monthValue, currentDate.dayOfMonth)
-            if (confession == "ort"){
-                fixedHolidays[monthDay]?.let { fixedHoliday -> dayHolidays.add(fixedHoliday)
-                }
-            }
+            fixedHolidays[monthDay]?.let { fixedHoliday -> dayHolidays.add(fixedHoliday) }
 
             movableHolidays.forEach { (name, date) ->
                 if (date.year == currentDate.year &&
@@ -460,6 +475,13 @@ object EasterCalculator {
             }
 
             val fastLevel = getFastLevel(currentDate, easterDate, confession)
+
+            if (confession == "cat" && dayHolidays.isNotEmpty()) {
+                val maxPriority = dayHolidays.sortedBy { it.priority }[0].priority
+                dayHolidays.removeIf { holiday -> (!holiday.name.contains("easter") && !holiday.name.contains("reserved_")) && (currentDate.isAfter(easterDate.minusDays(7)) && currentDate.isBefore(easterDate.plusDays(8))) }
+                dayHolidays.removeIf { holiday ->  (maxPriority < 3 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) && holiday.priority == 3 }
+                dayHolidays.removeIf { holiday ->  (!holiday.name.contains("easter") && !holiday.name.contains("reserved_") && !holiday.name.contains("_lord")) && holiday.priority == 2 && (maxPriority < 2 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) }
+            }
 
             days.add(
                 CalendarDay(
@@ -499,8 +521,7 @@ object EasterCalculator {
         val dayHolidays = mutableListOf<Holiday>()
 
         val monthDay = String.format("%02d%02d", currentDate.monthValue, currentDate.dayOfMonth)
-        fixedHolidays[monthDay]?.let { fixedHoliday -> dayHolidays.add(fixedHoliday)
-        }
+        fixedHolidays[monthDay]?.let { fixedHoliday -> dayHolidays.add(fixedHoliday) }
 
         movableHolidays.forEach { (name, date) ->
             if (date.year == currentDate.year &&
