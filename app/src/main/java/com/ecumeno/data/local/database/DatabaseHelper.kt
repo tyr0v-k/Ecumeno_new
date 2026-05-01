@@ -25,7 +25,7 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
             val languageCode : String
             if (currentLocales.isEmpty){
                 languageCode = Locale.getDefault().language
-            } else{
+            } else {
                 languageCode = currentLocales[0]?.language ?: "en"
             }
             var localeName = if (languageCode == "ru") "_ru." else "_en."

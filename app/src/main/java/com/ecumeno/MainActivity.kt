@@ -3,6 +3,7 @@ package com.ecumeno
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,11 +19,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(getSharedPreferences("app_settings", MODE_PRIVATE).getInt("night_mode", -1))
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)
-
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
         if (getSharedPreferences("app_settings", MODE_PRIVATE).getString("confession", null) == null){

@@ -5,19 +5,15 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="4dp">
-
     <RelativeLayout
         android:layout_width="40dp"
         android:layout_height="40dp">
-
         <TextView
             android:id="@+id/dayNumber"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="16sp" />
-
-        <!-- Индикатор праздника -->
         <View
             android:id="@+id/holidayIndicator"
             android:layout_width="8dp"
@@ -25,8 +21,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:background="@color/holiday_great" />
-
-        <!-- Индикатор поста -->
         <View
             android:id="@+id/fastIndicator"
             android:layout_width="8dp"
@@ -35,7 +29,6 @@
             android:layout_alignParentEnd="true"
             android:background="@color/fast_color" />
     </RelativeLayout>
-
     <TextView
         android:id="@+id/dayOfWeek"
         android:layout_width="wrap_content"

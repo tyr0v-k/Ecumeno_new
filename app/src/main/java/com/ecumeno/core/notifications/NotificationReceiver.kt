@@ -26,12 +26,9 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         scope.launch{
             val prefs = PrefsHelper(context)
-            // 1. Получаем данные по дню
             val day = calculator.getDailyCalendar(prefs.confession)
-            // 2. Показ уведомления
             showNotification(context, day, prefs.confession)
 
-            // 3. Перепланирование на следующий день
             if (prefs.isNotificationEnabled) {
                 AlarmUtils.scheduleNotification(context, prefs.notificationHour, prefs.notificationMinute)
             }
@@ -53,7 +50,6 @@ class NotificationReceiver : BroadcastReceiver() {
             dates = context.getString(R.string.no_dates)
         }
 
-        // Отображение поста
         val fastText = when (day.fastLevel) {
             FastLevel.NO_FAST -> context.getString(R.string.fast_no_fast)
             FastLevel.CONTINUOUS_WEEK -> context.getString(R.string.fast_continuous_week)

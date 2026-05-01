@@ -21,7 +21,6 @@ object AlarmUtils {
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
 
-            // Если выбранное время уже прошло сегодня, переносим на завтра
             if (before(Calendar.getInstance())) {
                 add(Calendar.DATE, 1)
             }

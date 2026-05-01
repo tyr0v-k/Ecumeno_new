@@ -22,16 +22,19 @@
     <string name="notification_time">Время уведомлений</string>
     <string name="daily_notifications">Ежедневные уведомления</string>
     <string name="appearance">Внешний вид</string>
-    <string name="dark_mode">Темная тема</string>
+    <string name="theme">Тема</string>
+    <string name="theme_nightmode">Темная</string>
+    <string name="theme_daymode">Светлая</string>
+    <string name="theme_system">Системная</string>
     <string name="language">Язык</string>
     <string name="switch_rosary">Молитвенное правило на четках</string>
     <string name="reset">Сброс</string>
-    <string name="confession">Конфессия</string>
+    <string name="personalization">Персонализация</string>
+    <string name="confession">Конфессия (требует перезапуска)</string>
     <string name="confession_ort">Православие</string>
     <string name="confession_cat">Католицизм</string>
     <string name="confession_lut">Лютеранство</string>
 
-    <!-- Fast levels -->
     <string name="fast_no_fast">Поста нет</string>
     <string name="fast_continuous_week">Сплошная седмица, поста нет</string>
     <string name="fast_xerophagy">Сухоядение</string>

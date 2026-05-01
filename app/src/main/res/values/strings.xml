@@ -22,11 +22,15 @@
     <string name="notification_time">Notification time</string>
     <string name="daily_notifications">Daily notifications</string>
     <string name="appearance">Appearance</string>
-    <string name="dark_mode">Dark mode</string>
+    <string name="theme">Theme</string>
+    <string name="theme_nightmode">Dark</string>
+    <string name="theme_daymode">Light</string>
+    <string name="theme_system">System</string>
     <string name="language">Language</string>
     <string name="switch_rosary">Rosary prayer rule</string>
     <string name="reset">Reset</string>
-    <string name="confession">Denomination</string>
+    <string name="personalization">Personalization</string>
+    <string name="confession">Denomination (requires restart)</string>
     <string name="confession_ort">Orthodoxy</string>
     <string name="confession_cat">Catholicism</string>
     <string name="confession_lut">Lutheranism</string>

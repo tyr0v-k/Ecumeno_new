@@ -43,7 +43,6 @@ class ReaderFragment : Fragment() {
         prefs = PrefsHelper(requireContext())
 
         if (dbName.contains("bible")){
-            // Настройка спиннера глав
             val chapters = dbHelper.getChapters(number)
             val spinnerAdapter = ArrayAdapter(
                 requireContext(),
@@ -56,7 +55,6 @@ class ReaderFragment : Fragment() {
             binding.spinnerChapters.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val verses = dbHelper.getVerses(number, chapters[position])
-                    // Собираем все стихи в один текст для простоты
                     prefs.lastChapter = position
                     binding.textViewContent.text = verses.joinToString("\n\n") { "${it.verse}. ${Html.fromHtml(it.text.replace(Regex("<[Ss][^>]*>.*?</[Ss]>", RegexOption.IGNORE_CASE), ""))}".replace("\\[.*?\\]".toRegex(), "") }
                 }
@@ -67,11 +65,9 @@ class ReaderFragment : Fragment() {
                 binding.spinnerChapters.setSelection(prefs.lastChapter)
             }
 
-            // Перехватываем нажатие системной кнопки "Назад"
             requireActivity().onBackPressedDispatcher.addCallback(this) {
                 prefs.lastChapter = -1
                 prefs.lastBook = -1
-                // Убираем колбэк, чтобы не зациклиться, и выполняем стандартное поведение
                 isEnabled = false
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }

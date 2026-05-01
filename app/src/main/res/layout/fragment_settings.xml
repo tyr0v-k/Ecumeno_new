@@ -4,12 +4,10 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@color/main">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,189 +15,141 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/daily_notifications"
                 />
-
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
-
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notification_time"
-                android:layout_marginBottom="8dp" />
-
+                android:text="@string/notification_time"/>
             <TextView
                 android:id="@+id/notification_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginBottom="8dp"
                 android:textAlignment="textEnd"
                 android:backgroundTint="@color/accent"
                 android:popupBackground="@color/main"/>
         </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/accent"
             android:layout_marginVertical="16dp" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/appearance"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
+            android:layout_marginBottom="16dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
-
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dark_mode"
-                />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_dark_theme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="@string/theme"/>
+            <Spinner
+                android:id="@+id/spinnerTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/accent"
+                android:popupBackground="@color/main"/>
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/language" />
+            <Spinner
+                android:id="@+id/spinnerLanguage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/accent"
+                android:popupBackground="@color/main" />
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/accent"
             android:layout_marginVertical="16dp" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/language"
+            android:text="@string/personalization"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
+            android:layout_marginBottom="8dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <Button
-                android:id="@+id/buttonRussian"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Русский"
-                android:backgroundTint="@color/accent"
-                android:textColor="@color/main"
-                android:layout_margin="16dp" />
-            <Button
-                android:id="@+id/buttonEnglish"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="English"
-                android:backgroundTint="@color/accent"
-                android:textColor="@color/main"
-                android:layout_margin="16dp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/accent"
-            android:layout_marginVertical="16dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/confession"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/switch_rosary"
                 />
-
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_rosary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"/>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
             android:gravity="center_vertical">
-            <Button
-                android:id="@+id/buttonOrt"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/confession_ort"
-                android:backgroundTint="@color/accent"
-                android:textColor="@color/main"
-                android:layout_margin="16dp" />
-            <Button
-                android:id="@+id/buttonCat"
-                android:layout_width="wrap_content"
+                android:text="@string/confession"
+                android:layout_marginBottom="8dp" />
+            <Spinner
+                android:id="@+id/spinnerConfession"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/confession_cat"
                 android:backgroundTint="@color/accent"
-                android:textColor="@color/main"
-                android:layout_margin="16dp" />
-            <Button
-                android:id="@+id/buttonLut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/confession_lut"
-                android:backgroundTint="@color/accent"
-                android:textColor="@color/main"
-                android:layout_margin="16dp" />
+                android:popupBackground="@color/main"
+                android:layout_marginBottom="8dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

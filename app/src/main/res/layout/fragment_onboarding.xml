@@ -18,7 +18,6 @@
             android:textStyle="bold"
             android:textColor="@color/accent"
             android:layout_marginBottom="16dp" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,13 +25,11 @@
             android:textAlignment="textStart"
             android:textColor="@color/accent"
             android:layout_marginBottom="32dp" />
-
         <RadioGroup
             android:id="@+id/radioGroupOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp">
-
             <RadioButton
                 android:id="@+id/option1"
                 android:layout_width="match_parent"
@@ -41,7 +38,6 @@
                 android:textColor="@color/accent"
                 android:checked="true"
                 android:backgroundTint="@color/accent" />
-
             <RadioButton
                 android:id="@+id/option2"
                 android:layout_width="match_parent"
@@ -49,7 +45,6 @@
                 android:text="@string/confession_cat"
                 android:textColor="@color/accent"
                 android:backgroundTint="@color/accent" />
-
             <RadioButton
                 android:id="@+id/option3"
                 android:layout_width="match_parent"
@@ -58,7 +53,6 @@
                 android:textColor="@color/accent"
                 android:backgroundTint="@color/accent" />
         </RadioGroup>
-
         <Button
             android:id="@+id/buttonContinue"
             android:layout_width="match_parent"
