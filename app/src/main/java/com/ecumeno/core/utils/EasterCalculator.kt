@@ -114,11 +114,11 @@ object EasterCalculator {
     fun getLutheranFixedHolidays(){
         getWesternFixedHolidays()
         fixedHolidays.put("0101", Holiday(name = "circumcision_of_the_lord", priority = 1))
-        fixedHolidays.put("0118", Holiday(name = "confession_of_peter", priority = 2))
+        fixedHolidays.put("0118", Holiday(name = "confession_of_peter", priority = 3))
         // Февраль
         fixedHolidays.put("0224", Holiday(name = "matthias", priority = 2))
         // Май
-        fixedHolidays.put("0501", Holiday(name = "philip_and_james", priority = 2))
+        fixedHolidays.put("0503", Holiday(name = "philip_and_james", priority = 2))
         // Июнь
         fixedHolidays.put("0625", Holiday(name = "augsburg_confession", priority = 2))
         // Август
@@ -137,7 +137,7 @@ object EasterCalculator {
             // Февраль
             "0202" to Holiday(name = "presentation_of_the_lord", priority = 2),
             // Март
-            "0319" to Holiday(name = "joseph", priority = 1),
+            "0319" to Holiday(name = "joseph", priority = 2),
             "0325" to Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1),
             // Апрель
             "0425" to Holiday(name = "mark", priority = 2),
@@ -188,6 +188,15 @@ object EasterCalculator {
         } else if (josephDate.isAfter(easterDate.minusDays(8)) && josephDate.isBefore(easterDate)){
             fixedHolidays.remove("0319")
             fixedHolidays.put("03" + easterDate.minusDays(8).dayOfMonth, Holiday(name = "joseph", priority = 1))
+        }
+    }
+
+    fun moveLutheranFixedHolidays(easterDate: LocalDate){
+        val annunciationDate = LocalDate.of(easterDate.year, 3, 25)
+        if (annunciationDate.isAfter(easterDate.minusDays(8)) && annunciationDate.isBefore(easterDate.plusDays(7))){
+            fixedHolidays.remove("0325")
+            fixedHolidays.put("03" + easterDate.minusDays(7).with(TemporalAdjusters.previous(
+                DayOfWeek.SUNDAY)).dayOfMonth, Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1))
         }
     }
 
@@ -428,7 +437,7 @@ object EasterCalculator {
         when (confession){
             "ort" -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
             "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
-            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate) }
+            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
         }
 
         // Получаем первый и последний день месяца
