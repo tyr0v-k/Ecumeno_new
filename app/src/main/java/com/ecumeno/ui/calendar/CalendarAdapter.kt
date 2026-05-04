@@ -1,5 +1,6 @@
 package com.ecumeno.ui.calendar
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,7 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
 
-class CalendarAdapter(
-    private val onDateClick: (LocalDate) -> Unit
-) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
+class CalendarAdapter(private val onDateClick: (LocalDate) -> Unit) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
 
     private var selectedDate: LocalDate? = null
     private var currentMonth: Month = LocalDate.now().month
@@ -49,7 +48,6 @@ class CalendarAdapter(
                 binding.holidayIndicator.visibility = View.GONE
                 binding.fastIndicator.visibility = View.GONE
             }else{
-                // Выделение выбранного дня
                 if (day.date == selectedDate) {
                     binding.root.setBackgroundResource(R.drawable.selected_day_bg)
                     binding.dayNumber.setTextColor(
@@ -62,7 +60,6 @@ class CalendarAdapter(
                     )
                 }
 
-                // Выделение сегодняшнего дня
                 if (day.isToday) {
                     binding.dayNumber.setBackgroundResource(R.drawable.today_circle)
                     binding.dayNumber.setTextColor(
@@ -72,7 +69,6 @@ class CalendarAdapter(
                     binding.dayNumber.background = null
                 }
 
-                // Отображение праздников
                 if (day.holidays.isNotEmpty()) {
                     val holiday = day.holidays.first()
                     binding.holidayIndicator.visibility = View.VISIBLE
@@ -83,11 +79,17 @@ class CalendarAdapter(
                             else -> binding.root.context.getColor(R.color.holiday_small)
                         }
                     )
+                    val size = (when (holiday.priority){
+                        0, 1 -> 10
+                        2 -> 8
+                        else -> 6
+                    } * Resources.getSystem().displayMetrics.density).toInt()
+                    binding.holidayIndicator.layoutParams.height = size
+                    binding.holidayIndicator.layoutParams.width = size
                 } else {
                     binding.holidayIndicator.visibility = View.GONE
                 }
 
-                // Отображение поста
                 binding.fastIndicator.visibility = when (day.fastLevel) {
                     FastLevel.NO_FAST -> View.GONE
                     FastLevel.CONTINUOUS_WEEK -> View.GONE

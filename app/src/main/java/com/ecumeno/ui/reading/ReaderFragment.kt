@@ -27,9 +27,6 @@ class ReaderFragment : Fragment() {
     private lateinit var sensorManager: SensorManager
     private lateinit var prefs: PrefsHelper
 
-
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReaderBinding.inflate(inflater, container, false)
         return binding.root
@@ -90,7 +87,6 @@ class ReaderFragment : Fragment() {
             }
         }
 
-        // Настройка размера шрифта
         binding.textViewContent.textSize = prefs.fontSize
         if (prefs.fontSize < 11f){
             binding.btnTextMinus.isEnabled = false

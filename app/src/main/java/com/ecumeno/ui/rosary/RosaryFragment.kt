@@ -137,10 +137,8 @@ class RosaryFragment : Fragment() {
                     val diffX = e2.x - (e1?.x ?: 0f)
                     if (Math.abs(diffX) > 100 && Math.abs(velocityX) > 100) {
                         if (diffX < 0) {
-                            // Свайп влево - следующий шаг
                             nextBead()
                         } else {
-                            // Свайп вправо - предыдущий шаг
                             previousBead()
                         }
                         return true
@@ -251,16 +249,13 @@ class RosaryFragment : Fragment() {
     private fun initRosaryStructure(){
         if (prefs.confession == "cat" && prefs.isRuleEnabled){
             rosaryStructure = listOf(
-                PrayerType.CREED,          // 0: Символ веры
-                PrayerType.OUR_FATHER,     // 1: Отче наш
-                PrayerType.HAIL_MARY,      // 2-4: 3 раза Радуйся, Мария
+                PrayerType.CREED,
+                PrayerType.OUR_FATHER,
                 PrayerType.HAIL_MARY,
                 PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,       // 5: Слава
-                // Декада 1
-                PrayerType.OUR_FATHER,     // 7: Отче наш
-                PrayerType.HAIL_MARY,      // 8-17: 10 раз Радуйся, Мария
                 PrayerType.HAIL_MARY,
+                PrayerType.GLORY_BE,
+                PrayerType.OUR_FATHER,
                 PrayerType.HAIL_MARY,
                 PrayerType.HAIL_MARY,
                 PrayerType.HAIL_MARY,
@@ -269,9 +264,10 @@ class RosaryFragment : Fragment() {
                 PrayerType.HAIL_MARY,
                 PrayerType.HAIL_MARY,
                 PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,       // 18: Слава
-                PrayerType.FATIMA_PRAYER,  // 19: Фатимская молитва
-                // Декады 2-5 повторяют структуру 8-19
+                PrayerType.HAIL_MARY,
+                PrayerType.HAIL_MARY,
+                PrayerType.GLORY_BE,
+                PrayerType.FATIMA_PRAYER,
             )
             rosaryStart = 0
             rosaryLimit = 5

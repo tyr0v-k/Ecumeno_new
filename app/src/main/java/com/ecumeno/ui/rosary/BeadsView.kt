@@ -18,28 +18,21 @@ class BeadsView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var currentBigCircleIndex = 5 // Текущий индекс большого круга
+    private var currentBigCircleIndex = 5
     private val circleCount = 40
-    // Анимация
     private var animator: ValueAnimator? = null
-    private var currentOffset = 0f // Текущее смещение для анимации
+    private var currentOffset = 0f
 
-    // Константы для размеров
     private val bigRadius = 80f
     private val smallRadius = 40f
     private val circleSpacing = 40f
 
-    // Кэшированное значение шага
     private val step: Float
         get() = bigRadius * 2 + circleSpacing
 
     fun setBigCircleIndex(targetIndex: Int) {
         if (targetIndex !in 0..circleCount) return
-
-        // Отменяем текущую анимацию
         animator?.cancel()
-
-        // Запускаем новую анимацию от текущей позиции к целевой
         startAnimationTo(targetIndex)
     }
 
@@ -60,13 +53,10 @@ class BeadsView @JvmOverloads constructor(
                 override fun onAnimationStart(animation: Animator) {}
 
                 override fun onAnimationEnd(animation: Animator) {
-                    // Определяем конечный индекс на основе смещения
                     currentBigCircleIndex = (-currentOffset / step).roundToInt().coerceIn(0, circleCount)
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
-                    // При отмене анимации (например, из-за нового нажатия)
-                    // не меняем currentBigCircleIndex, так как будет запущена новая анимация
                 }
 
                 override fun onAnimationRepeat(animation: Animator) {}
@@ -82,28 +72,22 @@ class BeadsView @JvmOverloads constructor(
         val centerY = height / 2f
         val screenCenterX = width / 2f
 
-        // Смещение для центрирования
         val offset = screenCenterX + currentOffset
 
-        // Определяем, какой круг должен быть большим
         val animatedBigIndex = if (animator?.isRunning == true) {
-            // Во время анимации вычисляем индекс на основе текущего смещения
             (-currentOffset / step).roundToInt().coerceIn(0, circleCount)
         } else {
             currentBigCircleIndex
         }
 
-        // Рисуем все 11 кругов
         for (i in 0..circleCount) {
             val centerX = i * step + offset
             val isBig = (i == animatedBigIndex)
 
-            // Пропускаем круги, которые полностью за пределами экрана
             if (centerX + bigRadius < 0 || centerX - bigRadius > width) {
                 continue
             }
 
-            // Вычисляем прозрачность для плавного исчезновения по краям
             val alpha = calculateAlpha(centerX)
 
             drawCircle(canvas, centerX, centerY, isBig, alpha)
@@ -123,7 +107,6 @@ class BeadsView @JvmOverloads constructor(
     private fun drawCircle(canvas: Canvas, centerX: Float, centerY: Float, isBig: Boolean, alpha: Float) {
         val radius = if (isBig) bigRadius else smallRadius
 
-        // Основной цвет
         paint.color = if (isBig) context.getColor(R.color.accent) else context.getColor(R.color.not_available)
         paint.alpha = (255 * alpha).toInt()
         paint.style = Paint.Style.FILL
@@ -139,7 +122,6 @@ class BeadsView @JvmOverloads constructor(
 
         setMeasuredDimension(width, height)
 
-        // Инициализируем начальное смещение
         if (currentOffset == 0f) {
             currentOffset = -currentBigCircleIndex * step
         }
