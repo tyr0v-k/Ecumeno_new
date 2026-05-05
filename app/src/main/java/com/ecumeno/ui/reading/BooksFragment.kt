@@ -31,7 +31,7 @@ class BooksFragment : Fragment() {
         val dbName = args.dbName
         val dbHelper = DatabaseHelper(requireContext(), dbName)
         if (dbName.contains("bible")){
-            prefs = PrefsHelper(requireContext())
+            prefs = PrefsHelper(requireContext().applicationContext)
             if (prefs.lastBook != -1){
                 val action = BooksFragmentDirections.actionBooksToReader(args.dbName, prefs.lastBook)
                 findNavController().navigate(action)

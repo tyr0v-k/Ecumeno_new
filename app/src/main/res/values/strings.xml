@@ -30,7 +30,7 @@
     <string name="switch_rosary">Rosary prayer rule</string>
     <string name="reset">Reset</string>
     <string name="personalization">Personalization</string>
-    <string name="confession">Denomination (requires restart)</string>
+    <string name="confession">Denomination</string>
     <string name="confession_ort">Orthodoxy</string>
     <string name="confession_cat">Catholicism</string>
     <string name="confession_lut">Lutheranism</string>

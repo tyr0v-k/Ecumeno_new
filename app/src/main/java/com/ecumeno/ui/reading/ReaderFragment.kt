@@ -37,7 +37,7 @@ class ReaderFragment : Fragment() {
         val number = args.number
         val dbName = args.dbName
         val dbHelper = DatabaseHelper(requireContext(), dbName)
-        prefs = PrefsHelper(requireContext())
+        prefs = PrefsHelper(requireContext().applicationContext)
 
         if (dbName.contains("bible")){
             val chapters = dbHelper.getChapters(number)

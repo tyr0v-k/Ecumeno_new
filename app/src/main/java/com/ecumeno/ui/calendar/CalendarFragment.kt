@@ -32,7 +32,6 @@ class CalendarFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var prefs: PrefsHelper
-    // Используем viewModels() делегат для создания ViewModel
     private val viewModel: CalendarViewModel by viewModels {
         CalendarViewModelFactory(prefs)
     }
@@ -55,7 +54,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prefs = PrefsHelper(requireContext())
+        prefs = PrefsHelper(requireContext().applicationContext)
         setupRecyclerView()
         setupObservers()
         setupClickListeners()
@@ -80,10 +79,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        // Подписываемся на StateFlow с помощью lifecycleScope
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Наблюдаем за calendarDays
                 viewModel.calendarDays.collect { days ->
                     calendarAdapter.submitList(days)
                 }
@@ -92,7 +89,6 @@ class CalendarFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Наблюдаем за currentMonth
                 viewModel.currentMonth.collect { month ->
                     val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.forLanguageTag(getCurrentLocale()))
                     binding.monthTitle.text = month.format(formatter).substring(0,1).uppercase() + month.format(formatter).substring(1)
@@ -117,7 +113,6 @@ class CalendarFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Наблюдаем за selectedDate
                 viewModel.selectedDate.collect { date ->
                     date?.let { showDateDetails(it) }
                 }
@@ -140,7 +135,6 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showDateDetails(date: LocalDate) {
-        // Получаем текущий список дней
         val days = calendarAdapter.currentList
         val day = days.find { it.date == date }
         day?.let {
@@ -156,7 +150,6 @@ class CalendarFragment : Fragment() {
                 binding.holidayName.visibility = View.GONE
             }
 
-            // Отображение поста
             if (prefs.confession != "lut"){
                 val fastText = when (it.fastLevel) {
                     FastLevel.NO_FAST -> getString(R.string.fast_no_fast)

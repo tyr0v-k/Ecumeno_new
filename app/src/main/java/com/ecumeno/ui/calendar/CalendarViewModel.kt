@@ -11,10 +11,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarViewModel(prefs: PrefsHelper) : ViewModel() {
+class CalendarViewModel(private val prefs: PrefsHelper) : ViewModel() {
     private val calculator = EasterCalculator
-    private val confession : String = prefs.confession
-
     private val _currentMonth = MutableStateFlow(YearMonth.now())
     val currentMonth: StateFlow<YearMonth> = _currentMonth
 
@@ -25,12 +23,12 @@ class CalendarViewModel(prefs: PrefsHelper) : ViewModel() {
     val selectedDate: StateFlow<LocalDate?> = _selectedDate
 
     init {
-        loadMonth(currentMonth.value.year, currentMonth.value.monthValue, confession)
+        loadMonth(currentMonth.value.year, currentMonth.value.monthValue)
     }
 
-    fun loadMonth(year: Int, month: Int, confession: String) {
+    fun loadMonth(year: Int, month: Int) {
         viewModelScope.launch {
-            _calendarDays.value = calculator.getMonthCalendar(year, month, confession)
+            _calendarDays.value = calculator.getMonthCalendar(year, month, prefs.confession)
             _currentMonth.value = YearMonth.of(year, month)
         }
     }
@@ -41,16 +39,16 @@ class CalendarViewModel(prefs: PrefsHelper) : ViewModel() {
 
     fun navigateToPreviousMonth() {
         val previousMonth = currentMonth.value.minusMonths(1)
-        loadMonth(previousMonth.year, previousMonth.monthValue, confession)
+        loadMonth(previousMonth.year, previousMonth.monthValue)
     }
 
     fun navigateToNextMonth() {
         val nextMonth = currentMonth.value.plusMonths(1)
-        loadMonth(nextMonth.year, nextMonth.monthValue, confession)
+        loadMonth(nextMonth.year, nextMonth.monthValue)
     }
 
     fun navigateToToday() {
         val today = LocalDate.now()
-        loadMonth(today.year, today.monthValue, confession)
+        loadMonth(today.year, today.monthValue)
     }
 }

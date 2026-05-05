@@ -26,7 +26,6 @@ import java.util.Calendar
 class RosaryFragment : Fragment() {
     private var _binding: FragmentRosaryBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var beadsView: BeadsView
     private lateinit var tvPrayer: TextView
     private lateinit var tvBeadNumber: TextView
@@ -59,7 +58,7 @@ class RosaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefs = PrefsHelper(requireContext())
+        prefs = PrefsHelper(requireContext().applicationContext)
         initRosaryStructure()
         initViews()
         initGestureDetector()
@@ -231,7 +230,6 @@ class RosaryFragment : Fragment() {
             getString(R.string.rosary_mystery_sorrowful),
             getString(R.string.rosary_mystery_glorious)
         )
-        // Определяем тайну по дню недели
         val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
             Calendar.MONDAY -> 0
             Calendar.SATURDAY -> 0
@@ -295,7 +293,7 @@ class RosaryFragment : Fragment() {
         }
         else {
             rosaryStructure = listOf(
-                PrayerType.OUR_FATHER,     // 1: Отче наш
+                PrayerType.OUR_FATHER,
                 PrayerType.JESUS_PRAYER,
                 PrayerType.JESUS_PRAYER,
                 PrayerType.JESUS_PRAYER,

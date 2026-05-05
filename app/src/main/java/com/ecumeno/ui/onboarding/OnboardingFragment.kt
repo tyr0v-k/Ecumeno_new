@@ -27,7 +27,7 @@ class OnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefs = PrefsHelper(requireContext())
+        prefs = PrefsHelper(requireContext().applicationContext)
         val radioGroup = binding.radioGroupOptions
         val buttonContinue = binding.buttonContinue
 

@@ -30,7 +30,7 @@
     <string name="switch_rosary">Молитвенное правило на четках</string>
     <string name="reset">Сброс</string>
     <string name="personalization">Персонализация</string>
-    <string name="confession">Конфессия (требует перезапуска)</string>
+    <string name="confession">Конфессия</string>
     <string name="confession_ort">Православие</string>
     <string name="confession_cat">Католицизм</string>
     <string name="confession_lut">Лютеранство</string>

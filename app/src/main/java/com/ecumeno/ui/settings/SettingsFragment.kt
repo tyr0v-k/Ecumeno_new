@@ -50,7 +50,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prefs = PrefsHelper(requireContext())
+        prefs = PrefsHelper(requireContext().applicationContext)
         binding.switchNotifications.isChecked = prefs.isNotificationEnabled
         binding.switchRosary.isChecked = prefs.isRuleEnabled
         updateTimeButtonText(prefs.notificationHour, prefs.notificationMinute)
@@ -116,7 +116,6 @@ class SettingsFragment : Fragment() {
                         2 -> prefs.confession = "lut"
                     }
                     requireContext().getDatabasePath("prayers.db")?.delete()
-                    requireActivity().finish()
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
