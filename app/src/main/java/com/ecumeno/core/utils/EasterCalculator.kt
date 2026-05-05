@@ -11,7 +11,6 @@ import java.time.Month
 import java.time.temporal.TemporalAdjusters
 
 object EasterCalculator {
-
     lateinit var fixedHolidays : MutableMap<String, Holiday>
     // Алгоритм Гаусса для юлианской Пасхи и перевод в григорианский календарь
     fun calculateOrthodoxEaster(year: Int): LocalDate {
@@ -512,20 +511,15 @@ object EasterCalculator {
         val currentDate = LocalDate.now()
         val easterDate : LocalDate
         val movableHolidays: MutableMap<String, LocalDate>
-        when (confession){
-            "ort" -> getOrthodoxFixedHolidays()
-            "cat" -> getCatholicFixedHolidays()
-            else -> getLutheranFixedHolidays()
-        }
         if (confession == "ort"){
             easterDate = calculateOrthodoxEaster(currentDate.year)
-        } else{
+        } else {
             easterDate = calculateGregorianEaster(currentDate.year)
         }
         when (confession){
             "ort" -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
-            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate) }
-            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate) }
+            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
+            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
         }
         val dayHolidays = mutableListOf<Holiday>()
 
@@ -554,6 +548,13 @@ object EasterCalculator {
         }
 
         val fastLevel = getFastLevel(currentDate, easterDate, confession)
+
+        if (confession == "cat" && dayHolidays.isNotEmpty()) {
+            val maxPriority = dayHolidays.sortedBy { it.priority }[0].priority
+            dayHolidays.removeIf { holiday -> (!holiday.name.contains("easter") && !holiday.name.contains("reserved_")) && (currentDate.isAfter(easterDate.minusDays(7)) && currentDate.isBefore(easterDate.plusDays(8))) }
+            dayHolidays.removeIf { holiday ->  (maxPriority < 3 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) && holiday.priority == 3 }
+            dayHolidays.removeIf { holiday ->  (!holiday.name.contains("easter") && !holiday.name.contains("reserved_") && !holiday.name.contains("_lord")) && holiday.priority == 2 && (maxPriority < 2 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) }
+        }
 
         return@withContext CalendarDay(
             date = currentDate,
