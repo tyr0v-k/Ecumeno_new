@@ -30,18 +30,15 @@ class CalendarFragment : Fragment() {
 
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var prefs: PrefsHelper
     private val viewModel: CalendarViewModel by viewModels {
         CalendarViewModelFactory(prefs)
     }
-
     private lateinit var calendarAdapter: CalendarAdapter
-
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var sensorManager: SensorManager
-
     private var current = true
+    private var hasFast = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,18 +78,12 @@ class CalendarFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.calendarDays.collect { days ->
-                    calendarAdapter.submitList(days)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.currentMonth.collect { month ->
+                viewModel.uiState.collect { state ->
+                    hasFast = state.hasFast
+                    calendarAdapter.submitList(state.calendarDays)
                     val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.forLanguageTag(getCurrentLocale()))
-                    binding.monthTitle.text = month.format(formatter).substring(0,1).uppercase() + month.format(formatter).substring(1)
-                    if(month == YearMonth.now()){
+                    binding.monthTitle.text = state.currentMonth.format(formatter).substring(0,1).uppercase() + state.currentMonth.format(formatter).substring(1)
+                    if(state.currentMonth == YearMonth.now()){
                         binding.prevMonth.imageAlpha = 100
                         binding.prevMonth.isEnabled = false
                         current = true
@@ -106,15 +97,8 @@ class CalendarFragment : Fragment() {
                         binding.todayButton.isEnabled = true
                         binding.todayButton.setAlpha(1f)
                     }
-                    calendarAdapter.setCurrentMonth(month.month)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.selectedDate.collect { date ->
-                    date?.let { showDateDetails(it) }
+                    calendarAdapter.setCurrentMonth(state.currentMonth.month)
+                    state.selectedDate?.let { showDateDetails(it) }
                 }
             }
         }
@@ -150,7 +134,7 @@ class CalendarFragment : Fragment() {
                 binding.holidayName.visibility = View.GONE
             }
 
-            if (prefs.confession != "lut"){
+            if (hasFast){
                 val fastText = when (it.fastLevel) {
                     FastLevel.NO_FAST -> getString(R.string.fast_no_fast)
                     FastLevel.CONTINUOUS_WEEK -> getString(R.string.fast_continuous_week)

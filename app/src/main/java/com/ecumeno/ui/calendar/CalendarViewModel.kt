@@ -3,7 +3,6 @@ package com.ecumeno.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.data.local.preferences.PrefsHelper
-import com.ecumeno.core.utils.models.CalendarDay
 import com.ecumeno.core.utils.EasterCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,37 +12,34 @@ import java.time.YearMonth
 
 class CalendarViewModel(private val prefs: PrefsHelper) : ViewModel() {
     private val calculator = EasterCalculator
-    private val _currentMonth = MutableStateFlow(YearMonth.now())
-    val currentMonth: StateFlow<YearMonth> = _currentMonth
+    private val _uiState = MutableStateFlow(CalendarUiState())
+    val uiState: StateFlow<CalendarUiState> = _uiState
 
-    private val _calendarDays = MutableStateFlow<List<CalendarDay>>(emptyList())
-    val calendarDays: StateFlow<List<CalendarDay>> = _calendarDays
-
-    private val _selectedDate = MutableStateFlow<LocalDate?>(null)
-    val selectedDate: StateFlow<LocalDate?> = _selectedDate
 
     init {
-        loadMonth(currentMonth.value.year, currentMonth.value.monthValue)
+        loadMonth(uiState.value.currentMonth.year, uiState.value.currentMonth.monthValue)
     }
 
     fun loadMonth(year: Int, month: Int) {
         viewModelScope.launch {
-            _calendarDays.value = calculator.getMonthCalendar(year, month, prefs.confession)
-            _currentMonth.value = YearMonth.of(year, month)
+            _uiState.value = _uiState.value.copy(currentMonth = YearMonth.of(year, month),
+                calendarDays = calculator.getMonthCalendar(year, month, prefs.confession),
+                hasFast = prefs.confession != "lut"
+            )
         }
     }
 
     fun selectDate(date: LocalDate) {
-        _selectedDate.value = date
+        _uiState.value = _uiState.value.copy(selectedDate = date)
     }
 
     fun navigateToPreviousMonth() {
-        val previousMonth = currentMonth.value.minusMonths(1)
+        val previousMonth = uiState.value.currentMonth.minusMonths(1)
         loadMonth(previousMonth.year, previousMonth.monthValue)
     }
 
     fun navigateToNextMonth() {
-        val nextMonth = currentMonth.value.plusMonths(1)
+        val nextMonth = uiState.value.currentMonth.plusMonths(1)
         loadMonth(nextMonth.year, nextMonth.monthValue)
     }
 

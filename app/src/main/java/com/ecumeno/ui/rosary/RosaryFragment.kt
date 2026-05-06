@@ -13,38 +13,32 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.ecumeno.R
+import com.ecumeno.core.utils.models.enums.MysteryType
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.core.utils.models.enums.PrayerType
 import com.ecumeno.databinding.FragmentRosaryBinding
-import java.util.Calendar
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class RosaryFragment : Fragment() {
     private var _binding: FragmentRosaryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var beadsView: BeadsView
-    private lateinit var tvPrayer: TextView
-    private lateinit var tvBeadNumber: TextView
-    private lateinit var tvMysteryTitle: TextView
-    private lateinit var btnReset: Button
-
+    private val viewModel: RosaryViewModel by viewModels {
+        RosaryViewModelFactory(prefs)
+    }
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var vibrator: Vibrator
     private lateinit var sensorManager: SensorManager
     private lateinit var prefs: PrefsHelper
-    private lateinit var rosaryStructure : List<PrayerType>
-    private var rosaryStart = 1
-    private var rosaryLimit = 0
 
-    private var currentDecade = 0
-    private var currentBead = 0
-    private var currentPrayerIndex = 0
     private var delimiter = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,18 +51,11 @@ class RosaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         prefs = PrefsHelper(requireContext().applicationContext)
-        initRosaryStructure()
-        initViews()
+        vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         initGestureDetector()
+        setupObservers()
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        if (prefs.confession == "cat" && prefs.isRuleEnabled){
-            initMysteries()
-        } else if (!(prefs.confession == "lut" && prefs.isRuleEnabled)){
-            currentDecade++
-        }
-        updateDisplay()
 
         view.isFocusableInTouchMode = true
         view.requestFocus()
@@ -76,11 +63,13 @@ class RosaryFragment : Fragment() {
             if (event.action == KeyEvent.ACTION_DOWN) {
                 when (keyCode) {
                     KeyEvent.KEYCODE_VOLUME_UP -> {
-                        nextBead()
+                        viewModel.nextBead()
+                        triggerVibration()
                         return@setOnKeyListener true
                     }
                     KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                        previousBead()
+                        viewModel.previousBead()
+                        triggerVibration()
                         return@setOnKeyListener true
                     }
                 }
@@ -92,6 +81,8 @@ class RosaryFragment : Fragment() {
             gestureDetector.onTouchEvent(event)
             true
         }
+
+        binding.btnReset.setOnClickListener { viewModel.resetRosary() ; triggerVibration() }
     }
 
     override fun onDestroyView() {
@@ -110,18 +101,6 @@ class RosaryFragment : Fragment() {
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
-    private fun initViews() {
-        tvPrayer = binding.tvPrayer
-        tvBeadNumber = binding.tvBeadNumber
-        btnReset = binding.btnReset
-        beadsView = binding.beadsView
-        if (!prefs.isRuleEnabled){
-            tvPrayer.visibility = View.INVISIBLE
-        }
-        vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        btnReset.setOnClickListener { resetRosary() }
-    }
 
     private fun initGestureDetector() {
         gestureDetector = GestureDetectorCompat(
@@ -136,9 +115,11 @@ class RosaryFragment : Fragment() {
                     val diffX = e2.x - (e1?.x ?: 0f)
                     if (Math.abs(diffX) > 100 && Math.abs(velocityX) > 100) {
                         if (diffX < 0) {
-                            nextBead()
+                            viewModel.nextBead()
+                            triggerVibration()
                         } else {
-                            previousBead()
+                            viewModel.previousBead()
+                            triggerVibration()
                         }
                         return true
                     }
@@ -149,202 +130,51 @@ class RosaryFragment : Fragment() {
             })
     }
 
-    private fun nextBead() {
-        if(currentDecade == rosaryLimit && currentPrayerIndex == rosaryStructure.size - 1){
-            resetRosary()
-        }
-        else{
-            if (prefs.confession == "cat" && prefs.isRuleEnabled){
-                if (currentPrayerIndex < rosaryStructure.size - 1) {
-                    if(currentPrayerIndex == rosaryLimit){
-                        currentDecade++
-                    }
-                    currentPrayerIndex++
-                }
-                else{
-                    currentPrayerIndex = rosaryLimit + 1
-                    currentDecade++
-                }
-            } else{
-                if (currentPrayerIndex < rosaryStructure.size - 1) {
-                    currentPrayerIndex++
-                }
-                else{
-                    currentDecade++
-                    currentPrayerIndex = 0
-                }
-            }
-            updateCurrentDecadeAndBead()
-            updateDisplay()
-            triggerVibration()
-        }
-    }
-
-    private fun previousBead() {
-        if (currentPrayerIndex > 0) {
-            currentPrayerIndex--
-            updateCurrentDecadeAndBead()
-            updateDisplay()
-            triggerVibration()
-        }
-    }
-
-    private fun updateCurrentDecadeAndBead() {
-        if (prefs.confession == "cat" && prefs.isRuleEnabled){
-            when {
-                currentPrayerIndex == 0 -> { currentDecade = 0; currentBead = 0 }
-                currentPrayerIndex <= 5 -> { currentDecade = 0; currentBead = currentPrayerIndex }
-                else -> {
-                    val beadInDecade = (currentPrayerIndex - 5) % 14
-                    currentBead = beadInDecade
+    private fun setupObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    binding.tvPrayer.text = getPrayerText(state.prayerType)
+                    binding.tvPrayer.visibility = if (state.prayerVisibility) View.VISIBLE else View.GONE
+                    binding.tvBeadNumber.text = (if (state.decadeVisibility) "${getString(R.string.decade)}: ${state.currentDecade}\n" else "") + "${if (state.beadVisibility) "${getString(
+                        R.string.bead)}: ${state.displayBead}" else ""}"
+                    binding.tvMysteryTitle.text = getMysteryText(state.mysteryType)
+                    binding.tvMysteryTitle.visibility = if(state.mysteryVisibility) View.VISIBLE else View.GONE
+                    if (!state.hasCenterPiece) binding.beadsView.setBigCircleIndex(state.currentBead)
+                    delimiter = state.isDelimiter
                 }
             }
         }
-        else{
-            currentBead = currentPrayerIndex
-        }
     }
 
-    private fun updateDisplay() {
-        val prayerType = rosaryStructure[currentPrayerIndex]
-        if (getPrayerText(prayerType) != tvPrayer.text.toString()){
-            delimiter = true
-        }
-        else{
-            delimiter = false
-        }
-        tvPrayer.text = getPrayerText(prayerType)
-        if (prefs.confession == "lut" && prefs.isRuleEnabled) currentBead++
-        tvBeadNumber.text = "${if (currentDecade != 0 && !(prefs.confession == "lut" && prefs.isRuleEnabled)) "${getString(
-            R.string.decade)}: ${currentDecade}\n" else ""}" +
-                "${if (currentBead != 0 && !(prefs.confession == "cat" && currentPrayerIndex > 16)) "${getString(
-                    R.string.bead)}: ${currentBead}" else ""}"
-        if (!(prefs.confession == "cat" && currentPrayerIndex > 16)) beadsView.setBigCircleIndex(if(prefs.confession != "cat" || (prefs.confession == "cat" && !prefs.isRuleEnabled) || (prefs.confession == "cat" && prefs.isRuleEnabled && currentPrayerIndex > 5)) currentBead + 10 else currentBead)
-    }
-
-    private fun initMysteries(){
-        tvMysteryTitle = binding.tvMysteryTitle
-        val mysteries = listOf(
-            getString(R.string.rosary_mystery_joyful),
-            getString(R.string.rosary_mystery_luminous),
-            getString(R.string.rosary_mystery_sorrowful),
-            getString(R.string.rosary_mystery_glorious)
-        )
-        val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-            Calendar.MONDAY -> 0
-            Calendar.SATURDAY -> 0
-            Calendar.TUESDAY -> 2
-            Calendar.FRIDAY -> 2
-            Calendar.WEDNESDAY -> 3
-            Calendar.SUNDAY -> 3
-            Calendar.THURSDAY -> 1
-            else -> 0
-        }
-        tvMysteryTitle.visibility = View.VISIBLE
-        tvMysteryTitle.text = "${getString(R.string.rosary_mystery)}: ${mysteries[dayOfWeek]}"
-    }
-
-    private fun initRosaryStructure(){
-        if (prefs.confession == "cat" && prefs.isRuleEnabled){
-            rosaryStructure = listOf(
-                PrayerType.CREED,
-                PrayerType.OUR_FATHER,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,
-                PrayerType.OUR_FATHER,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,
-                PrayerType.FATIMA_PRAYER,
-            )
-            rosaryStart = 0
-            rosaryLimit = 5
-        } else if (prefs.confession == "lut" && prefs.isRuleEnabled){
-            rosaryStructure = listOf(
-                PrayerType.FRALSARKRANSEN_FIRST,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_THIRD,
-                PrayerType.FRALSARKRANSEN_FOURTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_FIFTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_SIXTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_SEVENTH,
-                PrayerType.FRALSARKRANSEN_EIGHT,
-                PrayerType.SILENCE,
-                PrayerType.SILENCE,
-                PrayerType.SILENCE,
-                PrayerType.FRALSARKRANSEN_NINTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_TENTH,
-                PrayerType.FRALSARKRANSEN_SECOND
-            )
-        }
-        else {
-            rosaryStructure = listOf(
-                PrayerType.OUR_FATHER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER,
-                PrayerType.JESUS_PRAYER
-            )
-            rosaryLimit = 3
-        }
-    }
     private fun getPrayerText(prayerType: PrayerType): String {
-        val prayers = listOf(
-            getString(R.string.rosary_creed),
-            getString(R.string.rosary_our_father),
-            getString(R.string.rosary_hail_mary),
-            getString(R.string.rosary_glory),
-            getString(R.string.rosary_fatima),
-            getString(R.string.rosary_jesus),
-            getString(R.string.fralsarkransen_first),
-            getString(R.string.fralsarkransen_second),
-            getString(R.string.fralsarkransen_third),
-            getString(R.string.fralsarkransen_fourth),
-            getString(R.string.fralsarkransen_fifth),
-            getString(R.string.fralsarkransen_sixth),
-            getString(R.string.fralsarkransen_seventh),
-            getString(R.string.fralsarkransen_eight),
-            getString(R.string.fralsarkransen_ninth),
-            getString(R.string.fralsarkransen_tenth)
-        )
         return when (prayerType) {
-            PrayerType.CREED -> prayers[0]
-            PrayerType.OUR_FATHER -> prayers[1]
-            PrayerType.HAIL_MARY -> prayers[2]
-            PrayerType.GLORY_BE -> prayers[3]
-            PrayerType.FATIMA_PRAYER -> prayers[4]
-            PrayerType.JESUS_PRAYER -> prayers[5]
+            PrayerType.CREED -> getString(R.string.rosary_creed)
+            PrayerType.OUR_FATHER -> getString(R.string.rosary_our_father)
+            PrayerType.HAIL_MARY -> getString(R.string.rosary_hail_mary)
+            PrayerType.GLORY_BE -> getString(R.string.rosary_glory)
+            PrayerType.FATIMA_PRAYER -> getString(R.string.rosary_fatima)
+            PrayerType.JESUS_PRAYER -> getString(R.string.rosary_jesus)
             PrayerType.SILENCE -> ""
-            PrayerType.FRALSARKRANSEN_FIRST -> prayers[6]
-            PrayerType.FRALSARKRANSEN_SECOND -> prayers[7]
-            PrayerType.FRALSARKRANSEN_THIRD -> prayers[8]
-            PrayerType.FRALSARKRANSEN_FOURTH -> prayers[9]
-            PrayerType.FRALSARKRANSEN_FIFTH -> prayers[10]
-            PrayerType.FRALSARKRANSEN_SIXTH -> prayers[11]
-            PrayerType.FRALSARKRANSEN_SEVENTH -> prayers[12]
-            PrayerType.FRALSARKRANSEN_EIGHT -> prayers[13]
-            PrayerType.FRALSARKRANSEN_NINTH -> prayers[14]
-            PrayerType.FRALSARKRANSEN_TENTH -> prayers[15]
+            PrayerType.FRALSARKRANSEN_FIRST -> getString(R.string.fralsarkransen_first)
+            PrayerType.FRALSARKRANSEN_SECOND -> getString(R.string.fralsarkransen_second)
+            PrayerType.FRALSARKRANSEN_THIRD -> getString(R.string.fralsarkransen_third)
+            PrayerType.FRALSARKRANSEN_FOURTH -> getString(R.string.fralsarkransen_fourth)
+            PrayerType.FRALSARKRANSEN_FIFTH -> getString(R.string.fralsarkransen_fifth)
+            PrayerType.FRALSARKRANSEN_SIXTH -> getString(R.string.fralsarkransen_sixth)
+            PrayerType.FRALSARKRANSEN_SEVENTH -> getString(R.string.fralsarkransen_seventh)
+            PrayerType.FRALSARKRANSEN_EIGHT -> getString(R.string.fralsarkransen_eight)
+            PrayerType.FRALSARKRANSEN_NINTH -> getString(R.string.fralsarkransen_ninth)
+            PrayerType.FRALSARKRANSEN_TENTH -> getString(R.string.fralsarkransen_tenth)
+        }
+    }
+
+    private fun getMysteryText(mysteryType: MysteryType): String {
+        return when (mysteryType){
+            MysteryType.JOYFUL -> "${getString(R.string.rosary_mystery)}: ${getString(R.string.rosary_mystery_joyful)}"
+            MysteryType.GLORIOUS -> "${getString(R.string.rosary_mystery)}: ${getString(R.string.rosary_mystery_glorious)}"
+            MysteryType.LUMINOUS -> "${getString(R.string.rosary_mystery)}: ${getString(R.string.rosary_mystery_luminous)}"
+            MysteryType.SORROWFUL -> "${getString(R.string.rosary_mystery)}: ${getString(R.string.rosary_mystery_sorrowful)}"
         }
     }
 
@@ -355,14 +185,5 @@ class RosaryFragment : Fragment() {
         else{
             vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         }
-    }
-
-    private fun resetRosary() {
-        currentPrayerIndex = 0
-        currentDecade = rosaryStart
-        currentBead = 0
-        delimiter = false
-        updateDisplay()
-        triggerVibration()
     }
 }
