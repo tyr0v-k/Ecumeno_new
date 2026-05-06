@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.core.utils.EasterCalculator
+import com.ecumeno.core.utils.models.CalendarDay
 import com.ecumeno.core.utils.models.enums.Confession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,7 @@ class CalendarViewModel(private val prefs: PrefsHelper) : ViewModel() {
         }
     }
 
-    fun selectDate(date: LocalDate) {
+    fun selectDate(date: CalendarDay) {
         _uiState.value = _uiState.value.copy(selectedDate = date)
     }
 

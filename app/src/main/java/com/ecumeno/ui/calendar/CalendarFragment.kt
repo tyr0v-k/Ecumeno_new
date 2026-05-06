@@ -17,11 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ecumeno.R
+import com.ecumeno.core.utils.models.CalendarDay
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.core.utils.models.enums.FastLevel
 import com.ecumeno.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -64,7 +64,6 @@ class CalendarFragment : Fragment() {
         calendarAdapter = CalendarAdapter { date ->
             viewModel.selectDate(date)
         }
-
         binding.calendarGrid.apply {
             layoutManager = GridLayoutManager(requireContext(), 7)
             adapter = calendarAdapter
@@ -101,7 +100,7 @@ class CalendarFragment : Fragment() {
                         binding.todayButton.isEnabled = true
                         binding.todayButton.setAlpha(1f)
                     }
-                    calendarAdapter.setCurrentMonth(state.currentMonth.month)
+                    calendarAdapter.setCurrentDate(state.selectedDate)
                     state.selectedDate?.let { showDateDetails(it) }
                 }
             }
@@ -122,37 +121,33 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun showDateDetails(date: LocalDate) {
-        val days = calendarAdapter.currentList
-        val day = days.find { it.date == date }
-        day?.let {
-            binding.dayInfo.visibility= View.VISIBLE
-            binding.selectedDate.text = date.format(
-                DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale.forLanguageTag(getCurrentLocale()))
-            )
+    private fun showDateDetails(date: CalendarDay) {
+        binding.dayInfo.visibility= View.VISIBLE
+        binding.selectedDate.text = date.date.format(
+            DateTimeFormatter.ofPattern("dd MMMM yyyy, EEEE", Locale.forLanguageTag(getCurrentLocale()))
+        )
 
-            if (it.holidays.isNotEmpty()) {
-                binding.holidayName.text = it.holidays.joinToString("\n") { holiday -> getString(requireContext().resources.getIdentifier(holiday.name, "string", requireContext().packageName)) }
-                binding.holidayName.visibility = View.VISIBLE
-            } else {
-                binding.holidayName.visibility = View.GONE
-            }
+        if (date.holidays.isNotEmpty()) {
+            binding.holidayName.text = date.holidays.joinToString("\n") { holiday -> getString(requireContext().resources.getIdentifier(holiday.name, "string", requireContext().packageName)) }
+            binding.holidayName.visibility = View.VISIBLE
+        } else {
+            binding.holidayName.visibility = View.GONE
+        }
 
-            if (hasFast){
-                val fastText = when (it.fastLevel) {
-                    FastLevel.NO_FAST -> getString(R.string.fast_no_fast)
-                    FastLevel.CONTINUOUS_WEEK -> getString(R.string.fast_continuous_week)
-                    FastLevel.XEROPHAGY -> getString(R.string.fast_xerophagy)
-                    FastLevel.FISH -> getString(R.string.fast_fish)
-                    FastLevel.NO_OIL -> getString(R.string.fast_no_oil)
-                    FastLevel.FAST -> getString(R.string.fast_strict)
-                    FastLevel.OIL_ALLOWED -> getString(R.string.fast_oil_allowed)
-                    FastLevel.ABSTINENCE -> getString(R.string.abstinence)
-                }
-                binding.fastInfo.text = fastText
-            } else{
-                binding.fastInfo.visibility = View.GONE
+        if (hasFast){
+            val fastText = when (date.fastLevel) {
+                FastLevel.NO_FAST -> getString(R.string.fast_no_fast)
+                FastLevel.CONTINUOUS_WEEK -> getString(R.string.fast_continuous_week)
+                FastLevel.XEROPHAGY -> getString(R.string.fast_xerophagy)
+                FastLevel.FISH -> getString(R.string.fast_fish)
+                FastLevel.NO_OIL -> getString(R.string.fast_no_oil)
+                FastLevel.FAST -> getString(R.string.fast_strict)
+                FastLevel.OIL_ALLOWED -> getString(R.string.fast_oil_allowed)
+                FastLevel.ABSTINENCE -> getString(R.string.abstinence)
             }
+            binding.fastInfo.text = fastText
+        } else{
+            binding.fastInfo.visibility = View.GONE
         }
     }
 

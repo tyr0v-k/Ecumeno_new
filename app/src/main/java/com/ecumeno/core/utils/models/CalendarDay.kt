@@ -8,5 +8,5 @@ data class CalendarDay(
     val holidays: List<Holiday>,
     val fastLevel: FastLevel,
     val isToday: Boolean = false,
-    val isSelected: Boolean = false
+    val currentMonth: Boolean = true
 )

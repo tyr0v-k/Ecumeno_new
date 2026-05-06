@@ -498,7 +498,7 @@ object EasterCalculator {
                     holidays = dayHolidays.sortedBy { it.priority },
                     fastLevel = fastLevel,
                     isToday = currentDate == today,
-                    isSelected = false
+                    currentMonth = month == currentDate.month.value
                 )
             )
 
@@ -562,7 +562,6 @@ object EasterCalculator {
             holidays = dayHolidays.sortedBy { it.priority },
             fastLevel = fastLevel,
             isToday = true,
-            isSelected = false
         )
     }
 }

@@ -12,19 +12,14 @@ import com.ecumeno.R
 import com.ecumeno.core.utils.models.CalendarDay
 import com.ecumeno.core.utils.models.enums.FastLevel
 import com.ecumeno.databinding.CalendarDayItemBinding
-import java.time.LocalDate
-import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
 
-class CalendarAdapter(private val onDateClick: (LocalDate) -> Unit) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
+class CalendarAdapter(private val onDateClick: (CalendarDay) -> Unit) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
+    private var selectedDate: CalendarDay? = null
 
-    private var selectedDate: LocalDate? = null
-    private var currentMonth: Month = LocalDate.now().month
-
-    fun setCurrentMonth(month: Month) {
-        currentMonth = month
-        notifyDataSetChanged()
+    fun setCurrentDate(date: CalendarDay?) {
+        selectedDate = date
     }
     inner class CalendarViewHolder(
         private val binding: CalendarDayItemBinding
@@ -41,14 +36,16 @@ class CalendarAdapter(private val onDateClick: (LocalDate) -> Unit) : ListAdapte
             }
             binding.dayOfWeek.text = day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.forLanguageTag(languageCode))
 
-            if (day.date.month != currentMonth) {
+            if (!day.currentMonth) {
                 binding.dayNumber.setTextColor(
                     binding.root.context.getColor(R.color.not_available)
                 )
                 binding.holidayIndicator.visibility = View.GONE
                 binding.fastIndicator.visibility = View.GONE
-            }else{
-                if (day.date == selectedDate) {
+                binding.root.background = null
+                binding.root.setOnClickListener(null)
+            } else{
+                if (day.date == selectedDate?.date) {
                     binding.root.setBackgroundResource(R.drawable.selected_day_bg)
                     binding.dayNumber.setTextColor(
                         binding.root.context.getColor(R.color.main)
@@ -97,12 +94,18 @@ class CalendarAdapter(private val onDateClick: (LocalDate) -> Unit) : ListAdapte
                 }
 
                 binding.root.setOnClickListener {
-                    onDateClick(day.date)
-                    selectedDate = day.date
-                    notifyDataSetChanged()
+                    val oldDate = selectedDate
+                    onDateClick(day)
+                    selectedDate = day
+                    notifyItemChanged(adapterPosition)
+                    if (oldDate != null) {
+                        val oldPosition = currentList.indexOfFirst { it.date == oldDate.date }
+                        if (oldPosition != -1) {
+                            notifyItemChanged(oldPosition)
+                        }
+                    }
                 }
             }
-
         }
     }
 
