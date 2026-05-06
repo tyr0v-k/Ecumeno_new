@@ -1,6 +1,5 @@
 package com.ecumeno.ui.reading
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.data.local.database.DatabaseHelper
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.databinding.FragmentBooksBinding
@@ -28,10 +28,10 @@ class BooksFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        prefs = PrefsHelper(requireContext().applicationContext)
         val dbName = args.dbName
-        val dbHelper = DatabaseHelper(requireContext(), dbName)
+        val dbHelper = DatabaseHelper(requireContext(), dbName, Confession.fromPreferences(prefs.confession))
         if (dbName.contains("bible")){
-            prefs = PrefsHelper(requireContext().applicationContext)
             if (prefs.lastBook != -1){
                 val action = BooksFragmentDirections.actionBooksToReader(args.dbName, prefs.lastBook)
                 findNavController().navigate(action)
@@ -40,7 +40,7 @@ class BooksFragment : Fragment() {
 
             val adapter = ArrayAdapter(
                 requireContext(),
-                R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_1,
                 books.map { it.longName })
             binding.listViewBooks.adapter = adapter
 
@@ -56,7 +56,7 @@ class BooksFragment : Fragment() {
 
             val adapter = ArrayAdapter(
                 requireContext(),
-                R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_1,
                 categories.map { it.name })
             binding.listViewBooks.adapter = adapter
 

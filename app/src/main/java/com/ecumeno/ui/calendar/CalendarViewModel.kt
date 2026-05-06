@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.core.utils.EasterCalculator
+import com.ecumeno.core.utils.models.enums.Confession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,8 +24,8 @@ class CalendarViewModel(private val prefs: PrefsHelper) : ViewModel() {
     fun loadMonth(year: Int, month: Int) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(currentMonth = YearMonth.of(year, month),
-                calendarDays = calculator.getMonthCalendar(year, month, prefs.confession),
-                hasFast = prefs.confession != "lut"
+                calendarDays = calculator.getMonthCalendar(year, month, Confession.fromPreferences(prefs.confession)),
+                hasFast = Confession.fromPreferences(prefs.confession) != Confession.lut
             )
         }
     }

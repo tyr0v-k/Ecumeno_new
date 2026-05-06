@@ -1,6 +1,7 @@
 package com.ecumeno.ui.rosary
 
 import androidx.lifecycle.ViewModel
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.core.utils.models.enums.MysteryType
 import com.ecumeno.core.utils.models.enums.PrayerType
 import com.ecumeno.data.local.preferences.PrefsHelper
@@ -28,7 +29,7 @@ class RosaryViewModel(private val prefs: PrefsHelper) : ViewModel() {
             resetRosary()
         }
         else{
-            if (prefs.confession == "cat" && prefs.isRuleEnabled){
+            if (Confession.fromPreferences(prefs.confession) == Confession.cat && prefs.isRuleEnabled){
                 if (currentPrayerIndex < rosaryStructure.size - 1) {
                     if(currentPrayerIndex == rosaryLimit){
                         currentDecade++
@@ -62,7 +63,7 @@ class RosaryViewModel(private val prefs: PrefsHelper) : ViewModel() {
     }
 
     private fun updateCurrentDecadeAndBead() {
-        if (prefs.confession == "cat" && prefs.isRuleEnabled){
+        if (Confession.fromPreferences(prefs.confession) == Confession.cat && prefs.isRuleEnabled){
             when {
                 currentPrayerIndex == 0 -> { currentDecade = 0; currentBead = 0 }
                 currentPrayerIndex <= 5 -> { currentDecade = 0; currentBead = currentPrayerIndex }
@@ -78,53 +79,75 @@ class RosaryViewModel(private val prefs: PrefsHelper) : ViewModel() {
     }
 
     private fun initRosaryStructure(){
-        if (prefs.confession == "cat" && prefs.isRuleEnabled){
-            rosaryStructure = listOf(
-                PrayerType.CREED,
-                PrayerType.OUR_FATHER,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,
-                PrayerType.OUR_FATHER,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.HAIL_MARY,
-                PrayerType.GLORY_BE,
-                PrayerType.FATIMA_PRAYER,
-            )
-            rosaryStart = 0
-            rosaryLimit = 5
-        } else if (prefs.confession == "lut" && prefs.isRuleEnabled){
-            rosaryStructure = listOf(
-                PrayerType.FRALSARKRANSEN_FIRST,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_THIRD,
-                PrayerType.FRALSARKRANSEN_FOURTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_FIFTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_SIXTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_SEVENTH,
-                PrayerType.FRALSARKRANSEN_EIGHT,
-                PrayerType.SILENCE,
-                PrayerType.SILENCE,
-                PrayerType.SILENCE,
-                PrayerType.FRALSARKRANSEN_NINTH,
-                PrayerType.FRALSARKRANSEN_SECOND,
-                PrayerType.FRALSARKRANSEN_TENTH,
-                PrayerType.FRALSARKRANSEN_SECOND
-            )
-            rosaryStart = 1
-            rosaryLimit = 0
+        if (prefs.isRuleEnabled){
+            when (Confession.fromPreferences(prefs.confession)){
+                Confession.cat -> {
+                    rosaryStructure = listOf(
+                        PrayerType.CREED,
+                        PrayerType.OUR_FATHER,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.GLORY_BE,
+                        PrayerType.OUR_FATHER,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.HAIL_MARY,
+                        PrayerType.GLORY_BE,
+                        PrayerType.FATIMA_PRAYER,
+                    )
+                    rosaryStart = 0
+                    rosaryLimit = 5
+                }
+                Confession.lut -> {
+                    rosaryStructure = listOf(
+                        PrayerType.FRALSARKRANSEN_FIRST,
+                        PrayerType.FRALSARKRANSEN_SECOND,
+                        PrayerType.FRALSARKRANSEN_THIRD,
+                        PrayerType.FRALSARKRANSEN_FOURTH,
+                        PrayerType.FRALSARKRANSEN_SECOND,
+                        PrayerType.FRALSARKRANSEN_FIFTH,
+                        PrayerType.FRALSARKRANSEN_SECOND,
+                        PrayerType.FRALSARKRANSEN_SIXTH,
+                        PrayerType.FRALSARKRANSEN_SECOND,
+                        PrayerType.FRALSARKRANSEN_SEVENTH,
+                        PrayerType.FRALSARKRANSEN_EIGHT,
+                        PrayerType.SILENCE,
+                        PrayerType.SILENCE,
+                        PrayerType.SILENCE,
+                        PrayerType.FRALSARKRANSEN_NINTH,
+                        PrayerType.FRALSARKRANSEN_SECOND,
+                        PrayerType.FRALSARKRANSEN_TENTH,
+                        PrayerType.FRALSARKRANSEN_SECOND
+                    )
+                    rosaryStart = 1
+                    rosaryLimit = 0
+                }
+                Confession.ort -> {
+                    rosaryStructure = listOf(
+                        PrayerType.OUR_FATHER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER,
+                        PrayerType.JESUS_PRAYER
+                    )
+                    rosaryStart = 1
+                    rosaryLimit = 3
+                }
+            }
         }
         else {
             rosaryStructure = listOf(
@@ -155,11 +178,12 @@ class RosaryViewModel(private val prefs: PrefsHelper) : ViewModel() {
     }
 
     private fun updateDisplay() {
+        val confession = Confession.fromPreferences(prefs.confession)
         val prayerType = rosaryStructure[currentPrayerIndex]
-        val delimiter = prayerType != uiState.value?.prayerType
+        val delimiter = prayerType != uiState.value.prayerType
         var displayBead = currentBead
-        if (prefs.confession == "lut" && prefs.isRuleEnabled) displayBead++
-        val mysteryVisibility = prefs.confession == "cat" && prefs.isRuleEnabled
+        if (confession == Confession.lut && prefs.isRuleEnabled) displayBead++
+        val mysteryVisibility = confession == Confession.cat && prefs.isRuleEnabled
         val mysteryType = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
             Calendar.TUESDAY -> MysteryType.SORROWFUL
             Calendar.FRIDAY -> MysteryType.SORROWFUL
@@ -169,10 +193,10 @@ class RosaryViewModel(private val prefs: PrefsHelper) : ViewModel() {
             else -> MysteryType.JOYFUL
         }
         val prayerVisibility = prefs.isRuleEnabled
-        val decadeVisibility = currentDecade != 0 && !(prefs.confession == "lut" && prefs.isRuleEnabled)
-        val beadVisibility = displayBead != 0 && !(prefs.confession == "cat" && currentPrayerIndex > 16)
-        val hasCenterPiece = prefs.confession == "cat" && currentPrayerIndex > 16
-        val currBead = if (!hasCenterPiece && (prefs.confession != "cat" || (prefs.confession == "cat" && !prefs.isRuleEnabled) || (prefs.confession == "cat" && prefs.isRuleEnabled && currentPrayerIndex > 5))) currentBead + 10 else currentBead
+        val decadeVisibility = currentDecade != 0 && !(confession == Confession.lut && prefs.isRuleEnabled)
+        val beadVisibility = displayBead != 0 && !(confession == Confession.cat && currentPrayerIndex > 16)
+        val hasCenterPiece = confession == Confession.cat && currentPrayerIndex > 16
+        val currBead = if (!hasCenterPiece && (confession != Confession.cat || (confession == Confession.cat && !prefs.isRuleEnabled) || (confession == Confession.cat && prefs.isRuleEnabled && currentPrayerIndex > 5))) currentBead + 10 else currentBead
         _uiState.value = RosaryUiState(
             prayerType = prayerType,
             currentDecade = currentDecade,

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ecumeno.R
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.databinding.FragmentOnboardingBinding
 
@@ -33,13 +34,13 @@ class OnboardingFragment : Fragment() {
 
         buttonContinue.setOnClickListener {
             val selectedValue = when (radioGroup.checkedRadioButtonId) {
-                R.id.option1 -> "ort"
-                R.id.option2 -> "cat"
-                R.id.option3 -> "lut"
-                else -> "ort"
+                R.id.option1 -> Confession.ort
+                R.id.option2 -> Confession.cat
+                R.id.option3 -> Confession.lut
+                else -> Confession.ort
             }
 
-            prefs.confession = selectedValue
+            prefs.confession = Confession.toPreferences(selectedValue)
             findNavController().navigate(OnboardingFragmentDirections.actionOnboardingToCalendar())
             requireActivity().recreate()
         }

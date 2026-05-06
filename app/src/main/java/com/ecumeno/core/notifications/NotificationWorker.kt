@@ -11,6 +11,7 @@ import androidx.work.WorkerParameters
 import com.ecumeno.R
 import com.ecumeno.core.utils.EasterCalculator
 import com.ecumeno.core.utils.models.CalendarDay
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.core.utils.models.enums.FastLevel
 import com.ecumeno.data.local.preferences.PrefsHelper
 
@@ -22,9 +23,10 @@ class NotificationWorker(
     override suspend fun doWork(): Result {
         return try {
             val prefs = PrefsHelper(applicationContext)
-            val day = EasterCalculator.getDailyCalendar(prefs.confession)
+            val confession = Confession.fromPreferences(prefs.confession)
+            val day = EasterCalculator.getDailyCalendar(confession)
 
-            showNotification(applicationContext, day, prefs.confession)
+            showNotification(applicationContext, day, confession)
 
             if (prefs.isNotificationEnabled) {
                 AlarmUtils.scheduleNotification(
@@ -46,7 +48,7 @@ class NotificationWorker(
         }
     }
 
-    private fun showNotification(context: Context, day: CalendarDay, confession: String) {
+    private fun showNotification(context: Context, day: CalendarDay, confession: Confession) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "ecumeno_channel_id"
 
@@ -81,7 +83,7 @@ class NotificationWorker(
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(HtmlCompat.fromHtml("<b>" + context.getString(R.string.app_name) + "</b>", FROM_HTML_MODE_LEGACY))
             .setContentText(context.getString(R.string.notification_message_small))
-            .setStyle(NotificationCompat.BigTextStyle().bigText(if (confession != "lut") context.getString(R.string.notification_message).format(dates, fastText.lowercase()) else context.getString(R.string.notification_message_lut).format(dates)))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(if (confession != Confession.lut) context.getString(R.string.notification_message).format(dates, fastText.lowercase()) else context.getString(R.string.notification_message_lut).format(dates)))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

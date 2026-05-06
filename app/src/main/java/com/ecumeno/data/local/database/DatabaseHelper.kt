@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.appcompat.app.AppCompatDelegate
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.data.local.database.entities.Book
 import com.ecumeno.data.local.database.entities.Category
 import com.ecumeno.data.local.database.entities.Prayer
@@ -13,7 +14,7 @@ import java.util.Locale
 import kotlin.io.copyTo
 import kotlin.io.use
 
-class DatabaseHelper(private val context: Context, private val dbName: String) : SQLiteOpenHelper(context, dbName, null, 1) {
+class DatabaseHelper(private val context: Context, private val dbName: String, private val confession: Confession) : SQLiteOpenHelper(context, dbName, null, 1) {
 
     init { copyDatabaseIfNeeded() }
 
@@ -30,7 +31,7 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
             }
             var localeName = if (languageCode == "ru") "_ru." else "_en."
             if (dbFile.name.contains("prayers")){
-                localeName = "_" + context.getSharedPreferences("app_settings", Context.MODE_PRIVATE).getString("confession", "ort") + localeName
+                localeName = "_$confession$localeName"
             }
             val dbAssetName = dbName.substringBeforeLast(".") + localeName + dbName.substringAfterLast(".")
             context.assets.open(dbAssetName).use { input ->
@@ -46,14 +47,10 @@ class DatabaseHelper(private val context: Context, private val dbName: String) :
 
     fun getBooks(): List<Book> {
         val books = mutableListOf<Book>()
-        val confession = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE).getString("confession", "ort").toString()
-        val sql : String
-        if (confession == "ort"){
-            sql = "SELECT * FROM books ORDER BY book_number"
-        } else if (confession == "cat"){
-            sql = "SELECT * FROM books WHERE orthodox IS NULL ORDER BY book_number"
-        } else {
-            sql = "SELECT * FROM books WHERE orthodox IS NULL AND apocrypha IS NULL ORDER BY book_number"
+        val sql = when (confession){
+            Confession.ort -> "SELECT * FROM books ORDER BY book_number"
+            Confession.cat -> "SELECT * FROM books WHERE orthodox IS NULL ORDER BY book_number"
+            Confession.lut -> "SELECT * FROM books WHERE orthodox IS NULL AND apocrypha IS NULL ORDER BY book_number"
         }
         readableDatabase.rawQuery(sql, null).use { cursor ->
             while (cursor.moveToNext()) {

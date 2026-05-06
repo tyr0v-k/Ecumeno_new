@@ -21,6 +21,7 @@ import com.ecumeno.R
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.databinding.FragmentSettingsBinding
 import com.ecumeno.core.notifications.AlarmUtils
+import com.ecumeno.core.utils.models.enums.Confession
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
@@ -86,9 +87,9 @@ class SettingsFragment : Fragment() {
             binding.spinnerTheme.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position){
-                        0 -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
                         1 -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
                         2 -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+                        else -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
                     }
                     prefs.nightMode = AppCompatDelegate.getDefaultNightMode()
                 }
@@ -102,18 +103,18 @@ class SettingsFragment : Fragment() {
             arrayOf(getString(R.string.confession_ort), getString(R.string.confession_cat), getString(R.string.confession_lut)))
         confessionSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerConfession.adapter = confessionSpinnerAdapter
-        when (prefs.confession){
-            "ort" -> binding.spinnerConfession.setSelection(0)
-            "cat" -> binding.spinnerConfession.setSelection(1)
-            "lut" -> binding.spinnerConfession.setSelection(2)
+        when (Confession.fromPreferences(prefs.confession)){
+            Confession.ort -> binding.spinnerConfession.setSelection(0)
+            Confession.cat -> binding.spinnerConfession.setSelection(1)
+            Confession.lut -> binding.spinnerConfession.setSelection(2)
         }
         binding.spinnerConfession.post {
             binding.spinnerConfession.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position){
-                        0 -> prefs.confession = "ort"
-                        1 -> prefs.confession = "cat"
-                        2 -> prefs.confession = "lut"
+                        0 -> prefs.confession = Confession.toPreferences(Confession.ort)
+                        1 -> prefs.confession = Confession.toPreferences(Confession.cat)
+                        2 -> prefs.confession = Confession.toPreferences(Confession.lut)
                     }
                     requireContext().getDatabasePath("prayers.db")?.delete()
                 }
@@ -143,8 +144,8 @@ class SettingsFragment : Fragment() {
             binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position){
-                        0 -> setLocale("en")
                         1 -> setLocale("ru")
+                        else -> setLocale("en")
                     }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

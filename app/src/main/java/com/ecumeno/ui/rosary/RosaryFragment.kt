@@ -90,18 +90,6 @@ class RosaryFragment : Fragment() {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
     private fun initGestureDetector() {
         gestureDetector = GestureDetectorCompat(
             requireContext(),
@@ -132,10 +120,15 @@ class RosaryFragment : Fragment() {
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.resetRosary()
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     binding.tvPrayer.text = getPrayerText(state.prayerType)
-                    binding.tvPrayer.visibility = if (state.prayerVisibility) View.VISIBLE else View.GONE
+                    binding.tvPrayer.visibility = if (state.prayerVisibility) View.VISIBLE else View.INVISIBLE
                     binding.tvBeadNumber.text = (if (state.decadeVisibility) "${getString(R.string.decade)}: ${state.currentDecade}\n" else "") + "${if (state.beadVisibility) "${getString(
                         R.string.bead)}: ${state.displayBead}" else ""}"
                     binding.tvMysteryTitle.text = getMysteryText(state.mysteryType)

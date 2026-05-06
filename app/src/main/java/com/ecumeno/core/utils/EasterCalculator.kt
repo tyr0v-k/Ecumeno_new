@@ -3,6 +3,7 @@ package com.ecumeno.core.utils
 import com.ecumeno.core.utils.models.CalendarDay
 import com.ecumeno.core.utils.models.enums.FastLevel
 import com.ecumeno.core.utils.models.Holiday
+import com.ecumeno.core.utils.models.enums.Confession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
@@ -280,93 +281,95 @@ object EasterCalculator {
     }
 
     // Получение уровня поста для даты
-    fun getFastLevel(date: LocalDate, easterDate: LocalDate, confession: String): FastLevel {
-        if (confession == "cat"){
-            if (date == easterDate.minusDays(46) || date == easterDate.minusDays(2)){
-                return FastLevel.FAST
-            } else if (date.dayOfWeek == DayOfWeek.FRIDAY){
-                return FastLevel.ABSTINENCE
+    fun getFastLevel(date: LocalDate, easterDate: LocalDate, confession: Confession): FastLevel {
+        when (confession){
+            Confession.cat -> {
+                if (date == easterDate.minusDays(46) || date == easterDate.minusDays(2)){
+                    return FastLevel.FAST
+                } else if (date.dayOfWeek == DayOfWeek.FRIDAY){
+                    return FastLevel.ABSTINENCE
+                }
+                return FastLevel.NO_FAST
             }
-            return FastLevel.NO_FAST
-        }
-        if (confession == "lut"){
-            return FastLevel.NO_FAST
-        }
-        val dayOfWeek = date.dayOfWeek.value
+            Confession.lut -> return FastLevel.NO_FAST
+            Confession.ort -> {
+                val dayOfWeek = date.dayOfWeek.value
 
-        // Проверяем сплошные седмицы
-        if (isContinuousWeek(date, easterDate)) {
-            return FastLevel.CONTINUOUS_WEEK
-        }
+                // Проверяем сплошные седмицы
+                if (isContinuousWeek(date, easterDate)) {
+                    return FastLevel.CONTINUOUS_WEEK
+                }
 
-        // Великий пост
-        if (isGreatLent(date, easterDate)) {
-            return when {
-                date == easterDate.minusDays(7) || date == LocalDate.of(easterDate.year, 4, 7) -> FastLevel.FISH
-                date.dayOfWeek.value == 7 || date.dayOfWeek.value == 6 -> FastLevel.OIL_ALLOWED
-                date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4 -> FastLevel.NO_OIL
-                else -> FastLevel.XEROPHAGY
+                // Великий пост
+                if (isGreatLent(date, easterDate)) {
+                    return when {
+                        date == easterDate.minusDays(7) || date == LocalDate.of(easterDate.year, 4, 7) -> FastLevel.FISH
+                        date.dayOfWeek.value == 7 || date.dayOfWeek.value == 6 -> FastLevel.OIL_ALLOWED
+                        date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4 -> FastLevel.NO_OIL
+                        else -> FastLevel.XEROPHAGY
+                    }
+                }
+
+                // Рождественский пост
+                if (isChristmasFast(date, date.year)) {
+                    return when {
+                        date == LocalDate.of(easterDate.year, 12, 4) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.FISH
+                        date.isBefore(LocalDate.of(date.year, 12, 20)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.OIL_ALLOWED
+                        date.isAfter(LocalDate.of(date.year, 12, 19)) && date.isBefore(LocalDate.of(date.year, 1, 2)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.NO_OIL
+                        date.isAfter(LocalDate.of(date.year, 12, 19)) && date.isBefore(LocalDate.of(date.year, 1, 2)) && (date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4) -> FastLevel.OIL_ALLOWED
+                        date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.XEROPHAGY
+                        date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4) -> FastLevel.NO_OIL
+                        date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 6 || date.dayOfWeek.value == 7) -> FastLevel.OIL_ALLOWED
+                        else -> FastLevel.FISH
+                    }
+                }
+
+                // Петров пост
+                if (isPeterFast(date, easterDate)) {
+                    return when {
+                        date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5 -> FastLevel.OIL_ALLOWED
+                        else -> FastLevel.FISH
+                    }
+                }
+
+                // Успенский пост
+                if (isDormitionFast(date, date.year)) {
+                    return when {
+                        date == LocalDate.of(easterDate.year, 8, 19) -> FastLevel.FISH
+                        date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5 -> FastLevel.XEROPHAGY
+                        date.dayOfWeek.value == 6 || date.dayOfWeek.value == 7 -> FastLevel.OIL_ALLOWED
+                        else -> FastLevel.NO_OIL
+                    }
+                }
+
+                // Послабления по уставу
+                val specialDates = listOf(
+                    LocalDate.of(easterDate.year, 2, 15),
+                    LocalDate.of(easterDate.year, 8, 19),
+                    LocalDate.of(easterDate.year, 9, 21),
+                    LocalDate.of(easterDate.year, 10, 14),
+                    LocalDate.of(easterDate.year, 12, 4),
+                    LocalDate.of(easterDate.year, 7, 7),
+                    LocalDate.of(easterDate.year, 7, 12),
+                    LocalDate.of(easterDate.year, 5, 21),
+                    LocalDate.of(easterDate.year, 8, 28)
+                )
+
+                if (((date.isAfter(easterDate) && date.isBefore(easterDate.plusDays(49))) || (date in specialDates)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5)) {
+                    return FastLevel.FISH
+                }
+
+                if (isOneDayFast(date)) {
+                    return FastLevel.OIL_ALLOWED
+                }
+
+                // Среда и пятница - постные дни (кроме сплошных седмиц)
+                if (dayOfWeek == 3 || dayOfWeek == 5) {
+                    return FastLevel.FAST
+                }
+                return FastLevel.NO_FAST
             }
         }
-
-        // Рождественский пост
-        if (isChristmasFast(date, date.year)) {
-            return when {
-                date == LocalDate.of(easterDate.year, 12, 4) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.FISH
-                date.isBefore(LocalDate.of(date.year, 12, 20)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.OIL_ALLOWED
-                date.isAfter(LocalDate.of(date.year, 12, 19)) && date.isBefore(LocalDate.of(date.year, 1, 2)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.NO_OIL
-                date.isAfter(LocalDate.of(date.year, 12, 19)) && date.isBefore(LocalDate.of(date.year, 1, 2)) && (date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4) -> FastLevel.OIL_ALLOWED
-                date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.XEROPHAGY
-                date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 1 || date.dayOfWeek.value == 2 || date.dayOfWeek.value == 4) -> FastLevel.NO_OIL
-                date.isAfter(LocalDate.of(date.year, 1, 1)) && (date.dayOfWeek.value == 6 || date.dayOfWeek.value == 7) -> FastLevel.OIL_ALLOWED
-                else -> FastLevel.FISH
-            }
-        }
-
-        // Петров пост
-        if (isPeterFast(date, easterDate)) {
-            return when {
-                date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5 -> FastLevel.OIL_ALLOWED
-                else -> FastLevel.FISH
-            }
-        }
-
-        // Успенский пост
-        if (isDormitionFast(date, date.year)) {
-            return when {
-                date == LocalDate.of(easterDate.year, 8, 19) -> FastLevel.FISH
-                date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5 -> FastLevel.XEROPHAGY
-                date.dayOfWeek.value == 6 || date.dayOfWeek.value == 7 -> FastLevel.OIL_ALLOWED
-                else -> FastLevel.NO_OIL
-            }
-        }
-
-        // Послабления по уставу
-        val specialDates = listOf(
-            LocalDate.of(easterDate.year, 2, 15),
-            LocalDate.of(easterDate.year, 8, 19),
-            LocalDate.of(easterDate.year, 9, 21),
-            LocalDate.of(easterDate.year, 10, 14),
-            LocalDate.of(easterDate.year, 12, 4),
-            LocalDate.of(easterDate.year, 7, 7),
-            LocalDate.of(easterDate.year, 7, 12),
-            LocalDate.of(easterDate.year, 5, 21),
-            LocalDate.of(easterDate.year, 8, 28)
-        )
-
-        if (((date.isAfter(easterDate) && date.isBefore(easterDate.plusDays(49))) || (date in specialDates)) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5)) {
-            return FastLevel.FISH
-        }
-
-        if (isOneDayFast(date)) {
-            return FastLevel.OIL_ALLOWED
-        }
-
-        // Среда и пятница - постные дни (кроме сплошных седмиц)
-        if (dayOfWeek == 3 || dayOfWeek == 5) {
-            return FastLevel.FAST
-        }
-        return FastLevel.NO_FAST
     }
 
     private fun isGreatLent(date: LocalDate, easterDate: LocalDate): Boolean {
@@ -423,20 +426,19 @@ object EasterCalculator {
         return (date.month == Month.JANUARY && date.dayOfMonth == 18) || (date.month == Month.SEPTEMBER && date.dayOfMonth == 11) || (date.month == Month.SEPTEMBER && date.dayOfMonth == 27)
     }
 
-    suspend fun getMonthCalendar(year: Int, month: Int, confession: String): List<CalendarDay> = withContext(Dispatchers.IO) {
+    suspend fun getMonthCalendar(year: Int, month: Int, confession: Confession): List<CalendarDay> = withContext(Dispatchers.IO) {
         val days = mutableListOf<CalendarDay>()
         val today = LocalDate.now()
-        val easterDate : LocalDate
         val movableHolidays: MutableMap<String, LocalDate>
-        if (confession == "ort"){
-            easterDate = calculateOrthodoxEaster(year)
+        val easterDate = if (confession == Confession.ort){
+            calculateOrthodoxEaster(year)
         } else {
-            easterDate = calculateGregorianEaster(year)
+            calculateGregorianEaster(year)
         }
         when (confession){
-            "ort" -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
-            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
-            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
+            Confession.ort -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
+            Confession.cat -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
+            Confession.lut -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
         }
 
         // Получаем первый и последний день месяца
@@ -457,7 +459,6 @@ object EasterCalculator {
 
         repeat(times) {
             val dayHolidays = mutableListOf<Holiday>()
-
             val monthDay = String.format("%02d%02d", currentDate.monthValue, currentDate.dayOfMonth)
             fixedHolidays[monthDay]?.let { fixedHoliday -> dayHolidays.add(fixedHoliday) }
 
@@ -484,7 +485,7 @@ object EasterCalculator {
 
             val fastLevel = getFastLevel(currentDate, easterDate, confession)
 
-            if (confession == "cat" && dayHolidays.isNotEmpty()) {
+            if (confession == Confession.cat && dayHolidays.isNotEmpty()) {
                 val maxPriority = dayHolidays.sortedBy { it.priority }[0].priority
                 dayHolidays.removeIf { holiday -> (!holiday.name.contains("easter") && !holiday.name.contains("reserved_")) && (currentDate.isAfter(easterDate.minusDays(7)) && currentDate.isBefore(easterDate.plusDays(8))) }
                 dayHolidays.removeIf { holiday ->  (maxPriority < 3 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) && holiday.priority == 3 }
@@ -507,19 +508,19 @@ object EasterCalculator {
         return@withContext days
     }
 
-    suspend fun getDailyCalendar(confession: String): CalendarDay = withContext(Dispatchers.IO) {
+    suspend fun getDailyCalendar(confession: Confession): CalendarDay = withContext(Dispatchers.IO) {
         val currentDate = LocalDate.now()
         val easterDate : LocalDate
         val movableHolidays: MutableMap<String, LocalDate>
-        if (confession == "ort"){
+        if (confession == Confession.ort){
             easterDate = calculateOrthodoxEaster(currentDate.year)
         } else {
             easterDate = calculateGregorianEaster(currentDate.year)
         }
         when (confession){
-            "ort" -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
-            "cat" -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
-            else -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
+            Confession.ort -> { getOrthodoxFixedHolidays(); movableHolidays = calculateOrthodoxMovableHolidays(easterDate) }
+            Confession.cat -> { getCatholicFixedHolidays(); movableHolidays = calculateCatholicMovableHolidays(easterDate); moveCatholicFixedHolidays(easterDate) }
+            Confession.lut -> { getLutheranFixedHolidays(); movableHolidays = calculateWesternMovableHolidays(easterDate); moveLutheranFixedHolidays(easterDate) }
         }
         val dayHolidays = mutableListOf<Holiday>()
 
@@ -549,7 +550,7 @@ object EasterCalculator {
 
         val fastLevel = getFastLevel(currentDate, easterDate, confession)
 
-        if (confession == "cat" && dayHolidays.isNotEmpty()) {
+        if (confession == Confession.cat && dayHolidays.isNotEmpty()) {
             val maxPriority = dayHolidays.sortedBy { it.priority }[0].priority
             dayHolidays.removeIf { holiday -> (!holiday.name.contains("easter") && !holiday.name.contains("reserved_")) && (currentDate.isAfter(easterDate.minusDays(7)) && currentDate.isBefore(easterDate.plusDays(8))) }
             dayHolidays.removeIf { holiday ->  (maxPriority < 3 || currentDate.dayOfWeek == DayOfWeek.SUNDAY) && holiday.priority == 3 }

@@ -27,12 +27,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class CalendarFragment : Fragment() {
-
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
-    private lateinit var prefs: PrefsHelper
     private val viewModel: CalendarViewModel by viewModels {
-        CalendarViewModelFactory(prefs)
+        CalendarViewModelFactory(PrefsHelper(requireContext().applicationContext))
     }
     private lateinit var calendarAdapter: CalendarAdapter
     private lateinit var gestureDetector: GestureDetectorCompat
@@ -51,7 +49,6 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prefs = PrefsHelper(requireContext().applicationContext)
         setupRecyclerView()
         setupObservers()
         setupClickListeners()
@@ -76,6 +73,13 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.uiState.collect { state ->
+                    viewModel.loadMonth(state.currentMonth.year, state.currentMonth.month.value)
+                }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->

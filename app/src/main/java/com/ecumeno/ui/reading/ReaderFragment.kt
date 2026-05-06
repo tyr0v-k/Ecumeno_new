@@ -16,6 +16,7 @@ import androidx.activity.addCallback
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.ecumeno.core.utils.models.enums.Confession
 import com.ecumeno.data.local.database.DatabaseHelper
 import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.databinding.FragmentReaderBinding
@@ -36,8 +37,8 @@ class ReaderFragment : Fragment() {
         val args: ReaderFragmentArgs by navArgs()
         val number = args.number
         val dbName = args.dbName
-        val dbHelper = DatabaseHelper(requireContext(), dbName)
         prefs = PrefsHelper(requireContext().applicationContext)
+        val dbHelper = DatabaseHelper(requireContext(), dbName, Confession.fromPreferences(prefs.confession))
 
         if (dbName.contains("bible")){
             val chapters = dbHelper.getChapters(number)
