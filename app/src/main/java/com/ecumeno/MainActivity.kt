@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -50,15 +49,13 @@ class MainActivity : AppCompatActivity() {
 
         navView.setOnNavigationItemSelectedListener { item ->
             if (previousNavItemId == item.itemId) {
-                // Находим текущий граф и его стартовый фрагмент через NavDestination
                 val currentDest = navController.currentDestination
-                val parentGraph = currentDest?.parent as? NavGraph
+                val parentGraph = currentDest?.parent
 
                 if (parentGraph?.id == R.id.bible_graph || parentGraph?.id == R.id.prayers_graph){
-                    parentGraph?.let { graph ->
-                        // startDestination доступен через свойство graph.startDestinationId
+                    parentGraph.let { graph ->
                         if (currentDest.id != graph.startDestinationId) {
-                            if (parentGraph?.id == R.id.bible_graph){
+                            if (parentGraph.id == R.id.bible_graph){
                                 (application as EcumenoApp).preferencesRepository.clearReadingProgress()
                             }
                             navController.popBackStack(graph.startDestinationId, inclusive = false)
