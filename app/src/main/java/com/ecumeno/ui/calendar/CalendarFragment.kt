@@ -1,7 +1,5 @@
 package com.ecumeno.ui.calendar
 
-import android.content.Context
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -16,11 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.ecumeno.EcumenoApp
 import com.ecumeno.R
-import com.ecumeno.core.utils.models.CalendarDay
-import com.ecumeno.data.local.preferences.PrefsHelper
-import com.ecumeno.core.utils.models.enums.FastLevel
+import com.ecumeno.core.domain.CalendarDay
+import com.ecumeno.core.domain.FastLevel
 import com.ecumeno.databinding.FragmentCalendarBinding
+import com.ecumeno.di.ViewModelFactory
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -30,11 +29,10 @@ class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CalendarViewModel by viewModels {
-        CalendarViewModelFactory(PrefsHelper(requireContext().applicationContext))
+        ViewModelFactory((requireActivity().application as EcumenoApp).preferencesRepository)
     }
     private lateinit var calendarAdapter: CalendarAdapter
     private lateinit var gestureDetector: GestureDetectorCompat
-    private lateinit var sensorManager: SensorManager
     private var current = true
     private var hasFast = true
 
@@ -53,7 +51,6 @@ class CalendarFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         initGestureDetector()
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         view.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
             true
@@ -72,13 +69,6 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.uiState.collect { state ->
-                    viewModel.loadMonth(state.currentMonth.year, state.currentMonth.month.value)
-                }
-            }
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->

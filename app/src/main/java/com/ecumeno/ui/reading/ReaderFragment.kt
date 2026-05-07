@@ -1,8 +1,5 @@
 package com.ecumeno.ui.reading
 
-import android.R
-import android.content.Context
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.text.Html
 import android.view.GestureDetector
@@ -16,17 +13,17 @@ import androidx.activity.addCallback
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.ecumeno.core.utils.models.enums.Confession
+import com.ecumeno.EcumenoApp
 import com.ecumeno.data.local.database.DatabaseHelper
-import com.ecumeno.data.local.preferences.PrefsHelper
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.data.local.preferences.PreferencesRepository
 import com.ecumeno.databinding.FragmentReaderBinding
 
 class ReaderFragment : Fragment() {
     private var _binding: FragmentReaderBinding? = null
     private val binding get() = _binding!!
     private lateinit var gestureDetector: GestureDetectorCompat
-    private lateinit var sensorManager: SensorManager
-    private lateinit var prefs: PrefsHelper
+    private lateinit var preferencesRepository: PreferencesRepository
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentReaderBinding.inflate(inflater, container, false)
@@ -37,35 +34,38 @@ class ReaderFragment : Fragment() {
         val args: ReaderFragmentArgs by navArgs()
         val number = args.number
         val dbName = args.dbName
-        prefs = PrefsHelper(requireContext().applicationContext)
-        val dbHelper = DatabaseHelper(requireContext(), dbName, Confession.fromPreferences(prefs.confession))
+        preferencesRepository = (requireActivity().application as EcumenoApp).preferencesRepository
+        val dbHelper = DatabaseHelper(
+            requireContext(),
+            dbName,
+            Confession.Companion.fromPreferences(preferencesRepository.confession.value)
+        )
 
         if (dbName.contains("bible")){
             val chapters = dbHelper.getChapters(number)
             val spinnerAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_item,
                 chapters.map { "${getString(com.ecumeno.R.string.chapter)} $it" })
-            spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerChapters.adapter = spinnerAdapter
 
 
             binding.spinnerChapters.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val verses = dbHelper.getVerses(number, chapters[position])
-                    prefs.lastChapter = position
+                    preferencesRepository.setLastChapter(position)
                     binding.textViewContent.text = verses.joinToString("\n\n") { "${it.verse}. ${Html.fromHtml(it.text.replace(Regex("<[Ss][^>]*>.*?</[Ss]>", RegexOption.IGNORE_CASE), ""))}".replace("\\[.*?\\]".toRegex(), "") }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
-            if (prefs.lastChapter != -1){
-                binding.spinnerChapters.setSelection(prefs.lastChapter)
+            if (preferencesRepository.lastChapter.value != -1){
+                binding.spinnerChapters.setSelection(preferencesRepository.lastChapter.value)
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(this) {
-                prefs.lastChapter = -1
-                prefs.lastBook = -1
+                preferencesRepository.clearReadingProgress()
                 isEnabled = false
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
@@ -74,9 +74,9 @@ class ReaderFragment : Fragment() {
             val prayers = dbHelper.getPrayers(number)
             val spinnerAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_item,
                 prayers.map { it.prayerName })
-            spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerChapters.adapter = spinnerAdapter
 
             binding.spinnerChapters.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -88,20 +88,20 @@ class ReaderFragment : Fragment() {
             }
         }
 
-        binding.textViewContent.textSize = prefs.fontSize
-        if (prefs.fontSize < 11f){
+        binding.textViewContent.textSize = preferencesRepository.fontSize.value
+        if (preferencesRepository.fontSize.value < 11f){
             binding.btnTextMinus.isEnabled = false
             binding.btnTextMinus.setAlpha(0.1f)
         }
-        if (prefs.fontSize > 39f){
+        if (preferencesRepository.fontSize.value > 39f){
             binding.btnTextPlus.isEnabled = false
             binding.btnTextPlus.setAlpha(0.1f)
         }
 
         binding.btnTextMinus.setOnClickListener {
-            if (prefs.fontSize > 10f) prefs.fontSize -= 2f
-            binding.textViewContent.textSize = prefs.fontSize
-            if (prefs.fontSize < 11f){
+            if (preferencesRepository.fontSize.value > 10f) preferencesRepository.setFontSize(preferencesRepository.fontSize.value - 2f)
+            binding.textViewContent.textSize = preferencesRepository.fontSize.value
+            if (preferencesRepository.fontSize.value < 11f){
                 binding.btnTextMinus.isEnabled = false
                 binding.btnTextMinus.setAlpha(0.1f)
             }
@@ -112,9 +112,9 @@ class ReaderFragment : Fragment() {
         }
 
         binding.btnTextPlus.setOnClickListener {
-            if (prefs.fontSize < 40f) prefs.fontSize += 2f
-            binding.textViewContent.textSize = prefs.fontSize
-            if (prefs.fontSize > 39f){
+            if (preferencesRepository.fontSize.value < 40f) preferencesRepository.setFontSize(preferencesRepository.fontSize.value + 2f)
+            binding.textViewContent.textSize = preferencesRepository.fontSize.value
+            if (preferencesRepository.fontSize.value > 39f){
                 binding.btnTextPlus.isEnabled = false
                 binding.btnTextPlus.setAlpha(0.1f)
             }
@@ -125,7 +125,6 @@ class ReaderFragment : Fragment() {
         }
 
         initGestureDetector()
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         view.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
             true

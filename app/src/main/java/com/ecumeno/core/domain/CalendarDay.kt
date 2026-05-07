@@ -1,6 +1,5 @@
-package com.ecumeno.core.utils.models
+package com.ecumeno.core.domain
 
-import com.ecumeno.core.utils.models.enums.FastLevel
 import java.time.LocalDate
 
 data class CalendarDay(

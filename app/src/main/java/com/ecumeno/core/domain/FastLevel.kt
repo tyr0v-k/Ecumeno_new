@@ -1,4 +1,4 @@
-package com.ecumeno.core.utils.models.enums
+package com.ecumeno.core.domain
 
 enum class FastLevel {
     NO_FAST,

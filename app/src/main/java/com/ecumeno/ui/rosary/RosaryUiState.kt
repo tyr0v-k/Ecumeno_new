@@ -1,7 +1,7 @@
 package com.ecumeno.ui.rosary
 
-import com.ecumeno.core.utils.models.enums.MysteryType
-import com.ecumeno.core.utils.models.enums.PrayerType
+import com.ecumeno.ui.rosary.enums.MysteryType
+import com.ecumeno.ui.rosary.enums.PrayerType
 
 data class RosaryUiState(
     val prayerType: PrayerType = PrayerType.OUR_FATHER,

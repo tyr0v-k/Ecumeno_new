@@ -1,8 +1,6 @@
 package com.ecumeno.ui.rosary
 
 import android.content.Context
-import android.content.pm.ActivityInfo
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -12,18 +10,18 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.ecumeno.EcumenoApp
 import com.ecumeno.R
-import com.ecumeno.core.utils.models.enums.MysteryType
-import com.ecumeno.data.local.preferences.PrefsHelper
-import com.ecumeno.core.utils.models.enums.PrayerType
+import com.ecumeno.ui.rosary.enums.MysteryType
+import com.ecumeno.ui.rosary.enums.PrayerType
 import com.ecumeno.databinding.FragmentRosaryBinding
+import com.ecumeno.di.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -31,12 +29,10 @@ class RosaryFragment : Fragment() {
     private var _binding: FragmentRosaryBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RosaryViewModel by viewModels {
-        RosaryViewModelFactory(prefs)
+        ViewModelFactory((requireActivity().application as EcumenoApp).preferencesRepository)
     }
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var vibrator: Vibrator
-    private lateinit var sensorManager: SensorManager
-    private lateinit var prefs: PrefsHelper
 
     private var delimiter = false
 
@@ -51,11 +47,9 @@ class RosaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prefs = PrefsHelper(requireContext().applicationContext)
         vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         initGestureDetector()
         setupObservers()
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         view.isFocusableInTouchMode = true
         view.requestFocus()
@@ -119,11 +113,6 @@ class RosaryFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.resetRosary()
-            }
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->

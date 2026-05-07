@@ -1,4 +1,4 @@
-package com.ecumeno.core.utils.models
+package com.ecumeno.core.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

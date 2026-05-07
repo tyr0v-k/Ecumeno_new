@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.appcompat.app.AppCompatDelegate
-import com.ecumeno.core.utils.models.enums.Confession
+import com.ecumeno.data.local.preferences.Confession
 import com.ecumeno.data.local.database.entities.Book
 import com.ecumeno.data.local.database.entities.Category
 import com.ecumeno.data.local.database.entities.Prayer

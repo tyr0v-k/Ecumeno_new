@@ -18,15 +18,15 @@ class MainActivity : AppCompatActivity() {
     private var previousNavItemId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode((application as EcumenoApp).preferencesRepository.nightMode.value)
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(getSharedPreferences("app_settings", MODE_PRIVATE).getInt("night_mode", -1))
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
-        if (getSharedPreferences("app_settings", MODE_PRIVATE).getString("confession", null) == null){
+        if ((application as EcumenoApp).preferencesRepository.confession.value == ""){
             navGraph.setStartDestination(R.id.onboarding)
             binding.navView.visibility = View.GONE
             binding.delimiter.visibility = View.GONE
@@ -59,8 +59,7 @@ class MainActivity : AppCompatActivity() {
                         // startDestination доступен через свойство graph.startDestinationId
                         if (currentDest.id != graph.startDestinationId) {
                             if (parentGraph?.id == R.id.bible_graph){
-                                getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_book", -1).apply()
-                                getSharedPreferences("app_settings", MODE_PRIVATE).edit().putInt("last_chapter", -1).apply()
+                                (application as EcumenoApp).preferencesRepository.clearReadingProgress()
                             }
                             navController.popBackStack(graph.startDestinationId, inclusive = false)
                         }

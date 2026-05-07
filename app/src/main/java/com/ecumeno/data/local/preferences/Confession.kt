@@ -1,4 +1,4 @@
-package com.ecumeno.core.utils.models.enums
+package com.ecumeno.data.local.preferences
 
 enum class Confession {
     ort,

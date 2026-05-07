@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.ecumeno.EcumenoApp
 import com.ecumeno.R
-import com.ecumeno.core.utils.models.enums.Confession
-import com.ecumeno.data.local.preferences.PrefsHelper
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.data.local.preferences.PreferencesRepository
 import com.ecumeno.databinding.FragmentOnboardingBinding
 
 class OnboardingFragment : Fragment() {
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
-    private lateinit var prefs: PrefsHelper
+    private lateinit var preferencesRepository: PreferencesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +28,7 @@ class OnboardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        prefs = PrefsHelper(requireContext().applicationContext)
+        preferencesRepository = (requireActivity().application as EcumenoApp).preferencesRepository
         val radioGroup = binding.radioGroupOptions
         val buttonContinue = binding.buttonContinue
 
@@ -40,7 +40,7 @@ class OnboardingFragment : Fragment() {
                 else -> Confession.ort
             }
 
-            prefs.confession = Confession.toPreferences(selectedValue)
+            preferencesRepository.setConfession(Confession.toPreferences(selectedValue))
             findNavController().navigate(OnboardingFragmentDirections.actionOnboardingToCalendar())
             requireActivity().recreate()
         }

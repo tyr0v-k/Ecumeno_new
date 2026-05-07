@@ -1,6 +1,6 @@
 package com.ecumeno.ui.calendar
 
-import com.ecumeno.core.utils.models.CalendarDay
+import com.ecumeno.core.domain.CalendarDay
 import java.time.YearMonth
 
 data class CalendarUiState (

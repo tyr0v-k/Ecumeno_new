@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ecumeno.R
-import com.ecumeno.core.utils.models.CalendarDay
-import com.ecumeno.core.utils.models.enums.FastLevel
+import com.ecumeno.core.domain.CalendarDay
+import com.ecumeno.core.domain.FastLevel
 import com.ecumeno.databinding.CalendarDayItemBinding
 import java.time.format.TextStyle
 import java.util.Locale

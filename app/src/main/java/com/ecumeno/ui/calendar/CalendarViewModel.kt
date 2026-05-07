@@ -2,33 +2,35 @@ package com.ecumeno.ui.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecumeno.data.local.preferences.PrefsHelper
-import com.ecumeno.core.utils.EasterCalculator
-import com.ecumeno.core.utils.models.CalendarDay
-import com.ecumeno.core.utils.models.enums.Confession
+import com.ecumeno.core.calculator.EasterCalculator
+import com.ecumeno.core.domain.CalendarDay
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.data.local.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarViewModel(private val prefs: PrefsHelper) : ViewModel() {
+class CalendarViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
     private val calculator = EasterCalculator
     private val _uiState = MutableStateFlow(CalendarUiState())
     val uiState: StateFlow<CalendarUiState> = _uiState
 
 
     init {
-        loadMonth(uiState.value.currentMonth.year, uiState.value.currentMonth.monthValue)
+        viewModelScope.launch {
+            preferencesRepository.confession.collect { confession ->
+                loadMonth(uiState.value.currentMonth.year, uiState.value.currentMonth.monthValue)
+            }
+        }
     }
 
     fun loadMonth(year: Int, month: Int) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(currentMonth = YearMonth.of(year, month),
-                calendarDays = calculator.getMonthCalendar(year, month, Confession.fromPreferences(prefs.confession)),
-                hasFast = Confession.fromPreferences(prefs.confession) != Confession.lut
-            )
-        }
+        _uiState.value = _uiState.value.copy(currentMonth = YearMonth.of(year, month),
+            calendarDays = calculator.getMonthCalendar(year, month, Confession.fromPreferences(preferencesRepository.confession.value)),
+            hasFast = Confession.fromPreferences(preferencesRepository.confession.value) != Confession.lut
+        )
     }
 
     fun selectDate(date: CalendarDay) {

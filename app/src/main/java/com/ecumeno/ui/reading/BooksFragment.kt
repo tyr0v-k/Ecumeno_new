@@ -8,9 +8,10 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.ecumeno.core.utils.models.enums.Confession
+import com.ecumeno.EcumenoApp
 import com.ecumeno.data.local.database.DatabaseHelper
-import com.ecumeno.data.local.preferences.PrefsHelper
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.data.local.preferences.PreferencesRepository
 import com.ecumeno.databinding.FragmentBooksBinding
 
 class BooksFragment : Fragment() {
@@ -19,7 +20,7 @@ class BooksFragment : Fragment() {
 
     private val args: BooksFragmentArgs by navArgs()
 
-    private lateinit var prefs: PrefsHelper
+    private lateinit var preferencesRepository: PreferencesRepository
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -28,12 +29,16 @@ class BooksFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        prefs = PrefsHelper(requireContext().applicationContext)
+        preferencesRepository = (requireActivity().application as EcumenoApp).preferencesRepository
         val dbName = args.dbName
-        val dbHelper = DatabaseHelper(requireContext(), dbName, Confession.fromPreferences(prefs.confession))
+        val dbHelper = DatabaseHelper(
+            requireContext(),
+            dbName,
+            Confession.Companion.fromPreferences(preferencesRepository.confession.value)
+        )
         if (dbName.contains("bible")){
-            if (prefs.lastBook != -1){
-                val action = BooksFragmentDirections.actionBooksToReader(args.dbName, prefs.lastBook)
+            if (preferencesRepository.lastBook.value != -1){
+                val action = BooksFragmentDirections.actionBooksToReader(args.dbName, preferencesRepository.lastBook.value)
                 findNavController().navigate(action)
             }
             val books = dbHelper.getBooks()
@@ -46,7 +51,7 @@ class BooksFragment : Fragment() {
 
             binding.listViewBooks.setOnItemClickListener { _, _, position, _ ->
                 val bookNumber = books[position].bookNumber
-                prefs.lastBook = bookNumber
+                preferencesRepository.setLastBook(bookNumber)
                 val action = BooksFragmentDirections.actionBooksToReader(args.dbName, bookNumber)
                 findNavController().navigate(action)
             }

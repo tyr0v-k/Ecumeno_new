@@ -1,4 +1,4 @@
-package com.ecumeno.core.notifications
+package com.ecumeno.data.notifications
 
 import android.app.AlarmManager
 import android.app.PendingIntent

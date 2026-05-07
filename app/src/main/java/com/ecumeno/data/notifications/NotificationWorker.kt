@@ -1,4 +1,4 @@
-package com.ecumeno.core.notifications
+package com.ecumeno.data.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,30 +9,30 @@ import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.ecumeno.R
-import com.ecumeno.core.utils.EasterCalculator
-import com.ecumeno.core.utils.models.CalendarDay
-import com.ecumeno.core.utils.models.enums.Confession
-import com.ecumeno.core.utils.models.enums.FastLevel
-import com.ecumeno.data.local.preferences.PrefsHelper
+import com.ecumeno.core.calculator.EasterCalculator
+import com.ecumeno.core.domain.CalendarDay
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.FastLevel
+import com.ecumeno.data.local.preferences.PreferencesRepository
 
 class NotificationWorker(
     context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
+    private val preferencesRepository: PreferencesRepository
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            val prefs = PrefsHelper(applicationContext)
-            val confession = Confession.fromPreferences(prefs.confession)
+            val confession = Confession.fromPreferences(preferencesRepository.confession.value)
             val day = EasterCalculator.getDailyCalendar(confession)
 
             showNotification(applicationContext, day, confession)
 
-            if (prefs.isNotificationEnabled) {
+            if (preferencesRepository.isNotificationEnabled.value) {
                 AlarmUtils.scheduleNotification(
                     applicationContext,
-                    prefs.notificationHour,
-                    prefs.notificationMinute
+                    preferencesRepository.notificationHour.value,
+                    preferencesRepository.notificationMinute.value
                 )
             }
 

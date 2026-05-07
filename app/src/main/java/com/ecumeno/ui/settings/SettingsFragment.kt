@@ -17,17 +17,18 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
+import com.ecumeno.EcumenoApp
 import com.ecumeno.R
-import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.databinding.FragmentSettingsBinding
-import com.ecumeno.core.notifications.AlarmUtils
-import com.ecumeno.core.utils.models.enums.Confession
+import com.ecumeno.data.notifications.AlarmUtils
+import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.data.local.preferences.PreferencesRepository
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var prefs: PrefsHelper
+    private lateinit var preferencesRepository: PreferencesRepository
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -36,7 +37,7 @@ class SettingsFragment : Fragment() {
             checkNotificationPermission()
         } else {
             binding.switchNotifications.isChecked = false
-            prefs.isNotificationEnabled = false
+            preferencesRepository.setNotificationEnabled(false)
         }
     }
 
@@ -51,10 +52,10 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prefs = PrefsHelper(requireContext().applicationContext)
-        binding.switchNotifications.isChecked = prefs.isNotificationEnabled
-        binding.switchRosary.isChecked = prefs.isRuleEnabled
-        updateTimeButtonText(prefs.notificationHour, prefs.notificationMinute)
+        preferencesRepository = (requireActivity().application as EcumenoApp).preferencesRepository
+        binding.switchNotifications.isChecked = preferencesRepository.isNotificationEnabled.value
+        binding.switchRosary.isChecked = preferencesRepository.isRuleEnabled.value
+        updateTimeButtonText(preferencesRepository.notificationHour.value, preferencesRepository.notificationMinute.value)
 
         binding.switchNotifications.setOnClickListener {
             if (binding.switchNotifications.isChecked) {
@@ -65,7 +66,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.switchRosary.setOnClickListener {
-            prefs.isRuleEnabled = binding.switchRosary.isChecked
+            preferencesRepository.setRuleEnabled(binding.switchRosary.isChecked)
         }
 
         binding.notificationTime.setOnClickListener {
@@ -78,7 +79,7 @@ class SettingsFragment : Fragment() {
             arrayOf(getString(R.string.theme_system), getString(R.string.theme_nightmode), getString(R.string.theme_daymode)))
         themeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerTheme.adapter = themeSpinnerAdapter
-        when (prefs.nightMode){
+        when (preferencesRepository.nightMode.value){
             MODE_NIGHT_YES -> binding.spinnerTheme.setSelection(1)
             MODE_NIGHT_NO -> binding.spinnerTheme.setSelection(2)
             else -> binding.spinnerTheme.setSelection(0)
@@ -91,7 +92,7 @@ class SettingsFragment : Fragment() {
                         2 -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
                         else -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
                     }
-                    prefs.nightMode = AppCompatDelegate.getDefaultNightMode()
+                    preferencesRepository.setNightMode(AppCompatDelegate.getDefaultNightMode())
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
@@ -103,7 +104,7 @@ class SettingsFragment : Fragment() {
             arrayOf(getString(R.string.confession_ort), getString(R.string.confession_cat), getString(R.string.confession_lut)))
         confessionSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerConfession.adapter = confessionSpinnerAdapter
-        when (Confession.fromPreferences(prefs.confession)){
+        when (Confession.fromPreferences(preferencesRepository.confession.value)){
             Confession.ort -> binding.spinnerConfession.setSelection(0)
             Confession.cat -> binding.spinnerConfession.setSelection(1)
             Confession.lut -> binding.spinnerConfession.setSelection(2)
@@ -112,11 +113,11 @@ class SettingsFragment : Fragment() {
             binding.spinnerConfession.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position){
-                        0 -> prefs.confession = Confession.toPreferences(Confession.ort)
-                        1 -> prefs.confession = Confession.toPreferences(Confession.cat)
-                        2 -> prefs.confession = Confession.toPreferences(Confession.lut)
+                        0 -> preferencesRepository.setConfession(Confession.toPreferences(Confession.ort))
+                        1 -> preferencesRepository.setConfession(Confession.toPreferences(Confession.cat))
+                        2 -> preferencesRepository.setConfession(Confession.toPreferences(Confession.lut))
                     }
-                    requireContext().getDatabasePath("prayers.db")?.delete()
+                    requireContext().deleteDatabase("prayers.db")
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
@@ -160,8 +161,8 @@ class SettingsFragment : Fragment() {
 
     private fun setLocale(languageCode: String) {
         val appLocale = LocaleListCompat.forLanguageTags(languageCode)
-        requireContext().getDatabasePath("bible.db")?.delete()
-        requireContext().getDatabasePath("prayers.db")?.delete()
+        requireContext().deleteDatabase("bible.db")
+        requireContext().deleteDatabase("prayers.db")
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
@@ -180,12 +181,12 @@ class SettingsFragment : Fragment() {
     }
 
     private fun enableNotifications() {
-        prefs.isNotificationEnabled = true
-        AlarmUtils.scheduleNotification(requireContext(), prefs.notificationHour, prefs.notificationMinute)
+        preferencesRepository.setNotificationEnabled(true)
+        AlarmUtils.scheduleNotification(requireContext(), preferencesRepository.notificationHour.value, preferencesRepository.notificationMinute.value)
     }
 
     private fun disableNotifications() {
-        prefs.isNotificationEnabled = false
+        preferencesRepository.setNotificationEnabled(false)
         AlarmUtils.cancelNotification(requireContext())
     }
 
@@ -193,16 +194,15 @@ class SettingsFragment : Fragment() {
         val picker = TimePickerDialog(
             requireContext(),
             { _, hourOfDay, minute ->
-                prefs.notificationHour = hourOfDay
-                prefs.notificationMinute = minute
+                preferencesRepository.setNotificationTime(hourOfDay, minute)
                 updateTimeButtonText(hourOfDay, minute)
 
-                if (prefs.isNotificationEnabled) {
+                if (preferencesRepository.isNotificationEnabled.value) {
                     AlarmUtils.scheduleNotification(requireContext(), hourOfDay, minute)
                 }
             },
-            prefs.notificationHour,
-            prefs.notificationMinute,
+            preferencesRepository.notificationHour.value,
+            preferencesRepository.notificationMinute.value,
             true
         )
         picker.show()

@@ -14,7 +14,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,4 +67,5 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation(libs.androidx.work.runtime.ktx)
+    testImplementation("junit:junit:4.13.2")
 }
