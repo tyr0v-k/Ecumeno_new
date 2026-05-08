@@ -71,6 +71,7 @@ class BooksFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+        dbHelper.close()
     }
 
     override fun onDestroyView() {

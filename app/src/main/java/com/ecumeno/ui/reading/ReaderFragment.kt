@@ -88,6 +88,8 @@ class ReaderFragment : Fragment() {
             }
         }
 
+        dbHelper.close()
+
         binding.textViewContent.textSize = preferencesRepository.fontSize.value
         if (preferencesRepository.fontSize.value < 11f){
             binding.btnTextMinus.isEnabled = false
