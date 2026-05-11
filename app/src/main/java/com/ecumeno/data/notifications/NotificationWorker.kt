@@ -8,31 +8,33 @@ import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.ecumeno.EcumenoApp
 import com.ecumeno.R
 import com.ecumeno.core.calculator.EasterCalculator
 import com.ecumeno.core.domain.CalendarDay
 import com.ecumeno.data.local.preferences.Confession
 import com.ecumeno.core.domain.FastLevel
 import com.ecumeno.data.local.preferences.PreferencesRepository
+import kotlinx.coroutines.flow.first
 
 class NotificationWorker(
     context: Context,
     params: WorkerParameters,
-    private val preferencesRepository: PreferencesRepository
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            val confession = Confession.fromPreferences(preferencesRepository.confession.value)
+            val preferencesRepository = (applicationContext as EcumenoApp).preferencesRepository
+            val confession = Confession.fromPreferences(preferencesRepository.confession.first())
             val day = EasterCalculator.getDailyCalendar(confession)
 
             showNotification(applicationContext, day, confession)
 
-            if (preferencesRepository.isNotificationEnabled.value) {
+            if (preferencesRepository.isNotificationEnabled.first()) {
                 AlarmUtils.scheduleNotification(
                     applicationContext,
-                    preferencesRepository.notificationHour.value,
-                    preferencesRepository.notificationMinute.value
+                    preferencesRepository.notificationHour.first(),
+                    preferencesRepository.notificationMinute.first()
                 )
             }
 

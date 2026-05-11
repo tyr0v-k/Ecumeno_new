@@ -3,12 +3,10 @@ package com.ecumeno
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.ecumeno.data.local.preferences.PrefsHelper
 import com.ecumeno.data.local.preferences.PreferencesRepository
 
 class EcumenoApp : Application() {
-    val prefsHelper by lazy { PrefsHelper(this) }
-    val preferencesRepository by lazy { PreferencesRepository(prefsHelper) }
+    val preferencesRepository by lazy { PreferencesRepository(this) }
 
     override fun onCreate() {
         super.onCreate()

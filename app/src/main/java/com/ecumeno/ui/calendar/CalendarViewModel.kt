@@ -13,22 +13,22 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class CalendarViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
-    private val calculator = EasterCalculator
     private val _uiState = MutableStateFlow(CalendarUiState())
     val uiState: StateFlow<CalendarUiState> = _uiState
-
 
     init {
         viewModelScope.launch {
             preferencesRepository.confession.collect { confession ->
                 loadMonth(uiState.value.currentMonth.year, uiState.value.currentMonth.monthValue)
+                _uiState.value = _uiState.value.copy(selectedDate = null)
             }
         }
     }
 
     fun loadMonth(year: Int, month: Int) {
-        _uiState.value = _uiState.value.copy(currentMonth = YearMonth.of(year, month),
-            calendarDays = calculator.getMonthCalendar(year, month, Confession.fromPreferences(preferencesRepository.confession.value)),
+        _uiState.value = _uiState.value.copy(
+            currentMonth = YearMonth.of(year, month),
+            calendarDays = EasterCalculator.getMonthCalendar(year, month, Confession.fromPreferences(preferencesRepository.confession.value)),
             hasFast = Confession.fromPreferences(preferencesRepository.confession.value) != Confession.lut
         )
     }

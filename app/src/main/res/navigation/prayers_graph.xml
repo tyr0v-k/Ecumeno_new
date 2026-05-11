@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_prayers"
-        android:name="com.ecumeno.ui.reading.BooksFragment"
+        android:name="com.ecumeno.ui.reading.books.BooksFragment"
         android:label="@string/title_prayers"
         tools:layout="@layout/fragment_books">
         <argument android:name="dbName" app:argType="string" android:defaultValue="prayers.db" />
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/readerFragment"
-        android:name="com.ecumeno.ui.reading.ReaderFragment"
+        android:name="com.ecumeno.ui.reading.reader.ReaderFragment"
         android:label="@string/title_reader" >
         <argument
             android:name="dbName"

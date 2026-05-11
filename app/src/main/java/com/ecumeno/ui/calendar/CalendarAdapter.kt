@@ -17,7 +17,6 @@ import java.util.Locale
 
 class CalendarAdapter(private val onDateClick: (CalendarDay) -> Unit) : ListAdapter<CalendarDay, CalendarAdapter.CalendarViewHolder>(DiffCallback()) {
     private var selectedDate: CalendarDay? = null
-
     fun setCurrentDate(date: CalendarDay?) {
         selectedDate = date
     }
