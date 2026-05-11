@@ -54,6 +54,17 @@
   <li><b>Database management:</b> SQLiteOpenHelper</li>
 </ul>
 
+<h3>Screenshots</h3>
+<p align="center">
+  <a>
+    <img src="screenshots/screens_en_light.jpg" width="350" alt="Screenshots, light theme" />
+  </a>
+  &nbsp;&nbsp;
+  <a>
+    <img src="screenshots/screens_en_dark.jpg" width="350" alt="Screenshots, dark theme" />
+  </a>
+</p>
+
 <h2>Build</h2>
 <h3>Build Requirements</h3>
 <ul>

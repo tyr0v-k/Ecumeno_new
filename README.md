@@ -54,6 +54,17 @@
   <li><b>Управление базой данных:</b> SQLiteOpenHelper</li>
 </ul>
 
+<h3>Скриншоты</h3>
+<p align="center">
+  <a>
+    <img src="screenshots/screens_ru_light.jpg" width="350" alt="Скриншоты, светлая тема" />
+  </a>
+  &nbsp;&nbsp;
+  <a>
+    <img src="screenshots/screens_ru_dark.jpg" width="350" alt="Скриншоты, темная тема" />
+  </a>
+</p>
+
 <h2>Сборка</h2>
 <h3>Требования для сборки</h3>
 <ul>
