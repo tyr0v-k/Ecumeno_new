@@ -70,7 +70,6 @@
 <ul>
   <li>JDK 17 или новее</li>
   <li>Android SDK</li>
-  <li>Android NDK</li>
 </ul>
 
 <h3>Инструкция по сборке</h3>

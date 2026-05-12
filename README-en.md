@@ -70,7 +70,6 @@
 <ul>
   <li>JDK 17 or newer</li>
   <li>Android SDK</li>
-  <li>Android NDK</li>
 </ul>
 
 <h3>Build Instructions</h3>
