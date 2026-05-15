@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ecumeno.EcumenoApp
 import com.ecumeno.R
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import com.ecumeno.data.local.preferences.PreferencesRepository
 import com.ecumeno.databinding.FragmentOnboardingBinding
 

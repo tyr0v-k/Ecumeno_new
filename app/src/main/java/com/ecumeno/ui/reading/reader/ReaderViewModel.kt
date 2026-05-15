@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.EcumenoApp
 import com.ecumeno.data.local.database.DatabaseHelper
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

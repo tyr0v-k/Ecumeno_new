@@ -1,4 +1,4 @@
-package com.ecumeno.data.local.preferences
+package com.ecumeno.core.domain
 
 enum class Confession {
     ort,

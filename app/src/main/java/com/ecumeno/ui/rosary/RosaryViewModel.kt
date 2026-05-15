@@ -2,7 +2,7 @@ package com.ecumeno.ui.rosary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import com.ecumeno.ui.rosary.enums.MysteryType
 import com.ecumeno.ui.rosary.enums.PrayerType
 import com.ecumeno.data.local.preferences.PreferencesRepository

@@ -3,7 +3,7 @@ package com.ecumeno.core.calculator
 import com.ecumeno.core.domain.CalendarDay
 import com.ecumeno.core.domain.FastLevel
 import com.ecumeno.core.domain.Holiday
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month

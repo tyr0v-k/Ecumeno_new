@@ -1,7 +1,7 @@
 package com.ecumeno.ui.settings
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 
 data class SettingsUiState(
     val isNotificationEnabled: Boolean = false,

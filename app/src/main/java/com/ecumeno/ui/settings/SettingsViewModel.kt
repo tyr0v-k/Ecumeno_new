@@ -6,7 +6,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.EcumenoApp
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import com.ecumeno.infrastructure.notifications.AlarmUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

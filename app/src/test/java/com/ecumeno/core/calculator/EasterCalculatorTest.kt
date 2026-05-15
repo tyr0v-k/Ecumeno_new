@@ -1,6 +1,6 @@
 package com.ecumeno.core.calculator
 
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue

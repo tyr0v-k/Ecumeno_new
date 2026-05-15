@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecumeno.core.calculator.EasterCalculator
 import com.ecumeno.core.domain.CalendarDay
-import com.ecumeno.data.local.preferences.Confession
+import com.ecumeno.core.domain.Confession
 import com.ecumeno.data.local.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
