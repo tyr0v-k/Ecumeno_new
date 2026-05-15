@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -38,8 +37,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
-        dataBinding = true    }
+        viewBinding = true}
 }
 
 dependencies {

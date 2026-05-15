@@ -68,7 +68,6 @@ class PreferencesRepository(private val context: Context) {
         _lastChapter = MutableStateFlow(prefs[Keys.LAST_CHAPTER] ?: -1)
         _confession = MutableStateFlow(prefs[Keys.CONFESSION] ?: "")
         _nightMode = MutableStateFlow(prefs[Keys.NIGHT_MODE] ?: -1)
-
     }
 
     fun setNotificationEnabled(value: Boolean) {
