@@ -1,4 +1,4 @@
-package com.ecumeno.data.notifications
+package com.ecumeno.infrastructure.notifications
 
 import android.content.BroadcastReceiver
 import android.content.Context

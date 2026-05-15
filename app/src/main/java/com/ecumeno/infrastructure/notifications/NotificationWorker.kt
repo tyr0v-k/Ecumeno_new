@@ -1,4 +1,4 @@
-package com.ecumeno.data.notifications
+package com.ecumeno.infrastructure.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,7 +14,6 @@ import com.ecumeno.core.calculator.EasterCalculator
 import com.ecumeno.core.domain.CalendarDay
 import com.ecumeno.data.local.preferences.Confession
 import com.ecumeno.core.domain.FastLevel
-import com.ecumeno.data.local.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.first
 
 class NotificationWorker(
