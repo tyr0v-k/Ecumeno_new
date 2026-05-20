@@ -11,7 +11,6 @@ import java.time.temporal.TemporalAdjusters
 
 object EasterCalculator {
     lateinit var fixedHolidays : MutableMap<String, Holiday>
-    // Алгоритм Гаусса для юлианской Пасхи и перевод в григорианский календарь
     fun calculateOrthodoxEaster(year: Int): LocalDate {
         val a = year % 19
         val b = year % 4
@@ -20,7 +19,6 @@ object EasterCalculator {
         val e = (2 * b + 4 * c + 6 * d + 6) % 7
         val f = d + e
 
-        // Дата Пасхи по старому стилю
         val day = if (f <= 9) {
             22 + f
         } else {
@@ -28,17 +26,14 @@ object EasterCalculator {
         }
         val month = if (f <= 9) Month.MARCH else Month.APRIL
 
-        // Переход на григорианский календарь (+13 дней)
         var date = LocalDate.of(year, month, day).plusDays(13)
 
-        // Если дата выходит на май, корректируем
         if (date.month == Month.MAY && date.dayOfMonth > 7) {
             date = date.minusDays(7)
         }
 
         return date
     }
-    // Алгоритм Меёса/Джонса/Бутчера
     fun calculateGregorianEaster(year: Int): LocalDate {
         val a = year % 19
         val b = year / 100
@@ -63,26 +58,18 @@ object EasterCalculator {
             "0107" to Holiday(name = "christmas", priority = 1),
             "0114" to Holiday(name = "circumcision_of_the_lord", priority = 2),
             "0119" to Holiday(name = "theophany_lord", priority = 1),
-            // Февраль
             "0215" to Holiday(name = "presentation_of_the_lord", priority = 1),
-            // Апрель
             "0407" to Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1),
-            // Май
             "0509" to Holiday(name = "memorial_day_for_fallen_soldiers", priority = 3),
             "0521" to Holiday(name = "john_the_apostle", priority = 3),
-            // Июль
             "0707" to Holiday(name = "nativity_of_john_the_baptist", priority = 2),
             "0712" to Holiday(name = "feast_of_saints_peter_and_paul", priority = 2),
-            // Август
             "0819" to Holiday(name = "transfiguration_of_the_lord", priority = 1),
             "0828" to Holiday(name = "dormition_of_the_most_holy_theotokos", priority = 1),
-            // Сентябрь
             "0911" to Holiday(name = "beheading_of_john_the_baptist", priority = 2),
             "0921" to Holiday(name = "nativity_of_the_most_holy_theotokos", priority = 1),
             "0927" to Holiday(name = "exaltation_of_the_holy_cross_lord", priority = 1),
-            // Октябрь
             "1014" to Holiday(name = "protection_of_the_most_holy_theotokos", priority = 2),
-            // Декабрь
             "1204" to Holiday(
                 name = "entrance_of_the_most_holy_theotokos_into_the_temple",
                 priority = 1
@@ -93,24 +80,17 @@ object EasterCalculator {
     fun getCatholicFixedHolidays(){
         getWesternFixedHolidays()
         fixedHolidays.put("0101", Holiday(name = "solemnity_of_mary", priority = 1))
-        // Февраль
         fixedHolidays.put("0222", Holiday(name = "chair_of_peter", priority = 2))
-        // Май
         fixedHolidays.put("0503", Holiday(name = "philip_and_james", priority = 2))
         fixedHolidays.put("0514", Holiday(name = "matthias", priority = 2))
-        // Июль
         fixedHolidays.put("0703", Holiday(name = "thomas", priority = 2))
-        // Август
         fixedHolidays.put("0810", Holiday(name = "lawrence", priority = 2))
         fixedHolidays.put("0815", Holiday(name = "assumption", priority = 1))
-        // Сентябрь
         fixedHolidays.put("0908",
             Holiday(name = "nativity_of_the_most_holy_theotokos", priority = 2)
         )
-        // Ноябрь
         fixedHolidays.put("1102", Holiday(name = "all_souls", priority = 1))
         fixedHolidays.put("1109", Holiday(name = "dedication_lateran_basilica_lord", priority = 2))
-        // Декабрь
         fixedHolidays.put("1208", Holiday(name = "immaculate_conception", priority = 1))
     }
 
@@ -118,17 +98,11 @@ object EasterCalculator {
         getWesternFixedHolidays()
         fixedHolidays.put("0101", Holiday(name = "circumcision_of_the_lord", priority = 1))
         fixedHolidays.put("0118", Holiday(name = "confession_of_peter", priority = 3))
-        // Февраль
         fixedHolidays.put("0224", Holiday(name = "matthias", priority = 2))
-        // Май
         fixedHolidays.put("0503", Holiday(name = "philip_and_james", priority = 2))
-        // Июнь
         fixedHolidays.put("0625", Holiday(name = "augsburg_confession", priority = 2))
-        // Август
         fixedHolidays.put("0815", Holiday(name = "mary_virgin", priority = 2))
-        // Октябрь
         fixedHolidays.put("1031", Holiday(name = "reformation_day", priority = 2))
-        // Декабрь
         fixedHolidays.put("1221", Holiday(name = "thomas", priority = 2))
         fixedHolidays.put("1224", Holiday(name = "christmas_vigil", priority = 2))
     }
@@ -137,37 +111,26 @@ object EasterCalculator {
         fixedHolidays = mutableMapOf(
             "0106" to Holiday(name = "epiphany", priority = 1),
             "0125" to Holiday(name = "paul_conversion", priority = 1),
-            // Февраль
             "0202" to Holiday(name = "presentation_of_the_lord", priority = 2),
-            // Март
             "0319" to Holiday(name = "joseph", priority = 2),
             "0325" to Holiday(name = "annunciation_of_the_most_holy_theotokos", priority = 1),
-            // Апрель
             "0425" to Holiday(name = "mark", priority = 2),
-            // Май
             "0531" to Holiday(name = "visitation", priority = 2),
-            // Июнь
             "0611" to Holiday(name = "barnabas", priority = 3),
             "0624" to Holiday(name = "nativity_of_john_the_baptist", priority = 1),
             "0629" to Holiday(name = "feast_of_saints_peter_and_paul", priority = 1),
-            // Июль
             "0722" to Holiday(name = "magdalene", priority = 2),
             "0725" to Holiday(name = "james", priority = 2),
-            // Август
             "0806" to Holiday(name = "transfiguration_of_the_lord", priority = 2),
             "0824" to Holiday(name = "bartholomew", priority = 2),
             "0829" to Holiday(name = "beheading_of_john_the_baptist", priority = 3),
-            // Сентябрь
             "0914" to Holiday(name = "exaltation_of_the_holy_cross_lord", priority = 2),
             "0921" to Holiday(name = "matthew", priority = 2),
             "0929" to Holiday(name = "archangels", priority = 2),
-            // Октябрь
             "1018" to Holiday(name = "luke", priority = 2),
             "1028" to Holiday(name = "sumon_jude", priority = 2),
-            // Ноябрь
             "1101" to Holiday(name = "all_saints", priority = 1),
             "1130" to Holiday(name = "andrew", priority = 2),
-            // Декабрь
             "1225" to Holiday(name = "christmas", priority = 1),
             "1226" to Holiday(name = "stephen", priority = 2),
             "1227" to Holiday(name = "john_the_apostle", priority = 2),
@@ -222,7 +185,6 @@ object EasterCalculator {
         holidays["reserved_holy_thursday"] = easterDate.minusDays(3)
         holidays["reserved_holy_friday"] = easterDate.minusDays(2)
         holidays["reserved_holy_saturday"] = easterDate.minusDays(1)
-        // После Пасхи
         holidays["reserved_easter_monday"] = easterDate.plusDays(1)
         holidays["reserved_easter_tuesday"] = easterDate.plusDays(2)
         holidays["reserved_easter_wednesday"] = easterDate.plusDays(3)
@@ -238,15 +200,12 @@ object EasterCalculator {
     fun calculateOrthodoxMovableHolidays(easterDate: LocalDate): MutableMap<String, LocalDate> {
         val holidays = calculateBasicMovableHolidays(easterDate)
 
-        // Перед Пасхой
         holidays["forgiveness_sunday"] = easterDate.minusDays(49)
         holidays["triumph_of_orthodoxy"] = easterDate.minusDays(42)
         holidays["lent_saturday_5"] = easterDate.minusDays(15)
         holidays["lazarus_saturday"] = easterDate.minusDays(8)
-        // После Пасхи
         holidays["thomas_sunday"] = easterDate.plusDays(7)
         holidays["day_of_the_holy_spirit"] = easterDate.plusDays(50)
-        // Дни поминовения
         holidays["universal_memorial_saturday"] = easterDate.minusDays(57)
         holidays["lent_saturday_2_memorial"] = easterDate.minusDays(36)
         holidays["lent_saturday_3_memorial"] = easterDate.minusDays(29)
@@ -262,12 +221,10 @@ object EasterCalculator {
     fun calculateWesternMovableHolidays(easterDate: LocalDate): MutableMap<String, LocalDate> {
         val holidays = calculateBasicMovableHolidays(easterDate)
 
-        // Перед Пасхой
         holidays["theophany_lord"] = LocalDate.of(easterDate.year, 1, 6).with(
             TemporalAdjusters.next(
                 DayOfWeek.SUNDAY))
         holidays["ash_wednesday"] = easterDate.minusDays(46)
-        // После Пасхи
         holidays["reserved_divine_mercy_sunday"] = easterDate.plusDays(7)
         holidays["day_of_the_holy_trinity_greatfeast"] = easterDate.plusDays(56)
         holidays["corpus_christi_greatfeast"] = easterDate.plusDays(60)
@@ -306,7 +263,6 @@ object EasterCalculator {
         return holidays
     }
 
-    // Получение уровня поста для даты
     fun getFastLevel(date: LocalDate, easterDate: LocalDate, confession: Confession): FastLevel {
         when (confession){
             Confession.cat -> {
@@ -321,12 +277,10 @@ object EasterCalculator {
             Confession.ort -> {
                 val dayOfWeek = date.dayOfWeek.value
 
-                // Проверяем сплошные седмицы
                 if (isContinuousWeek(date, easterDate)) {
                     return FastLevel.CONTINUOUS_WEEK
                 }
 
-                // Великий пост
                 if (isGreatLent(date, easterDate)) {
                     return when {
                         date == easterDate.minusDays(7) || date == LocalDate.of(easterDate.year, 4, 7) -> FastLevel.FISH
@@ -336,7 +290,6 @@ object EasterCalculator {
                     }
                 }
 
-                // Рождественский пост
                 if (isChristmasFast(date, date.year)) {
                     return when {
                         date == LocalDate.of(easterDate.year, 12, 4) && (date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5) -> FastLevel.FISH
@@ -350,7 +303,6 @@ object EasterCalculator {
                     }
                 }
 
-                // Петров пост
                 if (isPeterFast(date, easterDate)) {
                     return when {
                         date.dayOfWeek.value == 3 || date.dayOfWeek.value == 5 -> FastLevel.OIL_ALLOWED
@@ -358,7 +310,6 @@ object EasterCalculator {
                     }
                 }
 
-                // Успенский пост
                 if (isDormitionFast(date, date.year)) {
                     return when {
                         date == LocalDate.of(easterDate.year, 8, 19) -> FastLevel.FISH
@@ -368,7 +319,6 @@ object EasterCalculator {
                     }
                 }
 
-                // Послабления по уставу
                 val specialDates = listOf(
                     LocalDate.of(easterDate.year, 2, 15),
                     LocalDate.of(easterDate.year, 8, 19),
@@ -389,7 +339,6 @@ object EasterCalculator {
                     return FastLevel.OIL_ALLOWED
                 }
 
-                // Среда и пятница - постные дни (кроме сплошных седмиц)
                 if (dayOfWeek == 3 || dayOfWeek == 5) {
                     return FastLevel.FAST
                 }
@@ -407,19 +356,14 @@ object EasterCalculator {
     private fun isContinuousWeek(date: LocalDate, easterDate: LocalDate): Boolean {
         val year = date.year
 
-        // Святки
         val christmastideStart = LocalDate.of(year, 1, 7)
         val christmastideEnd = LocalDate.of(year, 1, 17)
-        // Мытаря и фарисея
         val publicanWeekStart = easterDate.minusDays(69)
         val publicanWeekEnd = easterDate.minusDays(63)
-        // Cырная
         val cheeseFareWeekStart = easterDate.minusDays(55)
         val cheeseFareWeekEnd = easterDate.minusDays(49)
-        // Пасхальная седмица
         val brightWeekStart = easterDate.plusDays(1)
         val brightWeekEnd = easterDate.plusDays(6)
-        // Троицкая седмица
         val pentecostWeekStart = easterDate.plusDays(50)
         val pentecostWeekEnd = easterDate.plusDays(56)
 
@@ -482,11 +426,9 @@ object EasterCalculator {
             }
         }
 
-        // Получаем первый и последний день месяца
         val firstDay = LocalDate.of(year, month, 1)
         val lastDay = firstDay.withDayOfMonth(firstDay.lengthOfMonth())
 
-        // Добавляем дни предыдущего месяца для заполнения первой недели
         var currentDate = firstDay.with(DayOfWeek.MONDAY)
         if (firstDay.dayOfWeek != DayOfWeek.MONDAY) {
             currentDate = firstDay.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
