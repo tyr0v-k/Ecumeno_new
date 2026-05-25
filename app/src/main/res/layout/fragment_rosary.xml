@@ -27,15 +27,27 @@
         android:layout_height="1dp"
         android:layout_marginVertical="16dp"
         android:background="@color/accent"/>
-    <TextView
-        android:id="@+id/tvPrayer"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize="18sp"
-        android:lineSpacingExtra="8sp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"/>
+        android:overScrollMode="never"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvPrayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:lineSpacingExtra="8sp"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
+        </LinearLayout>
+    </ScrollView>
     <com.ecumeno.ui.rosary.BeadsView
         android:id="@+id/beads_view"
         android:layout_width="match_parent"
