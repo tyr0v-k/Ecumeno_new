@@ -29,7 +29,7 @@ class DatabaseHelper(private val context: Context, private val dbName: String, p
             } else {
                 languageCode = currentLocales[0]?.language ?: "en"
             }
-            var localeName = if (languageCode == "ru") "_ru." else "_en."
+            var localeName = "_$languageCode."
             if (dbFile.name.contains("prayers")){
                 localeName = "_$confession$localeName"
             }

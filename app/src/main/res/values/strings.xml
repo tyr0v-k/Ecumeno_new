@@ -35,7 +35,6 @@
     <string name="confession_cat">Catholicism</string>
     <string name="confession_lut">Lutheranism</string>
 
-    <!-- Fast levels -->
     <string name="fast_no_fast">No fast</string>
     <string name="fast_continuous_week">Continuous week, no fast</string>
     <string name="fast_xerophagy">Xerophagy</string>

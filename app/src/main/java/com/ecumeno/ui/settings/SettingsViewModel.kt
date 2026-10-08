@@ -55,7 +55,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 Confession.cat -> 1
                 Confession.lut -> 2
             },
-            selectedLanguagePosition = if (languageCode == "ru") 1 else 0,
+            selectedLanguagePosition = if (languageCode == "ru") 1 else if (languageCode == "cu") 2 else 0,
             currentLanguageCode = languageCode
         )
     }
@@ -118,7 +118,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun onLanguageChanged(position: Int) {
         viewModelScope.launch {
-            val languageCode = if (position == 1) "ru" else "en"
+            val languageCode = if (position == 1) "ru" else if (position == 2) "cu" else "en"
             val appLocale = LocaleListCompat.forLanguageTags(languageCode)
             getApplication<Application>().deleteDatabase("bible.db")
             getApplication<Application>().deleteDatabase("prayers.db")

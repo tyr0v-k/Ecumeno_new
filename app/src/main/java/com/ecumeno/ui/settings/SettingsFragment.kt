@@ -73,7 +73,7 @@ class SettingsFragment : Fragment() {
         val languageSpinnerAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            arrayOf("English", "Русский")
+            arrayOf("English", "Русский", "Русский + ЦСЯ")
         )
         languageSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerLanguage.adapter = languageSpinnerAdapter
