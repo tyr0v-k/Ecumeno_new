@@ -41,6 +41,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupSpinners()
+        setupFocusListeners()
         setupClickListeners()
         setupObservers()
     }
@@ -106,6 +107,44 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun setupFocusListeners() {
+        binding.etConfessorName.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onConfessorNameChanged(binding.etConfessorName.text.toString())
+            }
+        }
+
+        binding.etLivingParentsNames.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onLivingParentsNamesChanged(binding.etLivingParentsNames.text.toString())
+            }
+        }
+
+        binding.etLivingRelativesNames.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onLivingRelativesNamesChanged(binding.etLivingRelativesNames.text.toString())
+            }
+        }
+
+        binding.etDeceasedParentsNames.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onDeceasedParentsNamesChanged(binding.etDeceasedParentsNames.text.toString())
+            }
+        }
+
+        binding.etDeceasedRelativesNames.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onDeceasedRelativesNamesChanged(binding.etDeceasedRelativesNames.text.toString())
+            }
+        }
+
+        binding.etSaintsNames.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.onSaintsNamesChanged(binding.etSaintsNames.text.toString())
+            }
+        }
+    }
+
     private fun setupClickListeners() {
         binding.switchNotifications.setOnClickListener {
             if (binding.switchNotifications.isChecked) {
@@ -133,6 +172,13 @@ class SettingsFragment : Fragment() {
                 binding.spinnerTheme.setSelection(state.selectedThemePosition)
                 binding.spinnerConfession.setSelection(state.selectedConfessionPosition)
                 binding.spinnerLanguage.setSelection(state.selectedLanguagePosition)
+                binding.etConfessorName.setText(state.confessorName)
+                binding.etLivingParentsNames.setText(state.livingParentsNames)
+                binding.etLivingRelativesNames.setText(state.livingRelativesNames)
+                binding.etDeceasedParentsNames.setText(state.deceasedParentsNames)
+                binding.etDeceasedRelativesNames.setText(state.deceasedRelativesNames)
+                binding.etSaintsNames.setText(state.saintsNames)
+                binding.diptych.visibility = if (state.diptychVisibility) View.VISIBLE else View.GONE
             }
         }
     }

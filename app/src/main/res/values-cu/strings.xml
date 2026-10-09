@@ -34,6 +34,13 @@
     <string name="confession_ort">Православие</string>
     <string name="confession_cat">Католицизм</string>
     <string name="confession_lut">Лютеранство</string>
+    <string name="diptych">Помянник</string>
+    <string name="confessor">Имя духовного отца</string>
+    <string name="living_parents">Имена живых родителей</string>
+    <string name="living_relatives">Имена живых ближних</string>
+    <string name="deceased_parents">Имена усопших родителей</string>
+    <string name="deceased_relatives">Имена усопших ближних</string>
+    <string name="saints">Имена святых угодников</string>
 
     <string name="fast_no_fast">Поста нет</string>
     <string name="fast_continuous_week">Сплошная седмица, поста нет</string>

@@ -14,5 +14,12 @@ data class SettingsUiState(
     val confession: Confession = Confession.ort,
     val selectedConfessionPosition: Int = 0,
     val selectedLanguagePosition: Int = 0,
-    val currentLanguageCode: String = "en"
-)
+    val currentLanguageCode: String = "en",
+    val diptychVisibility: Boolean = true,
+    val confessorName: String = "*",
+    val livingParentsNames: String = "*",
+    val livingRelativesNames: String = "*",
+    val deceasedParentsNames: String = "*",
+    val deceasedRelativesNames: String = "*",
+    val saintsNames: String = "*"
+    )

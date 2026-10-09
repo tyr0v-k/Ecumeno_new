@@ -34,6 +34,13 @@
     <string name="confession_ort">Orthodoxy</string>
     <string name="confession_cat">Catholicism</string>
     <string name="confession_lut">Lutheranism</string>
+    <string name="diptych">Diptych</string>
+    <string name="confessor">Confessor\'s name</string>
+    <string name="living_parents">Names of living parents</string>
+    <string name="living_relatives">Names of living relatives</string>
+    <string name="deceased_parents">Names of deceased parents</string>
+    <string name="deceased_relatives">Names of deceased relatives</string>
+    <string name="saints">Names of the Saints</string>
 
     <string name="fast_no_fast">No fast</string>
     <string name="fast_continuous_week">Continuous week, no fast</string>

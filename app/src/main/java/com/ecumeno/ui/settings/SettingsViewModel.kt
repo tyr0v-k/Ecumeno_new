@@ -36,6 +36,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         } else {
             currentLocales[0]?.language ?: "en"
         }
+        val confessorName = preferencesRepository.confessorName.value
+        val livingParentsNames = preferencesRepository.livingParentsNames.value
+        val livingRelativesNames = preferencesRepository.livingRelativesNames.value
+        val deceasedParentsNames = preferencesRepository.deceasedParentsNames.value
+        val deceasedRelativesNames = preferencesRepository.deceasedRelativesNames.value
+        val saintsNames = preferencesRepository.saintsNames.value
 
         _uiState.value = SettingsUiState(
             isNotificationEnabled = isNotificationEnabled,
@@ -56,7 +62,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 Confession.lut -> 2
             },
             selectedLanguagePosition = if (languageCode == "ru") 1 else if (languageCode == "cu") 2 else 0,
-            currentLanguageCode = languageCode
+            currentLanguageCode = languageCode,
+            diptychVisibility = (confession == Confession.ort),
+            confessorName = confessorName,
+            livingParentsNames = livingParentsNames,
+            livingRelativesNames = livingRelativesNames,
+            deceasedParentsNames = deceasedParentsNames,
+            deceasedRelativesNames = deceasedRelativesNames,
+            saintsNames = saintsNames
         )
     }
 
@@ -111,7 +124,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             preferencesRepository.setPrayersCleared(true)
             _uiState.value = _uiState.value.copy(
                 confession = confession,
-                selectedConfessionPosition = position
+                selectedConfessionPosition = position,
+                diptychVisibility = (confession == Confession.ort)
             )
         }
     }
@@ -143,5 +157,35 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         if (_uiState.value.isNotificationEnabled) {
             AlarmUtils.scheduleNotification(getApplication(), hourOfDay, minute)
         }
+    }
+
+    fun onConfessorNameChanged(confessorName: String) {
+        _uiState.value = _uiState.value.copy(confessorName = confessorName)
+        preferencesRepository.setConfessorName(confessorName)
+    }
+
+    fun onLivingParentsNamesChanged(livingParentsNames: String) {
+        _uiState.value = _uiState.value.copy(livingParentsNames = livingParentsNames)
+        preferencesRepository.setLivingParentsNames(livingParentsNames)
+    }
+
+    fun onLivingRelativesNamesChanged(livingRelativesNames: String) {
+        _uiState.value = _uiState.value.copy(livingRelativesNames = livingRelativesNames)
+        preferencesRepository.setLivingRelativesNames(livingRelativesNames)
+    }
+
+    fun onDeceasedParentsNamesChanged(deceasedParentsNames: String) {
+        _uiState.value = _uiState.value.copy(deceasedParentsNames = deceasedParentsNames)
+        preferencesRepository.setDeceasedParentsNames(deceasedParentsNames)
+    }
+
+    fun onDeceasedRelativesNamesChanged(deceasedRelativesNames: String) {
+        _uiState.value = _uiState.value.copy(deceasedRelativesNames = deceasedRelativesNames)
+        preferencesRepository.setDeceasedRelativesNames(deceasedRelativesNames)
+    }
+
+    fun onSaintsNamesChanged(saintsNames: String) {
+        _uiState.value = _uiState.value.copy(saintsNames = saintsNames)
+        preferencesRepository.setSaintsNames(saintsNames)
     }
 }

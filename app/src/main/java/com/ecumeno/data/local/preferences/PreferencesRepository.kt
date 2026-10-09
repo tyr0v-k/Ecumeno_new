@@ -32,6 +32,12 @@ class PreferencesRepository(private val context: Context) {
         val LAST_CHAPTER = intPreferencesKey("last_chapter")
         val CONFESSION = stringPreferencesKey("confession")
         val NIGHT_MODE = intPreferencesKey("night_mode")
+        val CONFESSOR_NAME = stringPreferencesKey("confessor_name")
+        val LIVING_PARENTS_NAMES = stringPreferencesKey("living_parents_names")
+        val LIVING_RELATIVES_NAMES = stringPreferencesKey("living_relatives_names")
+        val DECEASED_PARENTS_NAMES = stringPreferencesKey("deceased_parents_names")
+        val DECEASED_RELATIVES_NAMES = stringPreferencesKey("deceased_relatives_names")
+        val SAINTS_NAMES = stringPreferencesKey("saints_names")
     }
 
     private val _isNotificationEnabled: MutableStateFlow<Boolean>
@@ -43,8 +49,15 @@ class PreferencesRepository(private val context: Context) {
     private val _lastChapter: MutableStateFlow<Int>
     private val _confession: MutableStateFlow<String>
     private val _nightMode: MutableStateFlow<Int>
+    private val _confessorName: MutableStateFlow<String>
+    private val _livingParentsNames: MutableStateFlow<String>
+    private val _livingRelativesNames: MutableStateFlow<String>
+    private val _deceasedParentsNames: MutableStateFlow<String>
+    private val _deceasedRelativesNames: MutableStateFlow<String>
+    private val _saintsNames: MutableStateFlow<String>
     private val _bibleCleared = MutableStateFlow(false)
     private val _prayersCleared = MutableStateFlow(false)
+
     val isNotificationEnabled: StateFlow<Boolean> get() = _isNotificationEnabled.asStateFlow()
     val isRuleEnabled: StateFlow<Boolean> get() = _isRuleEnabled.asStateFlow()
     val notificationHour: StateFlow<Int> get() = _notificationHour.asStateFlow()
@@ -54,6 +67,12 @@ class PreferencesRepository(private val context: Context) {
     val lastChapter: StateFlow<Int> get() = _lastChapter.asStateFlow()
     val confession: StateFlow<String> get() = _confession.asStateFlow()
     val nightMode: StateFlow<Int> get() = _nightMode.asStateFlow()
+    val confessorName: StateFlow<String> get() = _confessorName.asStateFlow()
+    val livingParentsNames: StateFlow<String> get() = _livingParentsNames.asStateFlow()
+    val livingRelativesNames: StateFlow<String> get() = _livingRelativesNames.asStateFlow()
+    val deceasedParentsNames: StateFlow<String> get() = _deceasedParentsNames.asStateFlow()
+    val deceasedRelativesNames: StateFlow<String> get() = _deceasedRelativesNames.asStateFlow()
+    val saintsNames: StateFlow<String> get() = _saintsNames.asStateFlow()
     val bibleCleared: StateFlow<Boolean> get() = _bibleCleared.asStateFlow()
     val prayersCleared: StateFlow<Boolean> get() = _prayersCleared.asStateFlow()
 
@@ -68,6 +87,12 @@ class PreferencesRepository(private val context: Context) {
         _lastChapter = MutableStateFlow(prefs[Keys.LAST_CHAPTER] ?: -1)
         _confession = MutableStateFlow(prefs[Keys.CONFESSION] ?: "")
         _nightMode = MutableStateFlow(prefs[Keys.NIGHT_MODE] ?: -1)
+        _confessorName = MutableStateFlow(prefs[Keys.CONFESSOR_NAME] ?: "*")
+        _livingParentsNames = MutableStateFlow(prefs[Keys.LIVING_PARENTS_NAMES] ?: "*")
+        _livingRelativesNames = MutableStateFlow(prefs[Keys.LIVING_RELATIVES_NAMES] ?: "*")
+        _deceasedParentsNames = MutableStateFlow(prefs[Keys.DECEASED_PARENTS_NAMES] ?: "*")
+        _deceasedRelativesNames = MutableStateFlow(prefs[Keys.DECEASED_RELATIVES_NAMES] ?: "*")
+        _saintsNames = MutableStateFlow(prefs[Keys.SAINTS_NAMES] ?: "*")
     }
 
     fun setNotificationEnabled(value: Boolean) {
@@ -119,6 +144,36 @@ class PreferencesRepository(private val context: Context) {
     fun setNightMode(value: Int) {
         _nightMode.value = value
         scope.launch { context.dataStore.edit { it[Keys.NIGHT_MODE] = value } }
+    }
+
+    fun setConfessorName(value: String) {
+        _confessorName.value = value
+        scope.launch { context.dataStore.edit { it[Keys.CONFESSOR_NAME] = value } }
+    }
+
+    fun setLivingParentsNames(value: String) {
+        _livingParentsNames.value = value
+        scope.launch { context.dataStore.edit { it[Keys.LIVING_PARENTS_NAMES] = value } }
+    }
+
+    fun setLivingRelativesNames(value: String) {
+        _livingRelativesNames.value = value
+        scope.launch { context.dataStore.edit { it[Keys.LIVING_RELATIVES_NAMES] = value } }
+    }
+
+    fun setDeceasedParentsNames(value: String) {
+        _deceasedParentsNames.value = value
+        scope.launch { context.dataStore.edit { it[Keys.DECEASED_PARENTS_NAMES] = value } }
+    }
+
+    fun setDeceasedRelativesNames(value: String) {
+        _deceasedRelativesNames.value = value
+        scope.launch { context.dataStore.edit { it[Keys.DECEASED_RELATIVES_NAMES] = value } }
+    }
+
+    fun setSaintsNames(value: String) {
+        _saintsNames.value = value
+        scope.launch { context.dataStore.edit { it[Keys.SAINTS_NAMES] = value } }
     }
 
     fun setBibleCleared(value: Boolean) {

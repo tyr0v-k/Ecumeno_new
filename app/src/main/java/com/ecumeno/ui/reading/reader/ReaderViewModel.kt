@@ -76,7 +76,13 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
     private fun initializePrayers(number: Int) {
         val prayers = dbHelper?.getPrayers(number) ?: return
         val prayersList = prayers.map { it.prayerName }
-        val firstPrayerContent = prayers.firstOrNull()?.text?.replace("\\n", "\n\n") ?: ""
+        val firstPrayerContent = prayers.firstOrNull()?.text?.replace("\\n", "\n\n")?.
+        replace("CONFESSOR_NAME", preferencesRepository.confessorName.value)?.
+        replace("LIVING_PARENTS", preferencesRepository.livingParentsNames.value)?.
+        replace("LIVING_RELATIVES", preferencesRepository.livingRelativesNames.value)?.
+        replace("DECEASED_PARENTS", preferencesRepository.deceasedParentsNames.value)?.
+        replace("DECEASED_RELATIVES", preferencesRepository.deceasedRelativesNames.value)?.
+        replace("SAINTS_NAMES", preferencesRepository.saintsNames.value) ?: ""
         _uiState.value = _uiState.value.copy(
             isBible = false,
             chapters = prayersList,
@@ -108,7 +114,13 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
                 val prayers = dbHelper?.getPrayers(categoryNumber) ?: return@launch
                 if (position < prayers.size) {
                     _uiState.value = _uiState.value.copy(
-                        content = prayers[position].text.replace("\\n", "\n\n"),
+                        content = prayers[position].text.replace("\\n", "\n\n").
+                        replace("CONFESSOR_NAME", preferencesRepository.confessorName.value).
+                        replace("LIVING_PARENTS", preferencesRepository.livingParentsNames.value).
+                        replace("LIVING_RELATIVES", preferencesRepository.livingRelativesNames.value).
+                        replace("DECEASED_PARENTS", preferencesRepository.deceasedParentsNames.value).
+                        replace("DECEASED_RELATIVES", preferencesRepository.deceasedRelativesNames.value).
+                        replace("SAINTS_NAMES", preferencesRepository.saintsNames.value),
                         selectedChapterPosition = position
                     )
                 }
